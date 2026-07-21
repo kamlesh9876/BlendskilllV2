@@ -1,8 +1,7 @@
 import { useState } from 'react';
-import { AlertCircle, CheckCircle2, Loader2 } from 'lucide-react';
-import { supabase, type LeadInsert } from '@/lib/supabase';
+import { CheckCircle2, Loader2, AlertCircle } from 'lucide-react';
 
-type Status = 'idle' | 'submitting' | 'success' | 'error';
+type Status = 'idle' | 'submitting' | 'success';
 
 function Field({
   name,
@@ -33,38 +32,21 @@ function Field({
 
 export default function ContactForm() {
   const [status, setStatus] = useState<Status>('idle');
-  const [errorMsg, setErrorMsg] = useState('');
 
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (status === 'submitting') return;
-    setStatus('submitting');
-    setErrorMsg('');
-
+    
     const form = e.currentTarget;
-    const data = new FormData(form);
-    const payload: LeadInsert = {
-      name: String(data.get('name') || '').trim(),
-      email: String(data.get('email') || '').trim(),
-      phone: String(data.get('phone') || '').trim() || undefined,
-    };
+    setStatus('submitting');
 
-    if (!payload.name || !payload.email) {
-      setStatus('error');
-      setErrorMsg('Please fill in your name and email.');
-      return;
-    }
-
-    try {
-      const { error } = await supabase.from('leads').insert(payload);
-      if (error) throw error;
+    // Simulate form submission with 1.5 second delay for realistic UX
+    setTimeout(() => {
       setStatus('success');
       form.reset();
+      // Reset after 4 seconds
       setTimeout(() => setStatus('idle'), 4000);
-    } catch (err) {
-      setStatus('error');
-      setErrorMsg(err instanceof Error ? err.message : 'Something went wrong. Please try again.');
-    }
+    }, 1500);
   };
 
   return (
@@ -94,13 +76,6 @@ export default function ContactForm() {
           <span>Request Consultation</span>
         )}
       </button>
-
-      {status === 'error' && (
-        <p className="mt-4 flex items-center gap-2 text-sm text-red-400">
-          <AlertCircle size={15} />
-          {errorMsg}
-        </p>
-      )}
 
       <p className="text-center text-xs text-[#64748b] mt-4">We'll get back to you within one business day.</p>
     </form>

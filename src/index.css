@@ -3,30 +3,35 @@
 @tailwind utilities;
 
 /* ============================================================
-   BLENDSKILLS — DESIGN SYSTEM
+   BLENDSKILLS — PREMIUM DESIGN SYSTEM
    ============================================================ */
 :root {
-  --bg-color: #070a13;
-  --bg-card: rgba(14, 20, 38, 0.6);
-  --bg-card-hover: rgba(20, 30, 55, 0.85);
+  --bg-color: #0a0e1a;
+  --bg-secondary: #0f1420;
+  --bg-card: rgba(15, 20, 32, 0.5);
+  --bg-card-hover: rgba(20, 28, 48, 0.8);
 
   --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
   --text-muted: #94a3b8;
   --text-dark: #64748b;
 
   --accent: #00f5d4;
   --accent-rgb: 0, 245, 212;
-  --accent-glow: rgba(0, 245, 212, 0.12);
+  --accent-glow: rgba(0, 245, 212, 0.15);
   --accent-dark: #00bfa5;
+  --accent-light: rgba(0, 245, 212, 0.1);
 
-  --border-color: rgba(255, 255, 255, 0.05);
-  --border-hover: rgba(0, 245, 212, 0.3);
+  --border-color: rgba(255, 255, 255, 0.06);
+  --border-hover: rgba(0, 245, 212, 0.4);
+  --border-strong: rgba(255, 255, 255, 0.1);
 
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
   --font-display: 'Space Grotesk', sans-serif;
   --font-mono: 'IBM Plex Mono', monospace;
 
   --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-fast: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @layer base {
@@ -89,31 +94,34 @@
     letter-spacing: 0.15em;
     color: var(--accent);
     margin-bottom: 1.5rem;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
+    font-weight: 600;
   }
   .eyebrow::before {
     content: '';
     width: 24px;
-    height: 1px;
-    background: var(--accent);
-    opacity: 0.6;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    opacity: 0.8;
   }
 
   .h2 {
     font-family: var(--font-display);
-    font-size: clamp(2rem, 4vw, 3.25rem);
-    font-weight: 700;
-    line-height: 1.15;
-    letter-spacing: -0.02em;
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: var(--text-primary);
   }
 
   .lead {
-    font-size: 1.15rem;
+    font-size: 1.1rem;
     color: var(--text-muted);
-    line-height: 1.7;
+    line-height: 1.8;
+    font-weight: 400;
   }
   .lead strong {
-    color: var(--text-primary);
+    color: var(--text-secondary);
     font-weight: 600;
   }
 
@@ -131,13 +139,14 @@
     font-weight: 600;
     text-decoration: none;
     cursor: pointer;
-    padding: 16px 32px;
-    border-radius: 100px;
+    padding: 14px 32px;
+    border-radius: 12px;
     font-size: 0.95rem;
     transition: var(--transition-smooth);
     will-change: transform;
     position: relative;
     overflow: hidden;
+    border: 1px solid transparent;
   }
   .btn-primary::before {
     content: '';
@@ -152,36 +161,42 @@
   }
 
   .btn-primary {
-    background: var(--accent);
-    color: #000;
+    background: linear-gradient(135deg, #00f5d4, #00dfc9);
+    color: #0a0e1a;
     border: 1px solid var(--accent);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    box-shadow: 0 8px 24px -6px rgba(0, 245, 212, 0.25);
   }
   .btn-primary:hover {
-    background: transparent;
-    color: var(--accent);
-    box-shadow: 0 0 24px rgba(0, 245, 212, 0.35);
+    background: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px -6px rgba(0, 245, 212, 0.35);
   }
 
   .btn-outline {
     background: transparent;
     color: var(--text-primary);
-    border: 1px solid var(--border-color);
+    border: 1.5px solid var(--border-strong);
   }
   .btn-outline:hover {
     border-color: var(--accent);
-    box-shadow: 0 0 15px var(--accent-glow);
+    background: rgba(0, 245, 212, 0.05);
+    box-shadow: 0 0 20px var(--accent-glow);
   }
 
   .btn-small {
     padding: 10px 20px;
     font-size: 0.85rem;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid var(--border-color);
-    color: var(--text-primary);
+    background: rgba(0, 245, 212, 0.08);
+    border: 1.5px solid rgba(0, 245, 212, 0.2);
+    color: var(--accent);
+    font-weight: 600;
   }
   .btn-small:hover {
-    background: var(--text-primary);
-    color: var(--bg-color);
+    background: rgba(0, 245, 212, 0.15);
+    border-color: var(--accent);
+    box-shadow: 0 0 16px rgba(0, 245, 212, 0.2);
   }
 
   .btn-full {
@@ -217,19 +232,21 @@
 
   /* ---------- CARDS ---------- */
   .glass-card {
-    background: var(--bg-card);
+    background: linear-gradient(135deg, rgba(20, 28, 48, 0.4), rgba(15, 20, 32, 0.5));
     border: 1px solid var(--border-color);
-    border-radius: 16px;
+    border-radius: 20px;
     transition: var(--transition-smooth);
     position: relative;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
   }
   .glass-card::after {
     content: '';
     position: absolute;
     inset: 0;
-    border-radius: 16px;
+    border-radius: 20px;
     padding: 1px;
-    background: linear-gradient(135deg, rgba(0,245,212,0.3), transparent 50%);
+    background: linear-gradient(135deg, rgba(0,245,212,0.4), transparent 50%);
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
@@ -241,8 +258,10 @@
     opacity: 1;
   }
   .glass-card:hover {
-    background: var(--bg-card-hover);
-    box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5), 0 0 30px -10px rgba(0, 245, 212, 0.15);
+    background: linear-gradient(135deg, rgba(25, 35, 60, 0.5), rgba(20, 28, 48, 0.6));
+    border-color: rgba(0, 245, 212, 0.3);
+    box-shadow: 0 24px 48px -16px rgba(0, 0, 0, 0.6), 0 0 40px -12px rgba(0, 245, 212, 0.2);
+    transform: translateY(-4px);
   }
 
   /* ---------- FLOATING LABEL INPUT ---------- */
@@ -251,40 +270,46 @@
   }
   .float-input input {
     width: 100%;
-    padding: 22px 24px 14px;
-    background: rgba(0, 0, 0, 0.2);
-    border: 1px solid var(--border-color);
+    padding: 16px 20px 8px;
+    background: rgba(15, 20, 32, 0.5);
+    border: 1.5px solid var(--border-strong);
     border-radius: 12px;
     color: var(--text-primary);
     font-family: var(--font-sans);
     font-size: 1rem;
     outline: none;
-    transition: var(--transition-smooth);
+    transition: var(--transition-fast);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  .float-input input::placeholder {
+    color: transparent;
   }
   .float-input input:focus {
     border-color: var(--accent);
-    background: rgba(0, 0, 0, 0.4);
-    box-shadow: 0 0 0 3px rgba(0, 245, 212, 0.08);
+    background: rgba(20, 28, 48, 0.6);
+    box-shadow: 0 0 0 3px rgba(0, 245, 212, 0.1);
   }
   .float-input label {
     position: absolute;
-    left: 24px;
+    left: 20px;
     top: 50%;
     transform: translateY(-50%);
     color: var(--text-dark);
-    font-size: 1rem;
+    font-size: 0.95rem;
     pointer-events: none;
-    transition: var(--transition-smooth);
+    transition: var(--transition-fast);
   }
   .float-input input:focus + label,
   .float-input input:not(:placeholder-shown) + label {
-    top: 12px;
+    top: 8px;
     transform: translateY(0);
     font-size: 0.7rem;
     color: var(--accent);
     font-family: var(--font-mono);
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    font-weight: 600;
   }
 }
 
@@ -334,9 +359,10 @@
 /* ---------- BLEND RULE ---------- */
 .blend-rule {
   height: 1px;
-  background: radial-gradient(circle, var(--border-color) 0%, rgba(255, 255, 255, 0) 80%);
+  background: radial-gradient(circle, var(--border-strong) 0%, rgba(255, 255, 255, 0) 75%);
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 5rem auto 0;
+  opacity: 0.8;
 }
 
 /* ---------- MARQUEE ---------- */
@@ -354,7 +380,7 @@
 /* ---------- REVEAL ANIMATIONS ---------- */
 .reveal {
   opacity: 0;
-  transform: translateY(30px);
+  transform: translateY(40px);
   transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .reveal.in-view {
@@ -365,11 +391,13 @@
 .reveal-line {
   display: block;
   overflow: hidden;
+  will-change: transform;
 }
 .reveal-line > span {
   display: block;
   transform: translateY(110%);
   transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
 }
 .reveal-line.in-view > span {
   transform: translateY(0);

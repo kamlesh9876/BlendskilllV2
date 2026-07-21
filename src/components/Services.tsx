@@ -19,31 +19,30 @@ const SERVICES: { index: string; title: string; body: string; icon?: LucideIcon;
 
 export default function Services() {
   return (
-    <section id="services" className="relative z-[2] py-24 md:py-32">
+    <section id="services" className="relative z-[2] py-24 md:py-40 lg:py-48">
       <div className="max-w-[1200px] mx-auto px-6">
-        <div className="reveal max-w-[600px] mb-16 md:mb-20">
+        <div className="reveal max-w-[700px] mb-16 md:mb-28">
           <p className="eyebrow">Our Core Services</p>
           <h2 className="h2">
-            Digital solutions that
-            <br />
+            Digital solutions that<br className="hidden md:block" />
             drive real results.
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           {SERVICES.map((s) =>
             s.large ? (
               <article
                 key={s.index}
-                className="reveal glass-card grid md:grid-cols-[1.2fr_1fr] md:col-span-2 md:row-span-2 md:min-h-[580px] items-center overflow-hidden p-0"
+                className="reveal glass-card grid md:grid-cols-[1.3fr_1fr] md:col-span-2 md:row-span-2 md:min-h-[620px] items-center overflow-hidden p-0 group"
               >
-                <div className="p-10 md:p-12">
-                  <div className="w-14 h-14 rounded-xl flex items-center justify-center mb-6 bg-[rgba(0,245,212,0.08)] border border-[rgba(0,245,212,0.15)]">
-                    {s.icon && <s.icon size={26} className="text-[#00f5d4]" />}
+                <div className="p-10 md:p-14 flex flex-col justify-center">
+                  <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-8 bg-gradient-to-br from-[rgba(0,245,212,0.15)] to-[rgba(0,245,212,0.05)] border border-[rgba(0,245,212,0.2)] group-hover:from-[rgba(0,245,212,0.2)] group-hover:to-[rgba(0,245,212,0.08)] transition-all duration-500">
+                    {s.icon && <s.icon size={28} className="text-[#00f5d4]" />}
                   </div>
-                  <span className="font-mono text-sm text-[#00f5d4]">{s.index}</span>
-                  <h3 className="font-display text-2xl font-semibold mt-3 mb-3">{s.title}</h3>
-                  <p className="text-[#94a3b8] text-[0.95rem] leading-relaxed mb-6">{s.body}</p>
+                  <span className="font-mono text-xs tracking-widest text-[#00f5d4] font-semibold mb-3">{s.index} — Featured</span>
+                  <h3 className="font-display text-3xl lg:text-4xl font-bold mt-2 mb-4 leading-tight">{s.title}</h3>
+                  <p className="text-[#94a3b8] text-[0.98rem] leading-relaxed mb-8 font-light">{s.body}</p>
                   <a
                     href="#contact"
                     onClick={(e) => {
@@ -69,20 +68,20 @@ export default function Services() {
             ) : (
               <article
                 key={s.index}
-                className={`reveal glass-card p-10 flex flex-col justify-end min-h-[280px] relative overflow-hidden group ${
+                className={`reveal glass-card p-10 md:p-12 flex flex-col justify-end min-h-[320px] relative overflow-hidden group ${
                   s.wide ? 'md:col-span-2' : ''
                 }`}
               >
-                <div className="absolute top-10 left-10 right-10 flex items-start justify-between">
-                  <span className="font-mono text-sm text-[#00f5d4]">{s.index}</span>
+                <div className="absolute top-8 md:top-10 left-8 md:left-10 right-8 md:right-10 flex items-start justify-between">
+                  <span className="font-mono text-xs tracking-widest text-[#00f5d4] font-semibold">{s.index}</span>
                   {s.icon && (
-                    <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-[rgba(255,255,255,0.03)] border border-[rgba(255,255,255,0.06)] transition-all duration-500 group-hover:bg-[rgba(0,245,212,0.08)] group-hover:border-[rgba(0,245,212,0.2)]">
-                      <s.icon size={18} className="text-[#94a3b8] group-hover:text-[#00f5d4] transition-colors duration-500" />
+                    <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-gradient-to-br from-[rgba(0,245,212,0.1)] to-[rgba(0,245,212,0.02)] border border-[rgba(255,255,255,0.08)] transition-all duration-500 group-hover:from-[rgba(0,245,212,0.15)] group-hover:to-[rgba(0,245,212,0.05)] group-hover:border-[rgba(0,245,212,0.2)]">
+                      <s.icon size={20} className="text-[#94a3b8] group-hover:text-[#00f5d4] transition-colors duration-500" />
                     </div>
                   )}
                 </div>
-                <h3 className="font-display text-2xl font-semibold mt-16 mb-3">{s.title}</h3>
-                <p className="text-[#94a3b8] text-[0.95rem]">{s.body}</p>
+                <h3 className="font-display text-2xl lg:text-3xl font-bold mt-20 mb-3 leading-tight">{s.title}</h3>
+                <p className="text-[#94a3b8] text-[0.95rem] leading-relaxed font-light">{s.body}</p>
               </article>
             )
           )}

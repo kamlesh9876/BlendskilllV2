@@ -1,8 +1,28 @@
 import { useEffect, useRef, useState } from 'react';
 
+// Shared IntersectionObserver instance for all reveal animations - reduces memory usage
+let sharedRevealObserver: IntersectionObserver | null = null;
+
+function getOrCreateRevealObserver(): IntersectionObserver {
+  if (!sharedRevealObserver) {
+    sharedRevealObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            sharedRevealObserver?.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.15, rootMargin: '0px 0px -40px 0px' }
+    );
+  }
+  return sharedRevealObserver;
+}
+
 /**
  * Adds an `in-view` class to elements with the `reveal` or `reveal-line` class
- * when they scroll into the viewport. Runs once per element.
+ * when they scroll into the viewport. Runs once per element. Uses shared IntersectionObserver.
  */
 export function useScrollReveal() {
   useEffect(() => {
@@ -14,55 +34,71 @@ export function useScrollReveal() {
       return;
     }
 
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('in-view');
-            io.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.15, rootMargin: '0px 0px -40px 0px' }
-    );
-
+    const io = getOrCreateRevealObserver();
     els.forEach((el) => io.observe(el));
-    return () => io.disconnect();
+    
+    // Don't disconnect shared observer - it's reused across all components
+    return () => {
+      els.forEach((el) => io.unobserve(el));
+    };
   }, []);
 }
 
-/** Animated number counter that triggers when the element enters the viewport. */
+// Shared IntersectionObserver for count-up animations - reduces memory footprint
+let sharedCountUpObserver: IntersectionObserver | null = null;
+
+function getOrCreateCountUpObserver(callback: (entry: IntersectionObserverEntry) => void): IntersectionObserver {
+  if (!sharedCountUpObserver) {
+    sharedCountUpObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            callback(entry);
+            sharedCountUpObserver?.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.6 }
+    );
+  }
+  return sharedCountUpObserver;
+}
+
+/** Animated number counter that triggers when the element enters the viewport. Uses shared observer. */
 export function useCountUp(target: number, duration = 1400) {
   const [value, setValue] = useState(0);
   const ref = useRef<HTMLSpanElement>(null);
-  const started = useRef(false);
+  const animationRef = useRef<number | null>(null);
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
 
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting || started.current) return;
-          started.current = true;
-          const start = performance.now();
-          const tick = (now: number) => {
-            const progress = Math.min((now - start) / duration, 1);
-            const eased = 1 - Math.pow(1 - progress, 3);
-            setValue(Math.round(eased * target));
-            if (progress < 1) requestAnimationFrame(tick);
-            else setValue(target);
-          };
-          requestAnimationFrame(tick);
-          io.unobserve(el);
-        });
-      },
-      { threshold: 0.6 }
-    );
+    const io = getOrCreateCountUpObserver((entry) => {
+      // Cancel any previous animation
+      if (animationRef.current) cancelAnimationFrame(animationRef.current);
+      
+      const start = performance.now();
+      const tick = (now: number) => {
+        const progress = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        setValue(Math.round(eased * target));
+        if (progress < 1) {
+          animationRef.current = requestAnimationFrame(tick);
+        } else {
+          setValue(target);
+          animationRef.current = null;
+        }
+      };
+      animationRef.current = requestAnimationFrame(tick);
+    });
 
     io.observe(el);
-    return () => io.disconnect();
+    
+    return () => {
+      if (animationRef.current) cancelAnimationFrame(animationRef.current);
+      io.unobserve(el);
+    };
   }, [target, duration]);
 
   return { value, ref };

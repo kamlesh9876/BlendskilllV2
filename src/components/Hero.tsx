@@ -35,12 +35,20 @@ export default function Hero() {
   const blend = useBlendSlider(50);
 
   return (
-    <section className="relative min-h-[100svh] flex flex-col justify-center overflow-hidden pt-32 pb-16 md:pt-40 md:pb-24">
+    <section className="relative min-h-[100svh] flex flex-col justify-center overflow-hidden pt-32 pb-16 md:pt-40 md:pb-24 lg:pt-44">
       <div
-        className="absolute top-[10%] right-[-10%] w-[60vw] h-[60vw] z-[1] pointer-events-none"
+        className="absolute top-[5%] right-[-15%] w-[70vw] h-[70vw] z-[1] pointer-events-none"
         style={{
-          background: 'radial-gradient(circle, rgba(0,245,212,0.08) 0%, rgba(7,10,19,0) 70%)',
-          filter: 'blur(50px)',
+          background: 'radial-gradient(circle, rgba(0,245,212,0.12) 0%, rgba(10,14,26,0) 65%)',
+          filter: 'blur(60px)',
+        }}
+        aria-hidden="true"
+      />
+      <div
+        className="absolute bottom-[20%] left-[-20%] w-[50vw] h-[50vw] z-[0] pointer-events-none"
+        style={{
+          background: 'radial-gradient(circle, rgba(0,245,212,0.08) 0%, rgba(10,14,26,0) 70%)',
+          filter: 'blur(80px)',
         }}
         aria-hidden="true"
       />
@@ -49,26 +57,26 @@ export default function Hero() {
       <div className="relative z-[5] max-w-[1200px] mx-auto px-6 w-full">
         <p className="eyebrow reveal">Pune · Gaya — Digital Growth Partner</p>
         <h1
-          className="font-display font-bold leading-[1.05] tracking-tight mb-8"
-          style={{ fontSize: 'clamp(2.5rem, 6.5vw, 5.5rem)' }}
+          className="font-display font-bold leading-[1.05] tracking-tight mb-8 lg:mb-10"
+          style={{ fontSize: 'clamp(2.5rem, 6.5vw, 5.8rem)' }}
         >
           <span className="reveal-line">
             <span>Driving growth</span>
           </span>
           <span className="reveal-line">
             <span>
-              through <em className="italic font-normal text-[#00f5d4]">development</em>
+              through <em className="italic font-normal text-[#00f5d4] not-italic">development</em>
             </span>
           </span>
           <span className="reveal-line">
             <span>
-              &amp; digital <em className="italic font-normal text-[#00f5d4]">marketing.</em>
+              &amp; digital <em className="italic font-normal text-[#00f5d4] not-italic">marketing.</em>
             </span>
           </span>
         </h1>
         <p
-          className="reveal text-[#94a3b8] max-w-[680px] leading-relaxed mb-12"
-          style={{ fontSize: 'clamp(1.1rem, 1.5vw, 1.4rem)' }}
+          className="reveal text-[#94a3b8] max-w-[720px] leading-relaxed mb-12 lg:mb-14 font-light"
+          style={{ fontSize: 'clamp(1rem, 1.5vw, 1.35rem)' }}
         >
           We craft result-driven marketing strategies and high-performance websites that help brands
           grow faster — with real, measurable business impact.
@@ -94,8 +102,8 @@ export default function Hero() {
 
         {/* Blend slider */}
         <div
-          className="reveal max-w-[600px] rounded-2xl p-6 md:p-8 backdrop-blur-md mt-10 transition-all duration-500 hover:border-[rgba(0,245,212,0.2)]"
-          style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border-color)' }}
+          className="reveal max-w-[600px] rounded-2xl p-8 md:p-10 backdrop-blur-lg mt-12 lg:mt-14 transition-all duration-500 hover:border-[rgba(0,245,212,0.3)] glass-card"
+          style={{ background: 'linear-gradient(135deg, rgba(20,28,48,0.4), rgba(15,20,32,0.5))' }}
         >
           <div className="flex justify-between items-center mb-5 font-display font-semibold">
             <span
