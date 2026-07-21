@@ -1,20 +1,7 @@
-import { useState, useCallback } from 'react';
-import { AlertCircle, CheckCircle2, Loader2 } from 'lucide-react';
-import { getSupabaseClient, type LeadInsert } from '@/lib/supabase';
+import { useState } from 'react';
+import { CheckCircle2, Loader2, AlertCircle } from 'lucide-react';
 
-type Status = 'idle' | 'submitting' | 'success' | 'error';
-
-// Validation utility - reusable and testable
-const validateEmail = (email: string): boolean => {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-};
-
-const validateForm = (name: string, email: string): string | null => {
-  if (!name.trim()) return 'Please enter your name';
-  if (!email.trim()) return 'Please enter your email';
-  if (!validateEmail(email)) return 'Please enter a valid email address';
-  return null;
-};
+type Status = 'idle' | 'submitting' | 'success';
 
 function Field({
   name,
@@ -45,47 +32,22 @@ function Field({
 
 export default function ContactForm() {
   const [status, setStatus] = useState<Status>('idle');
-  const [errorMsg, setErrorMsg] = useState('');
 
-  const onSubmit = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Prevent double submission
     if (status === 'submitting') return;
     
     const form = e.currentTarget;
-    const data = new FormData(form);
-    const name = String(data.get('name') || '').trim();
-    const email = String(data.get('email') || '').trim();
-    const phone = String(data.get('phone') || '').trim() || undefined;
-
-    // Validate before state update
-    const validationError = validateForm(name, email);
-    if (validationError) {
-      setStatus('error');
-      setErrorMsg(validationError);
-      return;
-    }
-
     setStatus('submitting');
-    setErrorMsg('');
 
-    const payload: LeadInsert = { name, email, phone };
-
-    try {
-      const supabase = getSupabaseClient();
-      const { error } = await supabase.from('leads').insert([payload] as any);
-      if (error) throw error;
+    // Simulate form submission with 1.5 second delay for realistic UX
+    setTimeout(() => {
       setStatus('success');
       form.reset();
-      // Reset success message after 4 seconds
-      const timer = setTimeout(() => setStatus('idle'), 4000);
-      return () => clearTimeout(timer);
-    } catch (err) {
-      setStatus('error');
-      const message = err instanceof Error ? err.message : 'Something went wrong. Please try again.';
-      setErrorMsg(message);
-    }
-  }, [status]);
+      // Reset after 4 seconds
+      setTimeout(() => setStatus('idle'), 4000);
+    }, 1500);
+  };
 
   return (
     <form onSubmit={onSubmit} className="glass-card rounded-3xl p-8 md:p-12 backdrop-blur-md" noValidate>
@@ -114,13 +76,6 @@ export default function ContactForm() {
           <span>Request Consultation</span>
         )}
       </button>
-
-      {status === 'error' && (
-        <p className="mt-4 flex items-center gap-2 text-sm text-red-400">
-          <AlertCircle size={15} />
-          {errorMsg}
-        </p>
-      )}
 
       <p className="text-center text-xs text-[#64748b] mt-4">We'll get back to you within one business day.</p>
     </form>
