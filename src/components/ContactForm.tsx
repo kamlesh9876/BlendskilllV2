@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { AlertCircle, CheckCircle2, Loader2 } from 'lucide-react';
-import { supabase, type LeadInsert } from '@/lib/supabase';
+import { getSupabaseClient, type LeadInsert } from '@/lib/supabase';
 
 type Status = 'idle' | 'submitting' | 'success' | 'error';
 
@@ -56,6 +56,7 @@ export default function ContactForm() {
     }
 
     try {
+      const supabase = getSupabaseClient();
       const { error } = await supabase.from('leads').insert(payload);
       if (error) throw error;
       setStatus('success');
