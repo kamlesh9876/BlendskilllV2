@@ -1,8 +1,20 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { AlertCircle, CheckCircle2, Loader2 } from 'lucide-react';
 import { getSupabaseClient, type LeadInsert } from '@/lib/supabase';
 
 type Status = 'idle' | 'submitting' | 'success' | 'error';
+
+// Validation utility - reusable and testable
+const validateEmail = (email: string): boolean => {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+};
+
+const validateForm = (name: string, email: string): string | null => {
+  if (!name.trim()) return 'Please enter your name';
+  if (!email.trim()) return 'Please enter your email';
+  if (!validateEmail(email)) return 'Please enter a valid email address';
+  return null;
+};
 
 function Field({
   name,
@@ -35,25 +47,29 @@ export default function ContactForm() {
   const [status, setStatus] = useState<Status>('idle');
   const [errorMsg, setErrorMsg] = useState('');
 
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    // Prevent double submission
     if (status === 'submitting') return;
+    
+    const form = e.currentTarget;
+    const data = new FormData(form);
+    const name = String(data.get('name') || '').trim();
+    const email = String(data.get('email') || '').trim();
+    const phone = String(data.get('phone') || '').trim() || undefined;
+
+    // Validate before state update
+    const validationError = validateForm(name, email);
+    if (validationError) {
+      setStatus('error');
+      setErrorMsg(validationError);
+      return;
+    }
+
     setStatus('submitting');
     setErrorMsg('');
 
-    const form = e.currentTarget;
-    const data = new FormData(form);
-    const payload: LeadInsert = {
-      name: String(data.get('name') || '').trim(),
-      email: String(data.get('email') || '').trim(),
-      phone: String(data.get('phone') || '').trim() || undefined,
-    };
-
-    if (!payload.name || !payload.email) {
-      setStatus('error');
-      setErrorMsg('Please fill in your name and email.');
-      return;
-    }
+    const payload: LeadInsert = { name, email, phone };
 
     try {
       const supabase = getSupabaseClient();
@@ -61,12 +77,15 @@ export default function ContactForm() {
       if (error) throw error;
       setStatus('success');
       form.reset();
-      setTimeout(() => setStatus('idle'), 4000);
+      // Reset success message after 4 seconds
+      const timer = setTimeout(() => setStatus('idle'), 4000);
+      return () => clearTimeout(timer);
     } catch (err) {
       setStatus('error');
-      setErrorMsg(err instanceof Error ? err.message : 'Something went wrong. Please try again.');
+      const message = err instanceof Error ? err.message : 'Something went wrong. Please try again.';
+      setErrorMsg(message);
     }
-  };
+  }, [status]);
 
   return (
     <form onSubmit={onSubmit} className="glass-card rounded-3xl p-8 md:p-12 backdrop-blur-md" noValidate>
