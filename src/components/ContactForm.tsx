@@ -57,7 +57,7 @@ export default function ContactForm() {
 
     try {
       const supabase = getSupabaseClient();
-      const { error } = await supabase.from('leads').insert(payload);
+      const { error } = await supabase.from('leads').insert([payload] as any);
       if (error) throw error;
       setStatus('success');
       form.reset();
