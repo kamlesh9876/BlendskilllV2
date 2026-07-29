@@ -1,0 +1,27 @@
+kind = "web"
+previewPath = "/"
+title = "BlendSkills"
+version = "1.0.0"
+id = "artifacts/blendskills"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 22054
+
+[services.development]
+run = "pnpm --filter @workspace/blendskills run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/blendskills", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/blendskills/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "22054"
+BASE_PATH = "/"

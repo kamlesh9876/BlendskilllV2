@@ -1,0 +1,23 @@
+{
+  "name": "workspace",
+  "version": "0.0.0",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "artifacts/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=@workspace/blendskills",
+    "build": "npm run build --workspace=@workspace/blendskills",
+    "typecheck": "npm run typecheck --workspace=@workspace/blendskills",
+    "lint": "npm run typecheck"
+  },
+  "dependencies": {
+    "@google/genai": "^2.13.0",
+    "@replit/connectors-sdk": "^0.4.1"
+  },
+  "devDependencies": {
+    "prettier": "^3.9.5",
+    "typescript": "~5.7.3"
+  }
+}
