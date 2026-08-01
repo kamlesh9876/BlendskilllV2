@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Code, Bot, TrendingUp, Palette, Smartphone, BarChart3, ArrowRight } from 'lucide-react';
-import { Link } from 'wouter';
+import { Code, Bot, TrendingUp, Palette, Smartphone, BarChart3, ArrowRight, Check, Clock, Sparkles } from 'lucide-react';
+import { Link, useLocation } from 'wouter';
 import type { LucideIcon } from 'lucide-react';
 import { Skeleton } from './Skeleton';
 
@@ -20,7 +20,7 @@ function ServiceCardImage({ src, alt, icon: Icon }: { src: string; alt: string; 
         }`}
       />
       <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-black/30 pointer-events-none" />
-      
+
       {/* Icon Badge Overlay */}
       <div className="absolute bottom-3 left-6 w-12 h-12 rounded-xl bg-white shadow-lg border border-black/5 flex items-center justify-center text-[#0066cc] z-10">
         <Icon size={22} />
@@ -74,10 +74,60 @@ const services = [
   },
 ];
 
+interface ModuleOption {
+  id: string;
+  name: string;
+  category: string;
+  estWeeks: number;
+  estCost: number;
+}
+
+const SCOPE_MODULES: ModuleOption[] = [
+  { id: 'web', name: 'Responsive Web/App Frontend', category: 'Dev', estWeeks: 2, estCost: 2500 },
+  { id: 'backend', name: 'Custom API & DB Backend', category: 'Dev', estWeeks: 3, estCost: 3500 },
+  { id: 'ai', name: 'AI Chatbot & Automation Bot', category: 'AI', estWeeks: 1, estCost: 2000 },
+  { id: 'seo', name: 'Technical SEO & Speed Optimization', category: 'Marketing', estWeeks: 1, estCost: 1500 },
+  { id: 'ads', name: 'Google & Meta Ads Lead Funnels', category: 'Marketing', estWeeks: 1, estCost: 1800 },
+  { id: 'branding', name: 'Brand Identity & Design System', category: 'Design', estWeeks: 2, estCost: 2000 },
+];
+
 export default function Services() {
+  const [, setLocation] = useLocation();
+  const [selectedModules, setSelectedModules] = useState<string[]>(['web', 'ai']);
+
+  const toggleModule = (id: string) => {
+    setSelectedModules((prev) =>
+      prev.includes(id) ? prev.filter((m) => m !== id) : [...prev, id]
+    );
+  };
+
+  const totalWeeks = SCOPE_MODULES.filter((m) => selectedModules.includes(m.id)).reduce(
+    (acc, item) => acc + item.estWeeks,
+    0
+  );
+
+  const totalCost = SCOPE_MODULES.filter((m) => selectedModules.includes(m.id)).reduce(
+    (acc, item) => acc + item.estCost,
+    0
+  );
+
+  const handleRequestScopeQuote = () => {
+    const moduleNames = SCOPE_MODULES.filter((m) => selectedModules.includes(m.id))
+      .map((m) => m.name)
+      .join(', ');
+
+    const msg = `Custom Scope Request: ${moduleNames}. Estimated Timeline: ~${totalWeeks} weeks.`;
+
+    setLocation(
+      `/contact?service=${encodeURIComponent('Custom Software & AI Scope')}&budget=${encodeURIComponent(
+        `$${totalCost.toLocaleString()}`
+      )}&msg=${encodeURIComponent(msg)}`
+    );
+  };
+
   return (
-    <section className="relative" style={{ padding: '120px 24px', background: 'linear-gradient(180deg, #f8fafc 0%, #ffffff 100%)' }}>
-      <div className="max-w-[1400px] mx-auto">
+    <section id="services" className="relative py-24 md:py-32 bg-gradient-to-b from-slate-50 to-white text-slate-900">
+      <div className="max-w-[1400px] mx-auto px-6">
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -86,38 +136,20 @@ export default function Services() {
           transition={{ duration: 0.6 }}
           className="mb-16"
         >
-          <p
-            className="font-mono text-[0.75rem] font-semibold uppercase tracking-widest mb-6"
-            style={{ color: '#0066cc' }}
-          >
+          <p className="font-mono text-xs font-bold uppercase tracking-widest text-[#0066cc] mb-4">
             What We Do
           </p>
-          <h2
-            className="font-display font-bold leading-tight mb-6"
-            style={{
-              fontSize: 'clamp(2rem, 4vw, 3rem)',
-              color: '#1e293b',
-              maxWidth: '700px',
-            }}
-          >
-            Everything you need to<br />
+          <h2 className="font-display font-extrabold text-3xl sm:text-4xl md:text-5xl text-slate-900 leading-tight mb-6">
+            Everything you need to<br className="hidden md:block" />
             build, automate, and grow
           </h2>
-          <p
-            className="font-normal"
-            style={{
-              fontSize: '1.1rem',
-              color: '#64748b',
-              maxWidth: '600px',
-              lineHeight: 1.7,
-            }}
-          >
+          <p className="text-slate-600 text-base md:text-lg max-w-2xl leading-relaxed">
             From custom software and AI automation to performance marketing and branding—we deliver end-to-end solutions that drive real business results.
           </p>
         </motion.div>
 
         {/* Service Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
           {services.map((service, index) => (
             <motion.div
               key={service.title}
@@ -125,63 +157,137 @@ export default function Services() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: index * 0.15 }}
-              className="glass-card group overflow-hidden flex flex-col justify-between"
-              style={{
-                borderRadius: '24px',
-                background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(248, 250, 252, 0.95))',
-                border: '1px solid rgba(0, 0, 0, 0.08)',
-                backdropFilter: 'blur(10px)',
-              }}
-              whileHover={{
-                transform: 'translateY(-8px)',
-                background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 1))',
-                borderColor: 'rgba(0, 102, 204, 0.4)',
-                boxShadow: '0 24px 48px -16px rgba(0, 0, 0, 0.1), 0 0 40px -12px rgba(0, 102, 204, 0.2)',
-                transition: { duration: 0.35 }
-              }}
+              className="glass-card group overflow-hidden flex flex-col justify-between rounded-3xl bg-white border border-slate-200/80 shadow-sm hover:shadow-2xl hover:border-[#0066cc]/40 transition-all duration-300"
             >
-              {/* Card Image Cover with Skeleton Loading */}
               <ServiceCardImage src={service.image} alt={service.title} icon={service.icon} />
 
-              <div className="p-8 pt-4 flex-1 flex flex-col justify-between">
+              <div className="p-8 pt-6 flex-1 flex flex-col justify-between space-y-4">
                 <div>
-                  {/* Title */}
-                  <h3
-                    className="font-display font-semibold mb-3 text-xl text-[#1e293b]"
-                  >
+                  <h3 className="font-display font-bold text-xl text-slate-900 group-hover:text-[#0066cc] transition-colors mb-2">
                     {service.title}
                   </h3>
-
-                  {/* Text */}
-                  <p
-                    className="font-normal mb-6 text-sm text-[#64748b] leading-relaxed"
-                  >
+                  <p className="text-sm text-slate-600 leading-relaxed">
                     {service.text}
                   </p>
                 </div>
 
-                {/* CTA */}
                 <Link
-                  href="/services"
-                  className="inline-flex items-center gap-2 font-semibold transition-all duration-300"
-                  style={{
-                    fontSize: '0.9rem',
-                    color: '#0066cc',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.color = '#1e293b';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.color = '#0066cc';
-                  }}
+                  href="/contact"
+                  className="inline-flex items-center gap-2 text-sm font-bold text-[#0066cc] group-hover:translate-x-1 transition-transform"
                 >
-                  {service.cta}
+                  <span>Explore Solutions</span>
                   <ArrowRight size={16} />
                 </Link>
               </div>
             </motion.div>
           ))}
         </div>
+
+        {/* Interactive Scope & Price Builder */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="rounded-3xl p-6 sm:p-8 md:p-10 bg-white border border-slate-200 shadow-xl space-y-8"
+        >
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-100">
+            <div>
+              <div className="flex items-center gap-2 text-[#0066cc] font-mono text-xs font-bold uppercase tracking-wider mb-1">
+                <Sparkles size={14} />
+                <span>Interactive Scope Builder</span>
+              </div>
+              <h3 className="font-display font-extrabold text-2xl md:text-3xl text-slate-900">
+                Tailor Your Project Scope
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-500 mt-1">
+                Select the modules your project needs to generate a timeline and budget estimate.
+              </p>
+            </div>
+          </div>
+
+          <div className="grid lg:grid-cols-12 gap-8 items-start">
+            {/* Module Checkboxes */}
+            <div className="lg:col-span-8 grid sm:grid-cols-2 gap-3">
+              {SCOPE_MODULES.map((m) => {
+                const isSelected = selectedModules.includes(m.id);
+                return (
+                  <div
+                    key={m.id}
+                    onClick={() => toggleModule(m.id)}
+                    className={`p-4 rounded-2xl border transition-all cursor-pointer flex items-start gap-3 ${
+                      isSelected
+                        ? 'bg-blue-50/60 border-[#0066cc] shadow-sm'
+                        : 'bg-slate-50/80 border-slate-200/80 hover:bg-slate-100/80'
+                    }`}
+                  >
+                    <div
+                      className={`w-5 h-5 rounded-md flex items-center justify-center mt-0.5 transition-colors ${
+                        isSelected ? 'bg-[#0066cc] text-white' : 'border border-slate-300 bg-white'
+                      }`}
+                    >
+                      {isSelected && <Check size={14} />}
+                    </div>
+
+                    <div className="flex-1">
+                      <div className="flex justify-between items-center text-xs font-bold text-slate-900 mb-1">
+                        <span>{m.name}</span>
+                      </div>
+                      <div className="flex items-center gap-3 text-[11px] text-slate-500 font-mono">
+                        <span className="flex items-center gap-1">
+                          <Clock size={12} /> ~{m.estWeeks} wks
+                        </span>
+                        <span>•</span>
+                        <span className="font-bold text-[#0066cc]">
+                          ${m.estCost.toLocaleString()}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Live Estimate Card */}
+            <div className="lg:col-span-4 rounded-2xl p-6 bg-slate-900 text-white shadow-xl space-y-6 border border-slate-800">
+              <span className="font-mono text-xs uppercase font-bold text-cyan-400 tracking-wider block">
+                Estimated Project Plan
+              </span>
+
+              <div className="space-y-4">
+                <div className="flex justify-between items-center pb-3 border-b border-slate-800">
+                  <span className="text-xs text-slate-400">Selected Modules</span>
+                  <span className="font-mono text-sm font-bold text-white">
+                    {selectedModules.length} Active
+                  </span>
+                </div>
+
+                <div className="flex justify-between items-center pb-3 border-b border-slate-800">
+                  <span className="text-xs text-slate-400">Est. Time to Market</span>
+                  <span className="font-mono text-sm font-bold text-cyan-300">
+                    ~{totalWeeks > 0 ? totalWeeks : 1} Weeks
+                  </span>
+                </div>
+
+                <div className="flex justify-between items-center pt-2">
+                  <span className="text-xs text-slate-300 font-medium">Estimated Investment</span>
+                  <span className="font-display font-extrabold text-2xl text-emerald-400">
+                    ${totalCost.toLocaleString()}
+                  </span>
+                </div>
+              </div>
+
+              <button
+                onClick={handleRequestScopeQuote}
+                disabled={selectedModules.length === 0}
+                className="w-full py-3.5 px-5 rounded-xl bg-[#0066cc] hover:bg-[#0052a3] text-white font-bold text-sm shadow-lg shadow-[#0066cc]/30 flex items-center justify-center gap-2 transition-all cursor-pointer disabled:opacity-50"
+              >
+                <span>Request Detailed Scope Proposal</span>
+                <ArrowRight size={16} />
+              </button>
+            </div>
+          </div>
+        </motion.div>
       </div>
     </section>
   );

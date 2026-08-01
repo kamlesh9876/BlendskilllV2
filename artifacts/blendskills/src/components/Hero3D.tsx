@@ -190,13 +190,18 @@ export default function Hero3D() {
       gl.uniformMatrix4fv(uProj, false, proj);
       gl.uniformMatrix4fv(uView, false, v);
 
+      // Dynamic Color Shift for rich vibrant tech visuals
+      const rMesh = 0.2 + 0.3 * Math.sin(time * 0.5);
+      const gMesh = 0.6 + 0.3 * Math.cos(time * 0.7);
+      const bMesh = 0.85 + 0.15 * Math.sin(time * 0.4);
+
       // Wireframe
       let model = mat4.identity();
       model = mat4.rotateY(model, time * 0.18);
       model = mat4.rotateX(model, time * 0.12);
       gl.uniformMatrix4fv(uModel, false, model);
-      gl.uniform3f(uColor, 0.39, 0.96, 0.83);
-      gl.uniform1f(uAlpha, 0.35);
+      gl.uniform3f(uColor, rMesh, gMesh, bMesh);
+      gl.uniform1f(uAlpha, 0.45);
       gl.bindBuffer(gl.ARRAY_BUFFER, lineBuf);
       gl.vertexAttribPointer(aPos, 3, gl.FLOAT, false, 0, 0);
       gl.enableVertexAttribArray(aPos);
@@ -205,9 +210,11 @@ export default function Hero3D() {
       // Particles
       let pModel = mat4.identity();
       pModel = mat4.rotateY(pModel, -time * 0.08);
+      const rP = 0.3 + 0.4 * Math.cos(time * 0.4);
+      const gP = 0.7 + 0.25 * Math.sin(time * 0.6);
       gl.uniformMatrix4fv(uModel, false, pModel);
-      gl.uniform3f(uColor, 1, 1, 1);
-      gl.uniform1f(uAlpha, 0.7);
+      gl.uniform3f(uColor, rP, gP, 1.0);
+      gl.uniform1f(uAlpha, 0.8);
       gl.uniform1f(uPointSize, 3 * dpr);
       gl.bindBuffer(gl.ARRAY_BUFFER, pBuf);
       gl.vertexAttribPointer(aPos, 3, gl.FLOAT, false, 0, 0);

@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Phone, MapPin, Instagram, Linkedin, Copy, Check } from 'lucide-react';
+import { Mail, Phone, MapPin, Instagram, Linkedin, Copy, Check, Sparkles, ArrowUpRight } from 'lucide-react';
 import { Link } from 'wouter';
 import ContactForm from './ContactForm';
 
 export default function Contact() {
   const [copiedField, setCopiedField] = useState<string | null>(null);
+  const [videoLoaded, setVideoLoaded] = useState(false);
 
   const copyToClipboard = (text: string, label: string) => {
     navigator.clipboard.writeText(text);
@@ -14,75 +15,71 @@ export default function Contact() {
   };
 
   return (
-    <section className="relative" style={{ padding: '120px 24px', background: '#f8fafc' }}>
-      <div className="max-w-[1400px] mx-auto">
-        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+    <section id="contact" className="relative py-24 md:py-32 bg-slate-950 text-white overflow-hidden">
+      {/* Background Video Layer */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-30">
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          poster="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1600&auto=format&fit=crop&q=80"
+          onLoadedData={() => setVideoLoaded(true)}
+          className={`w-full h-full object-cover transition-opacity duration-1000 ${
+            videoLoaded ? 'opacity-80' : 'opacity-20'
+          }`}
+          src="https://assets.mixkit.co/videos/preview/mixkit-futuristic-hologram-screen-with-data-32532-large.mp4"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-950/90 to-slate-950" />
+      </div>
+
+      <div className="max-w-[1400px] mx-auto px-6 relative z-10">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           {/* Left Content */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            style={{ maxWidth: '600px' }}
+            className="space-y-8"
           >
-            <p
-              className="font-mono text-[0.75rem] font-semibold uppercase tracking-widest mb-6"
-              style={{ color: '#0066cc' }}
-            >
-              Let's Build Something
-            </p>
-            <h2
-              className="font-display font-bold leading-tight mb-6"
-              style={{
-                fontSize: 'clamp(2rem, 4vw, 3rem)',
-                color: '#1e293b',
-              }}
-            >
-              Transform your business<br />
-              with BlendSkills
-            </h2>
-            <p
-              className="font-normal mb-12"
-              style={{
-                fontSize: '1.1rem',
-                color: '#64748b',
-                lineHeight: 1.7,
-              }}
-            >
-              Take your digital marketing and software infrastructure to the next level. Book a free consultation with our growth engineering specialists.
-            </p>
+            <div>
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-cyan-500/20 to-blue-500/20 border border-cyan-400/30 text-cyan-300 font-mono text-xs font-bold uppercase tracking-wider mb-4">
+                <Sparkles size={14} />
+                <span>Let's Build Something Great</span>
+              </div>
+              <h2 className="font-display font-extrabold text-3xl sm:text-4xl md:text-5xl text-white leading-tight">
+                Transform your business with{' '}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-indigo-400">
+                  BlendSkills
+                </span>
+              </h2>
+              <p className="text-slate-300 text-base md:text-lg mt-4 leading-relaxed">
+                Take your digital marketing and software infrastructure to the next level. Book a free strategy call with our growth engineering specialists.
+              </p>
+            </div>
 
             {/* Contact Info Cards with Micro-Interactions */}
-            <div className="flex flex-col gap-6">
-              <div className="flex items-center justify-between p-4 rounded-2xl bg-white border border-black/10 hover:border-[#0066cc]/40 transition-all shadow-sm">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/10 hover:border-cyan-400/50 backdrop-blur-md transition-all shadow-lg">
                 <a
                   href="mailto:info@blendskills.co.in"
-                  className="inline-flex items-center gap-4 font-display text-base md:text-lg font-semibold text-[#1e293b] hover:text-[#0066cc] transition-colors"
+                  className="inline-flex items-center gap-4 font-display text-sm sm:text-base font-semibold text-white hover:text-cyan-300 transition-colors"
                 >
-                  <div
-                    style={{
-                      width: '44px',
-                      height: '44px',
-                      borderRadius: '12px',
-                      background: 'rgba(0, 102, 204, 0.1)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    <Mail size={20} style={{ color: '#0066cc' }} />
+                  <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#0066cc] to-cyan-500 flex items-center justify-center text-white shadow-md">
+                    <Mail size={20} />
                   </div>
                   info@blendskills.co.in
                 </a>
                 <button
                   onClick={() => copyToClipboard('info@blendskills.co.in', 'email')}
-                  className="p-2.5 rounded-xl bg-[#f1f5f9] hover:bg-[#e2e8f0] text-[#64748b] hover:text-[#0066cc] transition-colors cursor-pointer flex items-center gap-1.5 text-xs font-mono"
+                  className="p-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white transition-colors cursor-pointer flex items-center gap-1.5 text-xs font-mono"
                   title="Copy email"
                 >
                   {copiedField === 'email' ? (
                     <>
-                      <Check size={14} className="text-emerald-600" />
-                      <span className="text-emerald-600 font-bold">Copied!</span>
+                      <Check size={14} className="text-emerald-400" />
+                      <span className="text-emerald-400 font-bold">Copied!</span>
                     </>
                   ) : (
                     <>
@@ -93,35 +90,25 @@ export default function Contact() {
                 </button>
               </div>
 
-              <div className="flex items-center justify-between p-4 rounded-2xl bg-white border border-black/10 hover:border-[#0066cc]/40 transition-all shadow-sm">
+              <div className="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/10 hover:border-cyan-400/50 backdrop-blur-md transition-all shadow-lg">
                 <a
                   href="tel:+918530819966"
-                  className="inline-flex items-center gap-4 font-display text-base md:text-lg font-semibold text-[#1e293b] hover:text-[#0066cc] transition-colors"
+                  className="inline-flex items-center gap-4 font-display text-sm sm:text-base font-semibold text-white hover:text-cyan-300 transition-colors"
                 >
-                  <div
-                    style={{
-                      width: '44px',
-                      height: '44px',
-                      borderRadius: '12px',
-                      background: 'rgba(0, 102, 204, 0.1)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    <Phone size={20} style={{ color: '#0066cc' }} />
+                  <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white shadow-md">
+                    <Phone size={20} />
                   </div>
                   +91 85308 19966
                 </a>
                 <button
                   onClick={() => copyToClipboard('+918530819966', 'phone')}
-                  className="p-2.5 rounded-xl bg-[#f1f5f9] hover:bg-[#e2e8f0] text-[#64748b] hover:text-[#0066cc] transition-colors cursor-pointer flex items-center gap-1.5 text-xs font-mono"
+                  className="p-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white transition-colors cursor-pointer flex items-center gap-1.5 text-xs font-mono"
                   title="Copy phone"
                 >
                   {copiedField === 'phone' ? (
                     <>
-                      <Check size={14} className="text-emerald-600" />
-                      <span className="text-emerald-600 font-bold">Copied!</span>
+                      <Check size={14} className="text-emerald-400" />
+                      <span className="text-emerald-400 font-bold">Copied!</span>
                     </>
                   ) : (
                     <>
@@ -132,25 +119,38 @@ export default function Contact() {
                 </button>
               </div>
 
-              <div className="p-4 rounded-2xl bg-white border border-black/10 flex items-center gap-4">
-                <div
-                  style={{
-                    width: '44px',
-                    height: '44px',
-                    borderRadius: '12px',
-                    background: 'rgba(0, 102, 204, 0.1)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <MapPin size={20} style={{ color: '#0066cc' }} />
+              <div className="p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md flex items-center gap-4">
+                <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-md">
+                  <MapPin size={20} />
                 </div>
                 <div>
-                  <div className="font-display font-semibold text-[#1e293b]">Offices in Pune & Gaya</div>
-                  <div className="text-xs text-[#64748b]">Serving clients across India & global markets</div>
+                  <div className="font-display font-semibold text-white text-sm sm:text-base">Offices in Pune & Gaya</div>
+                  <div className="text-xs text-slate-400">Serving clients across India & global markets</div>
                 </div>
               </div>
+            </div>
+
+            {/* Social Links */}
+            <div className="pt-2 flex items-center gap-4 text-xs font-mono text-slate-400">
+              <span>Follow Us:</span>
+              <a
+                href="https://instagram.com"
+                target="_blank"
+                rel="noreferrer"
+                className="p-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-cyan-300 transition-colors"
+                aria-label="Instagram"
+              >
+                <Instagram size={18} />
+              </a>
+              <a
+                href="https://linkedin.com"
+                target="_blank"
+                rel="noreferrer"
+                className="p-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-cyan-300 transition-colors"
+                aria-label="LinkedIn"
+              >
+                <Linkedin size={18} />
+              </a>
             </div>
           </motion.div>
 
@@ -171,239 +171,52 @@ export default function Contact() {
 
 export function Footer() {
   return (
-    <footer className="relative" style={{ padding: '80px 24px 32px', background: '#070B14', borderTop: '1px solid rgba(255, 255, 255, 0.06)' }}>
-      <div className="max-w-[1400px] mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr] gap-12 lg:gap-16 mb-16">
-          {/* Brand Column */}
-          <div>
-            <Link href="/" className="no-underline inline-block">
-              <img src="/logo.png" alt="BlendSkills" className="h-10 w-auto" />
+    <footer className="bg-slate-950 text-white border-t border-slate-900 py-16">
+      <div className="max-w-[1400px] mx-auto px-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-10 pb-12 border-b border-slate-900">
+          <div className="space-y-4">
+            <Link href="/" className="inline-block">
+              <img src="/logo.png" alt="BlendSkills" className="h-9 w-auto object-contain brightness-0 invert" />
             </Link>
-            <p
-              className="font-normal mt-6"
-              style={{
-                fontSize: '0.95rem',
-                color: '#94a3b8',
-                maxWidth: '350px',
-                lineHeight: 1.7,
-              }}
-            >
-              Empowering brands with smart digital marketing, creative design, and powerful development—growth that lasts.
+            <p className="text-slate-400 text-xs leading-relaxed max-w-xs">
+              Full-Stack Digital Marketing & Engineering Agency turning ambitious ideas into scalable revenue.
             </p>
-            <div className="flex gap-3 mt-8">
-              <a
-                href="https://www.instagram.com/blendskills.co/"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Instagram"
-                className="w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-300"
-                style={{
-                  background: 'rgba(0, 245, 212, 0.05)',
-                  border: '1px solid rgba(0, 245, 212, 0.1)',
-                  color: '#64748b',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.color = '#00f5d4';
-                  e.currentTarget.style.background = 'rgba(0, 245, 212, 0.1)';
-                  e.currentTarget.style.borderColor = 'rgba(0, 245, 212, 0.3)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.color = '#64748b';
-                  e.currentTarget.style.background = 'rgba(0, 245, 212, 0.05)';
-                  e.currentTarget.style.borderColor = 'rgba(0, 245, 212, 0.1)';
-                }}
-              >
-                <Instagram size={18} />
-              </a>
-              <a
-                href="https://www.linkedin.com/company/blendskills-pvt-ltd"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="LinkedIn"
-                className="w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-300"
-                style={{
-                  background: 'rgba(0, 245, 212, 0.05)',
-                  border: '1px solid rgba(0, 245, 212, 0.1)',
-                  color: '#64748b',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.color = '#00f5d4';
-                  e.currentTarget.style.background = 'rgba(0, 245, 212, 0.1)';
-                  e.currentTarget.style.borderColor = 'rgba(0, 245, 212, 0.3)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.color = '#64748b';
-                  e.currentTarget.style.background = 'rgba(0, 245, 212, 0.05)';
-                  e.currentTarget.style.borderColor = 'rgba(0, 245, 212, 0.1)';
-                }}
-              >
-                <Linkedin size={18} />
-              </a>
+          </div>
+
+          <div>
+            <h4 className="font-mono text-xs uppercase font-bold text-cyan-400 tracking-wider mb-4">Services</h4>
+            <ul className="space-y-2 text-xs text-slate-300">
+              <li><Link href="/services" className="hover:text-cyan-300 transition-colors">Custom Software Development</Link></li>
+              <li><Link href="/services" className="hover:text-cyan-300 transition-colors">AI & Workflow Automation</Link></li>
+              <li><Link href="/services" className="hover:text-cyan-300 transition-colors">Performance Marketing (PPC & SEO)</Link></li>
+              <li><Link href="/services" className="hover:text-cyan-300 transition-colors">Brand Identity & Digital Design</Link></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="font-mono text-xs uppercase font-bold text-cyan-400 tracking-wider mb-4">Company</h4>
+            <ul className="space-y-2 text-xs text-slate-300">
+              <li><Link href="/about" className="hover:text-cyan-300 transition-colors">About Us</Link></li>
+              <li><Link href="/results" className="hover:text-cyan-300 transition-colors">Case Studies & Impact</Link></li>
+              <li><Link href="/contact" className="hover:text-cyan-300 transition-colors">Book Consultation</Link></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="font-mono text-xs uppercase font-bold text-cyan-400 tracking-wider mb-4">Direct Inquiry</h4>
+            <div className="text-xs text-slate-300 space-y-1 font-mono">
+              <p>Email: info@blendskills.co.in</p>
+              <p>Phone: +91 85308 19966</p>
+              <p>Locations: Pune & Gaya, India</p>
             </div>
-          </div>
-
-          {/* Quick Links */}
-          <div>
-            <h4
-              className="font-display font-bold mb-8 tracking-wider uppercase"
-              style={{ fontSize: '0.85rem', color: '#f8fafc' }}
-            >
-              Quick Links
-            </h4>
-            {[
-              { label: 'Home', href: '/' },
-              { label: 'What We Do', href: '/about' },
-              { label: 'Services', href: '/services' },
-              { label: 'Contact', href: '/contact' },
-            ].map((l) => (
-              <Link
-                key={l.label}
-                href={l.href}
-                className="block font-normal mb-3 transition-colors no-underline"
-                style={{
-                  fontSize: '0.9rem',
-                  color: '#94a3b8',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.color = '#00f5d4';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.color = '#94a3b8';
-                }}
-              >
-                {l.label}
-              </Link>
-            ))}
-          </div>
-
-          {/* Services */}
-          <div>
-            <h4
-              className="font-display font-bold mb-8 tracking-wider uppercase"
-              style={{ fontSize: '0.85rem', color: '#f8fafc' }}
-            >
-              Services
-            </h4>
-            {['Social Media Marketing', 'SEO Optimization', 'PPC Advertising', 'Web Development'].map((s) => (
-              <Link
-                key={s}
-                href="/services"
-                className="block font-normal mb-3 transition-colors no-underline"
-                style={{
-                  fontSize: '0.9rem',
-                  color: '#94a3b8',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.color = '#00f5d4';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.color = '#94a3b8';
-                }}
-              >
-                {s}
-              </Link>
-            ))}
-          </div>
-
-          {/* Contact */}
-          <div>
-            <h4
-              className="font-display font-bold mb-8 tracking-wider uppercase"
-              style={{ fontSize: '0.85rem', color: '#f8fafc' }}
-            >
-              Contact
-            </h4>
-            <a
-              href="mailto:info@blendskills.co.in"
-              className="block font-normal mb-3 transition-colors no-underline"
-              style={{
-                fontSize: '0.9rem',
-                color: '#94a3b8',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = '#00f5d4';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = '#94a3b8';
-              }}
-            >
-              info@blendskills.co.in
-            </a>
-            <a
-              href="tel:+918530819966"
-              className="block font-normal mb-3 transition-colors no-underline"
-              style={{
-                fontSize: '0.9rem',
-                color: '#94a3b8',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = '#00f5d4';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = '#94a3b8';
-              }}
-            >
-              +91 85308 19966
-            </a>
-            <span
-              className="block font-normal"
-              style={{
-                fontSize: '0.9rem',
-                color: '#94a3b8',
-              }}
-            >
-              Pune | Gaya
-            </span>
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div
-          className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-8"
-          style={{ borderTop: '1px solid rgba(255, 255, 255, 0.06)' }}
-        >
-          <span
-            className="font-normal"
-            style={{
-              fontSize: '0.85rem',
-              color: '#64748b',
-            }}
-          >
-            © 2025 BlendSkills. All rights reserved.
-          </span>
-          <div className="flex gap-8">
-            <a
-              href="#"
-              className="font-normal transition-colors no-underline"
-              style={{
-                fontSize: '0.85rem',
-                color: '#94a3b8',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = '#00f5d4';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = '#94a3b8';
-              }}
-            >
-              Privacy Policy
-            </a>
-            <a
-              href="#"
-              className="font-normal transition-colors no-underline"
-              style={{
-                fontSize: '0.85rem',
-                color: '#94a3b8',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = '#00f5d4';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = '#94a3b8';
-              }}
-            >
-              Terms & Conditions
-            </a>
+        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 font-mono">
+          <div>© {new Date().getFullYear()} BlendSkills. All rights reserved.</div>
+          <div className="flex items-center gap-6">
+            <span>Privacy Policy</span>
+            <span>Terms of Service</span>
           </div>
         </div>
       </div>

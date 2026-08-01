@@ -35,7 +35,7 @@ const steps = [
 
 export default function Process() {
   return (
-    <section className="relative" style={{ padding: '120px 24px', background: '#f8fafc' }}>
+    <section id="process" className="relative" style={{ padding: '120px 24px', background: '#f8fafc' }}>
       <div className="max-w-[1400px] mx-auto">
         {/* Section Header */}
         <motion.div
