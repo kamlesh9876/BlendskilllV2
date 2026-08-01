@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Link, useLocation } from 'wouter';
-import { Menu, X, ArrowRight, Phone, Mail, Sparkles, ChevronRight } from 'lucide-react';
+import { useLocation } from 'wouter';
+import { Menu, X, ArrowRight, Phone, Mail, Sparkles, ChevronRight, MessageSquare, Compass, CheckCircle2 } from 'lucide-react';
 import { useScrolled } from '@/hooks/useScroll';
 
 const LINKS = [
@@ -13,19 +13,37 @@ const LINKS = [
 ];
 
 export default function Nav() {
-  const scrolled = useScrolled(40);
+  const scrolled = useScrolled(30);
   const [open, setOpen] = useState(false);
   const [location, setLocation] = useLocation();
 
-  // Disable body scroll when mobile drawer is active
+  // Prevent background body scroll when mobile menu is open (handles iOS Safari & Android Chrome)
   useEffect(() => {
-    document.body.style.overflow = open ? 'hidden' : '';
+    if (open) {
+      document.body.style.overflow = 'hidden';
+      document.body.style.touchAction = 'none';
+    } else {
+      document.body.style.overflow = '';
+      document.body.style.touchAction = '';
+    }
     return () => {
       document.body.style.overflow = '';
+      document.body.style.touchAction = '';
     };
   }, [open]);
 
-  // Close drawer on route change
+  // Handle ESC key press to close menu
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && open) {
+        setOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [open]);
+
+  // Close drawer on location/route change
   useEffect(() => {
     setOpen(false);
   }, [location]);
@@ -33,22 +51,31 @@ export default function Nav() {
   const handleNavClick = (href: string, sectionId?: string) => {
     setOpen(false);
 
-    // If already on home page and clicking a section link
-    if (location === '/' && sectionId && sectionId !== 'hero') {
+    // If currently on home page and navigating to a section
+    if (location === '/' && sectionId) {
+      if (sectionId === 'hero') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+      }
       const el = document.getElementById(sectionId);
       if (el) {
-        el.scrollIntoView({ behavior: 'smooth' });
+        const offset = 80;
+        const bodyRect = document.body.getBoundingClientRect().top;
+        const elementRect = el.getBoundingClientRect().top;
+        const elementPosition = elementRect - bodyRect;
+        const offsetPosition = elementPosition - offset;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
         return;
       }
     }
 
     if (href === '/') {
-      if (location === '/') {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else {
-        setLocation('/');
-        window.scrollTo({ top: 0, behavior: 'instant' });
-      }
+      setLocation('/');
+      window.scrollTo({ top: 0, behavior: 'instant' });
       return;
     }
 
@@ -57,132 +84,161 @@ export default function Nav() {
   };
 
   return (
-    <header
-      className={`fixed top-0 left-0 w-full z-[1000] transition-all duration-300 ${
-        scrolled
-          ? 'h-16 bg-slate-950/90 backdrop-blur-xl border-b border-white/10 shadow-2xl'
-          : 'h-20 bg-slate-950/60 backdrop-blur-md border-b border-white/10'
-      }`}
-    >
-      <div className="max-w-[1400px] mx-auto px-6 h-full flex justify-between items-center">
-        {/* Brand Logo */}
-        <button
-          onClick={() => handleNavClick('/', 'hero')}
-          className="no-underline transition-transform duration-300 hover:scale-[1.02] flex items-center gap-2 relative z-[1002] cursor-pointer bg-transparent border-none p-0"
-        >
-          <img
-            src="/logo.png"
-            alt="BlendSkills"
-            className="h-8 sm:h-9 w-auto object-contain brightness-0 invert transition-all duration-300"
-          />
-        </button>
+    <>
+      <header
+        className={`fixed top-0 left-0 w-full z-[1000] transition-all duration-300 ${
+          scrolled
+            ? 'h-16 bg-slate-950/90 backdrop-blur-xl border-b border-white/10 shadow-2xl'
+            : 'h-20 bg-slate-950/70 backdrop-blur-md border-b border-white/10'
+        }`}
+      >
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 h-full flex justify-between items-center">
+          {/* Brand Logo */}
+          <button
+            onClick={() => handleNavClick('/', 'hero')}
+            className="no-underline transition-transform duration-300 hover:scale-[1.02] flex items-center gap-2 relative z-[1002] cursor-pointer bg-transparent border-none p-0 focus:outline-none focus:ring-2 focus:ring-cyan-400 rounded-lg"
+            aria-label="BlendSkills Home"
+          >
+            <img
+              src="/logo.png"
+              alt="BlendSkills"
+              className="h-8 sm:h-9 w-auto object-contain brightness-0 invert transition-all duration-300"
+            />
+          </button>
 
-        {/* Desktop Links */}
-        <nav className="hidden lg:flex gap-8 items-center">
-          {LINKS.map((l) => {
-            const isActive = location === l.href;
-            return (
-              <button
-                key={l.href}
-                onClick={() => handleNavClick(l.href, l.sectionId)}
-                className={`relative text-[0.925rem] font-semibold transition-colors duration-300 no-underline group py-1 cursor-pointer bg-transparent border-none ${
-                  isActive ? 'text-cyan-400 font-bold' : 'text-slate-300 hover:text-white'
-                }`}
-              >
-                {l.label}
-                <span
-                  className="absolute -bottom-0.5 left-0 h-0.5 bg-cyan-400 rounded-full transition-all duration-300 group-hover:w-full"
-                  style={{ width: isActive ? '100%' : '0' }}
-                />
-              </button>
-            );
-          })}
-        </nav>
+          {/* Desktop Navigation */}
+          <nav className="hidden lg:flex gap-8 items-center" aria-label="Main Navigation">
+            {LINKS.map((l) => {
+              const isActive = location === l.href;
+              return (
+                <button
+                  key={l.href}
+                  onClick={() => handleNavClick(l.href, l.sectionId)}
+                  className={`relative text-[0.925rem] font-semibold transition-colors duration-300 no-underline group py-1 cursor-pointer bg-transparent border-none ${
+                    isActive ? 'text-cyan-400 font-bold' : 'text-slate-300 hover:text-white'
+                  }`}
+                >
+                  {l.label}
+                  <span
+                    className="absolute -bottom-0.5 left-0 h-0.5 bg-cyan-400 rounded-full transition-all duration-300 group-hover:w-full"
+                    style={{ width: isActive ? '100%' : '0' }}
+                  />
+                </button>
+              );
+            })}
+          </nav>
 
-        {/* Desktop CTA Button */}
-        <button
-          onClick={() => handleNavClick('/contact', 'contact')}
-          className="hidden lg:inline-flex items-center justify-center gap-2 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-[#0066cc]/25 active:scale-95 cursor-pointer bg-gradient-to-r from-[#0066cc] via-indigo-600 to-cyan-500 text-white font-semibold text-sm px-6 py-2.5 rounded-xl border border-cyan-400/30 shadow-md"
-        >
-          <span>Book Consultation</span>
-          <ArrowRight size={16} />
-        </button>
+          {/* Desktop CTA Button */}
+          <button
+            onClick={() => handleNavClick('/contact', 'contact')}
+            className="hidden lg:inline-flex items-center justify-center gap-2 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-[#0066cc]/25 active:scale-95 cursor-pointer bg-gradient-to-r from-[#0066cc] via-indigo-600 to-cyan-500 text-white font-semibold text-sm px-6 py-2.5 rounded-xl border border-cyan-400/30 shadow-md"
+          >
+            <span>Book Consultation</span>
+            <ArrowRight size={16} />
+          </button>
 
-        {/* Mobile menu trigger toggle button */}
-        <button
-          onClick={() => setOpen((v) => !v)}
-          aria-label="Toggle navigation menu"
-          aria-expanded={open}
-          className="lg:hidden flex items-center justify-center w-11 h-11 rounded-2xl active:scale-95 transition-all duration-200 relative z-[1002] cursor-pointer bg-white/10 border border-white/20 text-white hover:bg-white/20 shadow-md"
-        >
-          {open ? <X size={22} className="text-cyan-400 animate-in fade-in duration-200" /> : <Menu size={22} />}
-        </button>
-      </div>
+          {/* Mobile Navigation Trigger Button */}
+          <button
+            onClick={() => setOpen((v) => !v)}
+            aria-label={open ? 'Close navigation menu' : 'Open navigation menu'}
+            aria-expanded={open}
+            className="lg:hidden flex items-center justify-center min-w-[44px] min-h-[44px] rounded-xl active:scale-95 transition-all duration-200 relative z-[1002] cursor-pointer bg-slate-900/80 border border-white/20 text-white hover:bg-slate-800 hover:border-cyan-400/50 shadow-lg focus:outline-none focus:ring-2 focus:ring-cyan-400"
+          >
+            {open ? <X size={22} className="text-cyan-400 animate-in fade-in duration-200" /> : <Menu size={22} className="text-slate-100" />}
+          </button>
+        </div>
+      </header>
 
-      {/* Enhanced Mobile Navigation Drawer Backdrop & Modal */}
+      {/* Universal Responsive Mobile Menu Overlay */}
       <div
-        className={`lg:hidden fixed inset-0 bg-slate-950/98 backdrop-blur-2xl text-white transition-all duration-300 ease-in-out flex flex-col justify-between pt-20 ${
+        className={`lg:hidden fixed inset-0 z-[1001] bg-slate-950/95 backdrop-blur-2xl text-white transition-all duration-300 ease-in-out flex flex-col h-[100dvh] min-h-[100dvh] pt-20 pb-[max(1rem,env(safe-area-inset-bottom))] ${
           open ? 'opacity-100 pointer-events-auto translate-x-0' : 'opacity-0 pointer-events-none translate-x-full'
         }`}
-        style={{ zIndex: 1001 }}
+        style={{
+          paddingTop: 'calc(5rem + env(safe-area-inset-top, 0px))',
+        }}
+        aria-hidden={!open}
       >
-        {/* Mobile Links List */}
-        <div className="flex-1 overflow-y-auto px-6 py-6 space-y-2">
-          <p className="font-mono text-[11px] uppercase tracking-widest text-cyan-400 font-bold mb-4">
-            Navigation Menu
-          </p>
+        {/* Subtle Background Accent Glow */}
+        <div className="absolute top-1/4 -right-20 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-1/4 -left-20 w-64 h-64 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none" />
 
-          {LINKS.map((l, i) => {
-            const isActive = location === l.href;
-            return (
-              <button
-                key={l.href}
-                onClick={() => handleNavClick(l.href, l.sectionId)}
-                className={`w-full flex items-center justify-between p-4 rounded-2xl text-base sm:text-lg font-medium transition-all duration-200 cursor-pointer bg-transparent border-none text-left ${
-                  isActive
-                    ? 'bg-gradient-to-r from-[#0066cc] to-indigo-600 text-white font-bold shadow-lg shadow-[#0066cc]/30 border border-cyan-400/30'
-                    : 'text-slate-200 hover:bg-white/5 hover:text-white'
-                }`}
-                style={{
-                  transitionDelay: open ? `${i * 35}ms` : '0ms',
-                }}
-              >
-                <div className="flex items-center gap-3">
-                  {isActive && <span className="w-2.5 h-2.5 rounded-full bg-cyan-300 animate-pulse" />}
-                  <span>{l.label}</span>
-                </div>
-                <ChevronRight size={18} className={isActive ? 'text-cyan-200' : 'text-slate-500'} />
-              </button>
-            );
-          })}
+        {/* Scrollable Nav Area (Ensures compatibility with short viewports & landscape screens) */}
+        <div className="flex-1 overflow-y-auto overscroll-contain px-5 sm:px-8 py-2 space-y-2 relative z-10">
+          <div className="flex items-center justify-between mb-3 border-b border-white/10 pb-2">
+            <span className="font-mono text-[11px] uppercase tracking-widest text-cyan-400 font-bold flex items-center gap-1.5">
+              <Compass size={13} />
+              Navigation
+            </span>
+            <span className="text-[10px] text-slate-400 font-mono">BlendSkills AI</span>
+          </div>
 
-          <div className="pt-6">
+          <div className="space-y-1.5">
+            {LINKS.map((l, i) => {
+              const isActive = location === l.href;
+              return (
+                <button
+                  key={l.href}
+                  onClick={() => handleNavClick(l.href, l.sectionId)}
+                  className={`w-full min-h-[48px] flex items-center justify-between px-4 py-3 rounded-xl text-base sm:text-lg font-medium transition-all duration-200 cursor-pointer text-left border ${
+                    isActive
+                      ? 'bg-gradient-to-r from-[#0066cc]/90 to-indigo-600/90 text-white font-bold border-cyan-400/40 shadow-lg shadow-[#0066cc]/20'
+                      : 'bg-white/[0.03] hover:bg-white/[0.08] text-slate-200 hover:text-white border-white/5 active:bg-white/10'
+                  }`}
+                  style={{
+                    transitionDelay: open ? `${i * 30}ms` : '0ms',
+                  }}
+                >
+                  <div className="flex items-center gap-3">
+                    {isActive ? (
+                      <CheckCircle2 size={18} className="text-cyan-300 shrink-0" />
+                    ) : (
+                      <span className="w-2 h-2 rounded-full bg-slate-600 shrink-0" />
+                    )}
+                    <span>{l.label}</span>
+                  </div>
+                  <ChevronRight
+                    size={18}
+                    className={`transition-transform duration-200 ${isActive ? 'text-cyan-300 translate-x-0.5' : 'text-slate-500'}`}
+                  />
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Primary Mobile CTA Button */}
+          <div className="pt-4 pb-2">
             <button
               onClick={() => handleNavClick('/contact', 'contact')}
-              className="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-[#0066cc] via-indigo-600 to-cyan-500 text-white font-bold text-center flex items-center justify-center gap-2 shadow-xl shadow-[#0066cc]/25 border border-cyan-400/30 cursor-pointer"
+              className="w-full min-h-[50px] py-3.5 px-5 rounded-xl bg-gradient-to-r from-[#0066cc] via-indigo-600 to-cyan-500 text-white font-bold text-sm sm:text-base flex items-center justify-center gap-2 shadow-xl shadow-[#0066cc]/25 border border-cyan-400/40 cursor-pointer active:scale-[0.98] transition-transform"
             >
-              <Sparkles size={18} className="text-cyan-300" />
+              <Sparkles size={18} className="text-cyan-300 animate-pulse" />
               <span>Book Free AI Consultation</span>
             </button>
           </div>
         </div>
 
-        {/* Mobile Footer Contact Bar */}
-        <div className="p-6 bg-slate-900/90 border-t border-white/10 space-y-3">
-          <div className="flex items-center gap-3 text-xs text-slate-300">
-            <Phone size={14} className="text-[#0066cc]" />
-            <a href="tel:+918530819966" className="hover:text-cyan-300 font-mono transition-colors">
-              +91 85308 19966
+        {/* Fixed Bottom Contact Footer Bar */}
+        <div className="px-5 sm:px-8 py-4 bg-slate-900/95 border-t border-white/10 space-y-2.5 shrink-0 relative z-10">
+          <p className="text-[10px] font-mono uppercase tracking-wider text-slate-400">Direct Contact</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+            <a
+              href="tel:+918530819966"
+              className="flex items-center gap-2.5 p-2.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-200 hover:text-cyan-300 font-mono transition-colors border border-white/5"
+            >
+              <Phone size={14} className="text-[#0066cc] shrink-0" />
+              <span className="truncate">+91 85308 19966</span>
             </a>
-          </div>
-          <div className="flex items-center gap-3 text-xs text-slate-300">
-            <Mail size={14} className="text-[#0066cc]" />
-            <a href="mailto:info@blendskills.co.in" className="hover:text-cyan-300 font-mono transition-colors">
-              info@blendskills.co.in
+            <a
+              href="mailto:info@blendskills.co.in"
+              className="flex items-center gap-2.5 p-2.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-200 hover:text-cyan-300 font-mono transition-colors border border-white/5"
+            >
+              <Mail size={14} className="text-[#0066cc] shrink-0" />
+              <span className="truncate">info@blendskills.co.in</span>
             </a>
           </div>
         </div>
       </div>
-    </header>
+    </>
   );
 }

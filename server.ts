@@ -53,7 +53,7 @@ async function startServer() {
   }
 
   app.listen(PORT, "0.0.0.0", () => {
-    logger.info(`Server listening on http://0.0.0.0:${PORT}`);
+    logger.info(`Server running! Open http://localhost:${PORT} in your browser.`);
   });
 }
 
