@@ -4,12 +4,12 @@ import { Menu, X, ArrowRight, Phone, Mail, Sparkles, ChevronRight, MessageSquare
 import { useScrolled } from '@/hooks/useScroll';
 
 const LINKS = [
-  { href: '/', label: 'Home', sectionId: 'hero' },
-  { href: '/services', label: 'Services', sectionId: 'services' },
-  { href: '/process', label: 'Process', sectionId: 'process' },
-  { href: '/results', label: 'Results', sectionId: 'results' },
-  { href: '/about', label: 'About Us', sectionId: 'about' },
-  { href: '/contact', label: 'Contact', sectionId: 'contact' },
+  { href: '/', label: 'Home' },
+  { href: '/services', label: 'Services' },
+  { href: '/process', label: 'Process' },
+  { href: '/results', label: 'Results' },
+  { href: '/about', label: 'About Us' },
+  { href: '/contact', label: 'Contact' },
 ];
 
 export default function Nav() {
@@ -48,38 +48,11 @@ export default function Nav() {
     setOpen(false);
   }, [location]);
 
-  const handleNavClick = (href: string, sectionId?: string) => {
+  const handleNavClick = (href: string) => {
     setOpen(false);
-
-    // If currently on home page and navigating to a section
-    if (location === '/' && sectionId) {
-      if (sectionId === 'hero') {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        return;
-      }
-      const el = document.getElementById(sectionId);
-      if (el) {
-        const offset = 80;
-        const bodyRect = document.body.getBoundingClientRect().top;
-        const elementRect = el.getBoundingClientRect().top;
-        const elementPosition = elementRect - bodyRect;
-        const offsetPosition = elementPosition - offset;
-
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: 'smooth'
-        });
-        return;
-      }
+    if (location !== href) {
+      setLocation(href);
     }
-
-    if (href === '/') {
-      setLocation('/');
-      window.scrollTo({ top: 0, behavior: 'instant' });
-      return;
-    }
-
-    setLocation(href);
     window.scrollTo({ top: 0, behavior: 'instant' });
   };
 
@@ -95,7 +68,7 @@ export default function Nav() {
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 h-full flex justify-between items-center">
           {/* Brand Logo */}
           <button
-            onClick={() => handleNavClick('/', 'hero')}
+            onClick={() => handleNavClick('/')}
             className="no-underline transition-transform duration-300 hover:scale-[1.02] flex items-center gap-2 relative z-[1002] cursor-pointer bg-transparent border-none p-0 focus:outline-none focus:ring-2 focus:ring-cyan-400 rounded-lg"
             aria-label="BlendSkills Home"
           >
@@ -113,7 +86,7 @@ export default function Nav() {
               return (
                 <button
                   key={l.href}
-                  onClick={() => handleNavClick(l.href, l.sectionId)}
+                  onClick={() => handleNavClick(l.href)}
                   className={`relative text-[0.925rem] font-semibold transition-colors duration-300 no-underline group py-1 cursor-pointer bg-transparent border-none ${
                     isActive ? 'text-cyan-400 font-bold' : 'text-slate-300 hover:text-white'
                   }`}
@@ -130,7 +103,7 @@ export default function Nav() {
 
           {/* Desktop CTA Button */}
           <button
-            onClick={() => handleNavClick('/contact', 'contact')}
+            onClick={() => handleNavClick('/contact')}
             className="hidden lg:inline-flex items-center justify-center gap-2 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-[#0066cc]/25 active:scale-95 cursor-pointer bg-gradient-to-r from-[#0066cc] via-indigo-600 to-cyan-500 text-white font-semibold text-sm px-6 py-2.5 rounded-xl border border-cyan-400/30 shadow-md"
           >
             <span>Book Consultation</span>
@@ -163,7 +136,7 @@ export default function Nav() {
         <div className="absolute top-1/4 -right-20 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-1/4 -left-20 w-64 h-64 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none" />
 
-        {/* Scrollable Nav Area (Ensures compatibility with short viewports & landscape screens) */}
+        {/* Scrollable Nav Area */}
         <div className="flex-1 overflow-y-auto overscroll-contain px-5 sm:px-8 py-2 space-y-2 relative z-10">
           <div className="flex items-center justify-between mb-3 border-b border-white/10 pb-2">
             <span className="font-mono text-[11px] uppercase tracking-widest text-cyan-400 font-bold flex items-center gap-1.5">
@@ -179,7 +152,7 @@ export default function Nav() {
               return (
                 <button
                   key={l.href}
-                  onClick={() => handleNavClick(l.href, l.sectionId)}
+                  onClick={() => handleNavClick(l.href)}
                   className={`w-full min-h-[48px] flex items-center justify-between px-4 py-3 rounded-xl text-base sm:text-lg font-medium transition-all duration-200 cursor-pointer text-left border ${
                     isActive
                       ? 'bg-gradient-to-r from-[#0066cc]/90 to-indigo-600/90 text-white font-bold border-cyan-400/40 shadow-lg shadow-[#0066cc]/20'
@@ -209,7 +182,7 @@ export default function Nav() {
           {/* Primary Mobile CTA Button */}
           <div className="pt-4 pb-2">
             <button
-              onClick={() => handleNavClick('/contact', 'contact')}
+              onClick={() => handleNavClick('/contact')}
               className="w-full min-h-[50px] py-3.5 px-5 rounded-xl bg-gradient-to-r from-[#0066cc] via-indigo-600 to-cyan-500 text-white font-bold text-sm sm:text-base flex items-center justify-center gap-2 shadow-xl shadow-[#0066cc]/25 border border-cyan-400/40 cursor-pointer active:scale-[0.98] transition-transform"
             >
               <Sparkles size={18} className="text-cyan-300 animate-pulse" />
