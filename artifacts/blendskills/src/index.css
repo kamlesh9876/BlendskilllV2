@@ -613,6 +613,37 @@
   max-width: 900px;
 }
 
+/* ---------- AMBIENT GLOW ANIMATIONS ---------- */
+@keyframes pulseGlow {
+  0%, 100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.75;
+    transform: scale(1.08);
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulseGlow 6s ease-in-out infinite;
+}
+
+/* Glass Card Hover Border Glow */
+.glass-glow-card {
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-glow-card:hover {
+  border-color: rgba(6, 182, 212, 0.35);
+  box-shadow: 0 12px 32px -8px rgba(6, 182, 212, 0.15);
+  transform: translateY(-2px);
+}
+
 /* ---------- REDUCED MOTION ---------- */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

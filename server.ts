@@ -46,7 +46,13 @@ async function startServer() {
     app.use(vite.middlewares);
   } else {
     const distPath = path.resolve(process.cwd(), "artifacts/blendskills/dist");
-    app.use(express.static(distPath));
+    app.use(
+      express.static(distPath, {
+        maxAge: "1y",
+        immutable: true,
+        index: false,
+      })
+    );
     app.get("*", (_req, res) => {
       res.sendFile(path.join(distPath, "index.html"));
     });

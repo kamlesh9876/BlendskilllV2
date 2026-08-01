@@ -53,6 +53,8 @@ export default function Hero() {
 
         {/* Ambient Gradient Color Overlays */}
         <div className="absolute inset-0 bg-gradient-to-br from-slate-950/90 via-slate-900/80 to-indigo-950/90" />
+        <div className="absolute top-1/4 left-10 w-96 h-96 bg-cyan-500/15 rounded-full blur-[140px] pointer-events-none animate-pulse-slow" />
+        <div className="absolute bottom-1/4 right-10 w-[450px] h-[450px] bg-purple-500/15 rounded-full blur-[160px] pointer-events-none animate-pulse-slow" />
         <div
           className="absolute inset-0 pointer-events-none"
           style={{

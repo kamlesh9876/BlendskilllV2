@@ -136,9 +136,12 @@ export default function AIChatBot() {
               whileHover={{ scale: 1.08 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setIsOpen(true)}
-              className="group relative flex items-center gap-3 px-5 py-3.5 rounded-full bg-gradient-to-r from-[#0066cc] to-indigo-600 text-white shadow-2xl hover:shadow-cyan-500/25 border border-white/20 transition-all duration-300"
+              className="group relative flex items-center gap-3 px-5 py-3.5 rounded-full bg-gradient-to-r from-[#0066cc] via-indigo-600 to-teal-500 text-white shadow-2xl hover:shadow-cyan-500/40 border border-white/20 transition-all duration-300 cursor-pointer"
               aria-label="Open AI Assistant"
             >
+              {/* Background ambient glow */}
+              <span className="absolute inset-0 rounded-full bg-cyan-400/30 blur-md group-hover:blur-lg transition-all duration-300 -z-10" />
+
               {/* Glowing Pulse */}
               <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75" />

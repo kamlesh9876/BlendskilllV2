@@ -22,12 +22,24 @@ router.post("/contact", (req: Request<{}, {}, ContactBody>, res: Response) => {
   try {
     const { name, email, phone, service, budget, message, roiEstimate } = req.body;
 
-    if (!name || !email) {
+    const nameStr = typeof name === "string" ? name.trim() : "";
+    const emailStr = typeof email === "string" ? email.trim().toLowerCase() : "";
+
+    if (!nameStr || !emailStr) {
       return res.status(400).json({ error: "Name and email are required fields." });
     }
 
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(emailStr)) {
+      return res.status(400).json({ error: "Please provide a valid email address." });
+    }
+
+    if (nameStr.length > 100 || emailStr.length > 150) {
+      return res.status(400).json({ error: "Input values exceed maximum allowed length." });
+    }
+
     logger.info(
-      { name, email, phone, service, budget, roiEstimate },
+      { name: nameStr, email: emailStr, phone, service, budget, roiEstimate },
       "Received new consultation request"
     );
 

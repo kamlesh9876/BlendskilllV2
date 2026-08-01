@@ -68,7 +68,7 @@ chatRouter.post("/chat", async (req: Request, res: Response): Promise<void> => {
         contents.push({ role: "user", parts: [{ text: message }] });
 
         const response = await ai.models.generateContent({
-          model: "gemini-3.6-flash",
+          model: "gemini-2.5-flash",
           contents,
           config: {
             systemInstruction: SYSTEM_INSTRUCTION,
