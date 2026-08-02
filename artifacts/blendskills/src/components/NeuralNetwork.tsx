@@ -67,39 +67,31 @@ function smoothFalloff(d: number, radius: number): number {
 
 // How often (in seconds of real elapsed time) the line/connection graph is
 // recomputed. Fixed-timestep instead of frame-count-based throttling.
-const LINE_UPDATE_INTERVAL = 0.15; // 150ms
+const LINE_UPDATE_INTERVAL = 0.12; // 120ms - faster updates for smoother connections
 
-// --- Flow field tuning -------------------------------------------------
-const NOISE_SCALE = 0.009; // lower spatial frequency = larger, smoother, more coherent swirls
-const NOISE_TIME_SCALE = 0.02; // how fast local turbulence evolves
-const LOCAL_FLOW_STRENGTH = 0.28; // finer per-particle eddies
-const GLOBAL_TIME_SCALE = 0.003; // the shared current changes direction very slowly
-const GLOBAL_FLOW_STRENGTH = 0.5; // dominant — this is what makes the WHOLE field drift together
-const FLOW_STRENGTH_Z = 0.08;
-const SOFT_WALL_ZONE = 0.85; // fraction of the band where the soft cushion starts
-const SOFT_WALL_STRENGTH = 1.2; // gentle inward push near the edges, prevents pile-up at walls
-const BEND_RADIUS = 260; // cursor influence radius
-const BEND_STRENGTH = 14; // stronger, more noticeable reaction to the cursor
-const BREATH_AMPLITUDE = 0.18;
-const BREATH_SPEED = 0.15;
-// DAMPING is a per-frame velocity MULTIPLIER, not a friction amount:
-// closer to 1 = LESS friction (momentum persists → fluid, drifting motion).
-// closer to 0 = MORE friction (velocity dies almost instantly → jittery,
-// frozen-looking motion). This was accidentally inverted in a prior edit
-// (set to 0.4, which is much stronger friction than intended) — that,
-// combined with a very low MAX_SPEED, was the main reason the field wasn't
-// reading as "liquid": momentum was being killed before it could build into
-// a visible current.
-const DAMPING = 0.95;
-const MAX_SPEED = 4; // raised from 1 — still slow, but enough to actually see the current
+// --- Flow field tuning - PREMIUM SMOOTH MOTION --------------------------
+const NOISE_SCALE = 0.008; // even larger, smoother, more coherent swirls for luxury feel
+const NOISE_TIME_SCALE = 0.018; // slightly slower evolution for elegant motion
+const LOCAL_FLOW_STRENGTH = 0.22; // refined, subtle per-particle eddies
+const GLOBAL_TIME_SCALE = 0.0025; // extremely slow global direction changes for sophistication
+const GLOBAL_FLOW_STRENGTH = 0.6; // stronger dominant flow — graceful drift
+const FLOW_STRENGTH_Z = 0.12; // enhanced depth movement
+const SOFT_WALL_ZONE = 0.88; // larger soft cushion for smoother confinement
+const SOFT_WALL_STRENGTH = 1.0; // gentle, barely noticeable wall interactions
+const BEND_RADIUS = 320; // larger cursor influence for smooth interactions
+const BEND_STRENGTH = 12; // smooth, refined cursor response
+const BREATH_AMPLITUDE = 0.22; // subtle, elegant breathing motion
+const BREATH_SPEED = 0.12; // slower, more graceful breathing
+// High damping for smooth, momentum-driven motion that feels liquid
+const DAMPING = 0.96; // very high damping = very little friction = smooth, flowing motion
+const MAX_SPEED = 5; // increased for smoother, more visible currents
 
-// --- Line fade tuning ----------------------------------------------------
-const FADE_DECAY = 0.8; // per-recompute multiplicative fade for inactive connections
-const FADE_GROWTH = 0.4; // per-recompute additive ramp-up for newly active connections
-const ALPHA_CUTOFF = 0.03; // below this, a connection is treated as gone
+// --- Line fade tuning - PREMIUM CONNECTIONS ----------------------------
+const FADE_DECAY = 0.85; // per-recompute multiplicative fade for smooth fade-out
+const FADE_GROWTH = 0.35; // per-recompute additive ramp-up for elegant connection
+const ALPHA_CUTOFF = 0.02; // below this, a connection is treated as gone
 
-// Custom point shader: soft circular falloff with a brighter core, rendered
-// with additive blending.
+// Premium custom point shader: ultra-smooth glow with radiant core
 const POINT_VERTEX_SHADER = /* glsl */ `
   attribute vec3 color;
   varying vec3 vColor;
@@ -117,10 +109,15 @@ const POINT_FRAGMENT_SHADER = /* glsl */ `
   void main() {
     vec2 uv = gl_PointCoord.xy - vec2(0.5);
     float dist = length(uv);
-    float glow = smoothstep(0.5, 0.0, dist);
-    float core = smoothstep(0.2, 0.0, dist) * 0.6;
-    float alpha = glow + core;
+    
+    // Premium soft falloff with multiple layers
+    float outerGlow = smoothstep(0.55, 0.0, dist) * 0.4;
+    float midGlow = smoothstep(0.35, 0.05, dist) * 0.6;
+    float core = smoothstep(0.15, 0.0, dist);
+    
+    float alpha = outerGlow + midGlow + core;
     if (alpha <= 0.001) discard;
+    
     gl_FragColor = vec4(vColor, alpha);
   }
 `;
@@ -185,7 +182,7 @@ function NetworkScene({
       new THREE.ShaderMaterial({
         vertexShader: POINT_VERTEX_SHADER,
         fragmentShader: POINT_FRAGMENT_SHADER,
-        uniforms: { uSize: { value: 5.5 } },
+        uniforms: { uSize: { value: 6.5 } }, // slightly larger for premium presence
         transparent: true,
         depthWrite: false,
         blending: THREE.AdditiveBlending,
@@ -197,12 +194,18 @@ function NetworkScene({
     const arr = new Float32Array(resolvedCount * 3);
     for (let i = 0; i < resolvedCount; i++) {
       const r = Math.random();
-      if (r < 0.85) {
-        arr[i * 3] = 1.0; arr[i * 3 + 1] = 1.0; arr[i * 3 + 2] = 1.0; // white
-      } else if (r < 0.95) {
-        arr[i * 3] = 0.45; arr[i * 3 + 1] = 0.7; arr[i * 3 + 2] = 1.0; // blue
+      if (r < 0.60) {
+        // Premium white - bright core particles
+        arr[i * 3] = 1.0; arr[i * 3 + 1] = 1.0; arr[i * 3 + 2] = 1.0;
+      } else if (r < 0.80) {
+        // Warm orange - new brand primary color (FF6B35)
+        arr[i * 3] = 1.0; arr[i * 3 + 1] = 0.42; arr[i * 3 + 2] = 0.21;
+      } else if (r < 0.92) {
+        // Purple accent - secondary brand color (6B3FB5)
+        arr[i * 3] = 0.42; arr[i * 3 + 1] = 0.25; arr[i * 3 + 2] = 0.71;
       } else {
-        arr[i * 3] = 0.7; arr[i * 3 + 1] = 0.5; arr[i * 3 + 2] = 1.0; // purple
+        // Cyan accent - tertiary brand color (00F5D4)
+        arr[i * 3] = 0.0; arr[i * 3 + 1] = 0.96; arr[i * 3 + 2] = 0.83;
       }
     }
     return arr;
@@ -360,7 +363,9 @@ function NetworkScene({
       }
 
       let lineIdx = 0;
-      const baseColor = [0.45, 0.7, 1.0];
+      // Premium gradient color for connections - orange to purple
+      const baseColorStart = [1.0, 0.42, 0.21]; // warm orange
+      const baseColorEnd = [0.0, 0.96, 0.83]; // cyan
 
       for (let i = 0; i < resolvedCount; i++) {
         for (let j = i + 1; j < resolvedCount; j++) {
@@ -383,6 +388,14 @@ function NetworkScene({
           const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
           const distFade = 1 - Math.min(dist / maxDist, 1);
           const opacity = distFade * alpha;
+          
+          // Interpolate between warm orange and cyan for gradient effect
+          const t = (i % 10) / 10;
+          const colorMix = [
+            baseColorStart[0] * (1 - t) + baseColorEnd[0] * t,
+            baseColorStart[1] * (1 - t) + baseColorEnd[1] * t,
+            baseColorStart[2] * (1 - t) + baseColorEnd[2] * t,
+          ];
 
           linePositions[lineIdx] = x1;
           linePositions[lineIdx + 1] = y1;
@@ -391,12 +404,12 @@ function NetworkScene({
           linePositions[lineIdx + 4] = y2;
           linePositions[lineIdx + 5] = z2;
 
-          lineColors[lineIdx] = baseColor[0] * opacity;
-          lineColors[lineIdx + 1] = baseColor[1] * opacity;
-          lineColors[lineIdx + 2] = baseColor[2] * opacity;
-          lineColors[lineIdx + 3] = baseColor[0] * opacity;
-          lineColors[lineIdx + 4] = baseColor[1] * opacity;
-          lineColors[lineIdx + 5] = baseColor[2] * opacity;
+          lineColors[lineIdx] = colorMix[0] * opacity;
+          lineColors[lineIdx + 1] = colorMix[1] * opacity;
+          lineColors[lineIdx + 2] = colorMix[2] * opacity;
+          lineColors[lineIdx + 3] = colorMix[0] * opacity;
+          lineColors[lineIdx + 4] = colorMix[1] * opacity;
+          lineColors[lineIdx + 5] = colorMix[2] * opacity;
 
           lineIdx += 6;
         }
@@ -432,7 +445,8 @@ function NetworkScene({
       new THREE.LineBasicMaterial({
         vertexColors: true,
         transparent: true,
-        opacity: 0.3,
+        opacity: 0.4, // slightly higher opacity for more visible connections
+        linewidth: 1.2,
       }),
     []
   );
@@ -476,12 +490,12 @@ export default function NeuralNetwork({
         camera={{ position: [0, 0, 60], fov: 45, near: 0.1, far: 200 }}
         style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
       >
-        <ambientLight intensity={0.3} />
-        <directionalLight position={[0, 0, 1]} intensity={0.6} />
+        <ambientLight intensity={0.4} />
+        <directionalLight position={[0, 0, 1]} intensity={0.7} />
         {enableFog && <fog attach="fog" args={[fogColor, 40, 95]} />}
         <NetworkScene nodeCount={nodeCount} maxDist={maxDist} bottomBandRatio={bottomBandRatio} />
         <EffectComposer>
-          <Bloom luminanceThreshold={0} luminanceSmoothing={0.9} height={300} intensity={1.2} radius={0.8} />
+          <Bloom luminanceThreshold={-0.1} luminanceSmoothing={1.0} height={512} intensity={1.5} radius={1.2} />
         </EffectComposer>
       </Canvas>
     </div>
