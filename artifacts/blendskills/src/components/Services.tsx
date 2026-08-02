@@ -22,7 +22,7 @@ function ServiceCardImage({ src, alt, icon: Icon }: { src: string; alt: string; 
       <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-black/30 pointer-events-none" />
 
       {/* Icon Badge Overlay */}
-      <div className="absolute bottom-3 left-6 w-12 h-12 rounded-xl bg-white shadow-lg border border-black/5 flex items-center justify-center text-[#0066cc] z-10">
+      <div className="absolute bottom-3 left-6 w-12 h-12 rounded-xl bg-gradient-to-br from-[#FF6B35] to-[#FF8557] shadow-lg border border-[#FF6B35]/20 flex items-center justify-center text-white z-10">
         <Icon size={22} />
       </div>
     </div>
@@ -126,7 +126,7 @@ export default function Services() {
   };
 
   return (
-    <section id="services" className="relative py-24 md:py-32 bg-gradient-to-b from-slate-50 to-white text-slate-900">
+    <section id="services" className="relative py-24 md:py-32 bg-gradient-to-b from-[#0f1418] to-[#1a1f2e] text-white">
       <div className="max-w-[1400px] mx-auto px-6">
         {/* Section Header */}
         <motion.div
@@ -136,14 +136,14 @@ export default function Services() {
           transition={{ duration: 0.6 }}
           className="mb-16"
         >
-          <p className="font-mono text-xs font-bold uppercase tracking-widest text-[#0066cc] mb-4">
+          <p className="font-mono text-xs font-bold uppercase tracking-widest text-[#FF6B35] mb-4">
             What We Do
           </p>
-          <h2 className="font-display font-extrabold text-3xl sm:text-4xl md:text-5xl text-slate-900 leading-tight mb-6">
+          <h2 className="font-display font-extrabold text-3xl sm:text-4xl md:text-5xl text-white leading-tight mb-6">
             Everything you need to<br className="hidden md:block" />
-            build, automate, and grow
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF6B35] to-[#00F5D4]">build, automate, and grow</span>
           </h2>
-          <p className="text-slate-600 text-base md:text-lg max-w-2xl leading-relaxed">
+          <p className="text-slate-300 text-base md:text-lg max-w-2xl leading-relaxed">
             From custom software and AI automation to performance marketing and branding—we deliver end-to-end solutions that drive real business results.
           </p>
         </motion.div>
@@ -157,23 +157,23 @@ export default function Services() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: index * 0.15 }}
-              className="glass-card group overflow-hidden flex flex-col justify-between rounded-3xl bg-white border border-slate-200/80 shadow-sm hover:shadow-2xl hover:border-[#0066cc]/40 transition-all duration-300"
+              className="group overflow-hidden flex flex-col justify-between rounded-2xl bg-gradient-to-br from-[#1a1f2e] to-[#0f1418] border border-[#FF6B35]/20 shadow-lg hover:shadow-xl hover:border-[#FF6B35]/40 transition-all duration-300"
             >
               <ServiceCardImage src={service.image} alt={service.title} icon={service.icon} />
 
               <div className="p-8 pt-6 flex-1 flex flex-col justify-between space-y-4">
                 <div>
-                  <h3 className="font-display font-bold text-xl text-slate-900 group-hover:text-[#0066cc] transition-colors mb-2">
+                  <h3 className="font-display font-bold text-xl text-white group-hover:text-[#FF6B35] transition-colors mb-2">
                     {service.title}
                   </h3>
-                  <p className="text-sm text-slate-600 leading-relaxed">
+                  <p className="text-sm text-slate-300 leading-relaxed">
                     {service.text}
                   </p>
                 </div>
 
                 <Link
                   href="/contact"
-                  className="inline-flex items-center gap-2 text-sm font-bold text-[#0066cc] group-hover:translate-x-1 transition-transform"
+                  className="inline-flex items-center gap-2 text-sm font-bold text-[#FF6B35] group-hover:translate-x-1 transition-transform"
                 >
                   <span>Explore Solutions</span>
                   <ArrowRight size={16} />

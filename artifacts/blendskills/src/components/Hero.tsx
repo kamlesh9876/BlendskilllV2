@@ -35,24 +35,29 @@ export default function Hero() {
   ];
 
   return (
-        <section className="relative min-h-screen flex items-center overflow-hidden bg-[#09090B] pt-24 pb-16 md:pt-28 md:pb-24 lg:pt-32">
-    {/* Neural network background fills entire hero */}
-    {/* Liquid glass overlay */}
-    <div className="absolute inset-0 glass pointer-events-none"></div>
-        <NeuralNetwork />
+        <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-b from-[#0f1418] via-[#0a0d12] to-[#0f1418] pt-24 pb-16 md:pt-28 md:pb-24 lg:pt-32">
+    {/* Immersive Neural network background */}
+    <NeuralNetwork />
+    
+    {/* Premium overlay with gradient mesh */}
+    <div className="absolute inset-0 pointer-events-none">
+      <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-[#000000]/40"></div>
+      <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-gradient-to-br from-[#FF6B35]/5 to-transparent blur-3xl"></div>
+      <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-gradient-to-tr from-[#6B3FB5]/5 to-transparent blur-3xl"></div>
+    </div>
 
-      <div className="relative z-[5] max-w-[1400px] mx-auto px-6 w-full text-white">
-        <div className="grid grid-cols-1 gap-12 items-center">
-          {/* Left Content */}
-          <div className="max-w-[640px]">
+      <div className="relative z-[5] max-w-[1200px] mx-auto px-6 w-full text-white">
+        <div className="flex flex-col gap-16 items-center text-center">
+          {/* Centered Premium Content */}
+          <div className="w-full max-w-[900px]">
             {/* Multi-color Gradient Badge with Animated Capability Ticker */}
             <motion.div
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-[#0066cc]/20 via-purple-500/20 to-cyan-400/20 border border-cyan-400/30 backdrop-blur-md mb-6 shadow-lg shadow-[#0066cc]/10"
+              className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-gradient-to-r from-[#FF6B35]/12 via-[#6B3FB5]/12 to-[#00F5D4]/12 border border-[#FF6B35]/25 backdrop-blur-xl mb-8 shadow-lg shadow-[#FF6B35]/10 hover:shadow-[#FF6B35]/20 transition-all duration-500"
             >
-              <Sparkles size={14} className="text-cyan-400 animate-pulse" />
+              <Sparkles size={14} className="text-[#FF6B35] animate-pulse" />
               <div className="h-5 overflow-hidden relative w-[240px] sm:w-[320px]">
                 <AnimatePresence mode="wait">
                   <motion.span
@@ -61,7 +66,7 @@ export default function Hero() {
                     animate={{ y: 0, opacity: 1 }}
                     exit={{ y: -20, opacity: 0 }}
                     transition={{ duration: 0.4 }}
-                    className="absolute inset-0 font-mono text-xs font-bold text-cyan-200 uppercase tracking-wider whitespace-nowrap truncate"
+                    className="absolute inset-0 font-mono text-xs font-bold text-[#FF8557] uppercase tracking-wider whitespace-nowrap truncate"
                   >
                     {TICKER_TEXTS[tickerIndex]}
                   </motion.span>
@@ -70,84 +75,85 @@ export default function Hero() {
             </motion.div>
 
             <motion.h1
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="font-display font-extrabold leading-[1.1] tracking-tight mb-6 text-white"
-              style={{ fontSize: 'clamp(4rem, 9vw, 6rem)' }}
+              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+              className="font-display font-extrabold leading-[1.15] tracking-tight mb-8 text-white"
+              style={{ fontSize: 'clamp(3rem, 10vw, 6.5rem)' }}
             >
-              <span style={{fontSize:'clamp(2rem,4vw,3.5rem)'}}>Technology that grows your business.</span>{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4F7CFF] via-[#8B5CF6] to-[#4F7CFF]">
-                Marketing that delivers.
+              <span className="block mb-3" style={{fontSize:'clamp(1.8rem,5vw,3.5rem)', color: '#E0E0E0'}}>Transform your business</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF6B35] via-[#6B3FB5] to-[#00F5D4] animate-gradient block">
+                with AI-powered solutions
               </span>
             </motion.h1>
 
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-slate-300 max-w-[600px] leading-relaxed mb-10 text-base sm:text-lg"
+              transition={{ duration: 0.6, delay: 0.15 }}
+              className="text-slate-300 mx-auto max-w-[700px] leading-relaxed mb-12 text-lg sm:text-xl font-light"
             >
-              Whether launching a startup, automating workflows with AI, or scaling an established enterprise, BlendSkills crafts data-driven marketing & modern web applications—all under one roof.
+              Custom software, AI automation, and performance marketing—building digital experiences that drive real growth.
             </motion.p>
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className="flex flex-col sm:flex-row gap-4 mb-12"
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="flex flex-col sm:flex-row gap-5 mb-16 justify-center"
             >
               <Link
                 href="/contact"
-                className="group relative inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl bg-gradient-to-r from-[#0066cc] via-indigo-600 to-cyan-500 text-white font-bold text-sm shadow-xl shadow-[#0066cc]/30 hover:shadow-cyan-500/25 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+                className="group relative inline-flex items-center justify-center gap-2 px-10 py-4.5 rounded-2xl bg-gradient-to-r from-[#FF6B35] to-[#FF8557] text-white font-bold text-base shadow-2xl shadow-[#FF6B35]/50 hover:shadow-[#FF6B35]/70 transition-all duration-500 hover:scale-[1.03] active:scale-[0.97] overflow-hidden"
               >
-                <span>Book Free Consultation</span>
-                <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
+                <span className="relative z-10">Get Started Today</span>
+                <ArrowRight size={20} className="transition-transform group-hover:translate-x-1" />
               </Link>
 
               <Link
                 href="/results"
-                className="inline-flex items-center justify-center px-8 py-4 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold text-sm backdrop-blur-md transition-all duration-300 hover:border-white/40"
+                className="inline-flex items-center justify-center gap-2 px-10 py-4.5 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/30 text-white font-semibold text-base backdrop-blur-xl transition-all duration-500 hover:border-[#FF6B35]/60 group"
               >
-                View Case Studies
+                <span>View Portfolio</span>
+                <ArrowRight size={20} className="transition-transform group-hover:translate-x-1" />
               </Link>
             </motion.div>
 
-            {/* Trust Row */}
+            {/* Trust & Social Proof */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
+              className="mb-12 flex flex-col items-center gap-4"
+            >
+              <div className="flex items-center gap-3 px-6 py-3 rounded-full bg-white/8 border border-white/15 backdrop-blur-md">
+                <div className="flex gap-1">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} size={18} fill="#FF6B35" color="#FF6B35" />
+                  ))}
+                </div>
+                <span className="text-white font-bold text-sm">5.0 / 5.0</span>
+                <span className="text-slate-400 text-sm">50+ reviews</span>
+              </div>
+              <p className="font-mono text-xs uppercase tracking-widest text-slate-400 font-semibold">
+                Trusted by industry leaders • 200+ Projects Delivered
+              </p>
+            </motion.div>
+
+            {/* Client Logos - Premium Display */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.6 }}
-              className="mb-6"
-            >
-              <div className="flex items-center gap-2 mb-2">
-                <div className="flex">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} size={16} fill="#fbbf24" color="#fbbf24" />
-                  ))}
-                </div>
-                <span className="text-white font-bold text-sm">5.0 / 5.0</span>
-                <span className="text-slate-400 text-xs">from 50+ enterprise reviews</span>
-              </div>
-              <p className="font-mono text-[0.75rem] uppercase tracking-widest text-cyan-300/80 mb-4">
-                Trusted by industry leaders across India
-              </p>
-            </motion.div>
-
-            {/* Client Logos */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.8 }}
-              className="flex flex-wrap gap-6 sm:gap-8 items-center justify-start"
+              className="flex flex-wrap gap-4 sm:gap-6 items-center justify-center pt-4 border-t border-white/10"
             >
               {clientLogos.map((logo, index) => (
                 <motion.div
                   key={logo.name}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: 0.8 + index * 0.1 }}
-                  className="text-slate-300 hover:text-cyan-300 font-bold text-sm sm:text-base transition-all duration-300 cursor-pointer"
+                  transition={{ duration: 0.4, delay: 0.7 + index * 0.08 }}
+                  className="text-slate-400 hover:text-[#FF6B35] font-semibold text-xs sm:text-sm transition-all duration-300 cursor-pointer"
                 >
                   {logo.name}
                 </motion.div>

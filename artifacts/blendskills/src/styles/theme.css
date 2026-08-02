@@ -1,30 +1,64 @@
+/* ============================================================
+   BLENDSKILLS — MODERN PREMIUM DESIGN SYSTEM
+   ============================================================ */
+
 /* Global dark background and premium text colors */
 html {
-  background: #09090B;
+  background: #0f1418;
   color: #FFFFFF;
   font-family: 'Geist', 'Inter', system-ui, sans-serif;
 }
 
-/* Glassmorphism utility class */
-.glass {
-  background: rgba(255,255,255,.05);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255,255,255,.08);
-  box-shadow: 0 20px 80px rgba(0,0,0,.25);
+:root {
+  /* Primary Colors - Warm Orange/Rust & Deep Blacks */
+  --primary: #FF6B35;
+  --primary-dark: #E55A1F;
+  --primary-light: #FF8557;
+  
+  /* Secondary - Sophisticated Purples */
+  --secondary: #6B3FB5;
+  --secondary-dark: #5A2E9E;
+  
+  /* Accents - Bright & Contemporary */
+  --accent: #00F5D4;
+  --accent-dark: #00C9A5;
+  
+  /* Backgrounds */
+  --bg-dark: #0f1418;
+  --bg-darker: #0a0d12;
+  --bg-card: rgba(20, 24, 35, 0.6);
+  
+  /* Text Colors */
+  --text-primary: #FFFFFF;
+  --text-secondary: #E0E0E0;
+  --text-muted: #999AAA;
+  
+  /* Borders & Dividers */
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-light: rgba(255, 255, 255, 0.12);
 }
 
-/* Scrollbar styling */
+/* Modern Glassmorphism */
+.glass {
+  background: linear-gradient(135deg, rgba(20, 24, 35, 0.5), rgba(15, 18, 27, 0.4));
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--border-light);
+  box-shadow: 0 20px 80px rgba(0, 0, 0, 0.4);
+}
+
+/* Premium Scrollbar */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 12px;
 }
 ::-webkit-scrollbar-track {
-  background: #070a13;
+  background: var(--bg-darker);
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,.08);
-  border-radius: 10px;
-  border: 2px solid #070a13;
+  background: linear-gradient(to bottom, var(--primary), var(--accent));
+  border-radius: 12px;
+  border: 2px solid var(--bg-darker);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(0,245,212,.3);
+  background: linear-gradient(to bottom, var(--primary-light), var(--accent-dark));
 }

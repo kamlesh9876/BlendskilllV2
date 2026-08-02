@@ -102,7 +102,7 @@ export default function Nav() {
           {/* Desktop CTA Button */}
           <button
             onClick={() => handleNavClick('/contact')}
-            className="hidden lg:inline-flex items-center justify-center gap-2 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-[#0066cc]/25 active:scale-95 cursor-pointer bg-gradient-to-r from-[#0066cc] via-indigo-600 to-cyan-500 text-white font-semibold text-sm px-6 py-2.5 rounded-xl border border-cyan-400/30 shadow-md"
+            className="hidden lg:inline-flex items-center justify-center gap-2 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-[#FF6B35]/30 active:scale-95 cursor-pointer bg-gradient-to-r from-[#FF6B35] to-[#FF8557] text-white font-semibold text-sm px-6 py-2.5 rounded-xl border border-[#FF6B35]/40 shadow-md"
           >
             <span>Book Consultation</span>
             <ArrowRight size={16} />
@@ -153,7 +153,7 @@ export default function Nav() {
                   onClick={() => handleNavClick(l.href)}
                   className={`w-full min-h-[48px] flex items-center justify-between px-4 py-3 rounded-xl text-base sm:text-lg font-medium transition-all duration-200 cursor-pointer text-left border ${
                     isActive
-                      ? 'bg-gradient-to-r from-[#0066cc]/90 to-indigo-600/90 text-white font-bold border-cyan-400/40 shadow-lg shadow-[#0066cc]/20'
+                      ? 'bg-gradient-to-r from-[#FF6B35]/90 to-[#FF8557]/90 text-white font-bold border-[#FF6B35]/40 shadow-lg shadow-[#FF6B35]/20'
                       : 'bg-white/[0.03] hover:bg-white/[0.08] text-slate-200 hover:text-white border-white/5 active:bg-white/10'
                   }`}
                   style={{
@@ -181,9 +181,9 @@ export default function Nav() {
           <div className="pt-4 pb-2">
             <button
               onClick={() => handleNavClick('/contact')}
-              className="w-full min-h-[50px] py-3.5 px-5 rounded-xl bg-gradient-to-r from-[#0066cc] via-indigo-600 to-cyan-500 text-white font-bold text-sm sm:text-base flex items-center justify-center gap-2 shadow-xl shadow-[#0066cc]/25 border border-cyan-400/40 cursor-pointer active:scale-[0.98] transition-transform"
+              className="w-full min-h-[50px] py-3.5 px-5 rounded-xl bg-gradient-to-r from-[#FF6B35] to-[#FF8557] text-white font-bold text-sm sm:text-base flex items-center justify-center gap-2 shadow-xl shadow-[#FF6B35]/35 border border-[#FF6B35]/40 cursor-pointer active:scale-[0.98] transition-transform"
             >
-              <Sparkles size={18} className="text-cyan-300 animate-pulse" />
+              <Sparkles size={18} className="text-[#FFB380] animate-pulse" />
               <span>Book Free AI Consultation</span>
             </button>
           </div>
