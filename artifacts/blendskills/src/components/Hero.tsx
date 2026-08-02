@@ -3,7 +3,6 @@ import { ArrowRight, ChevronDown, Star, TrendingUp, Sparkles } from 'lucide-reac
 import { Link } from 'wouter';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useScrollReveal } from '@/hooks/useScrollReveal';
-import NeuralNetwork from './NeuralNetwork';
 
 const TICKER_TEXTS = [
   'Full-Stack Modern Web Applications',
@@ -36,9 +35,6 @@ export default function Hero() {
 
   return (
         <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-b from-[#0f1418] via-[#0a0d12] to-[#0f1418] pt-24 pb-16 md:pt-28 md:pb-24 lg:pt-32">
-    {/* Immersive Neural network background */}
-    <NeuralNetwork />
-    
     {/* Premium overlay with gradient mesh */}
     <div className="absolute inset-0 pointer-events-none">
       <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-[#000000]/40"></div>
