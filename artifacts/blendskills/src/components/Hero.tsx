@@ -1,175 +1,225 @@
 import { useState, useEffect } from 'react';
-import { ArrowRight, ChevronDown, Star, TrendingUp, Sparkles } from 'lucide-react';
+import { ArrowRight, ChevronDown, Sparkles } from 'lucide-react';
 import { Link } from 'wouter';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useScrollReveal } from '@/hooks/useScrollReveal';
 
-const TICKER_TEXTS = [
-  'Full-Stack Modern Web Applications',
-  'AI & Neural Workflow Automations',
-  'Data Performance Marketing & SEO',
-  'Enterprise Cloud Infrastructure',
-  'Brand Strategy & Scalable Funnels',
+const CAPABILITIES = [
+  'Custom Software Development',
+  'AI & Automation Solutions',
+  'Performance Marketing',
+  'Enterprise Infrastructure',
 ];
 
 export default function Hero() {
   useScrollReveal();
-  const [videoLoaded, setVideoLoaded] = useState(false);
   const [tickerIndex, setTickerIndex] = useState(0);
 
-  // Dynamic Ticker Text Rotation
   useEffect(() => {
     const timer = setInterval(() => {
-      setTickerIndex((prev) => (prev + 1) % TICKER_TEXTS.length);
-    }, 3500);
+      setTickerIndex((prev) => (prev + 1) % CAPABILITIES.length);
+    }, 4000);
     return () => clearInterval(timer);
   }, []);
 
   const clientLogos = [
-    { name: 'Imagicaa', alt: 'Imagicaa Water Park' },
-    { name: 'Wet N Joy', alt: 'Wet N Joy' },
-    { name: 'ADYPU', alt: 'ADYPU University' },
-    { name: 'Toy World', alt: 'Toy World' },
-    { name: 'Community Stay', alt: 'Community Stay' },
+    { name: 'Imagicaa' },
+    { name: 'Wet N Joy' },
+    { name: 'ADYPU' },
+    { name: 'Toy World' },
+    { name: 'Community Stay' },
   ];
 
   return (
-        <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-b from-[#0f1418] via-[#0a0d12] to-[#0f1418] pt-24 pb-16 md:pt-28 md:pb-24 lg:pt-32">
-    {/* Premium overlay with gradient mesh */}
-    <div className="absolute inset-0 pointer-events-none">
-      <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-[#000000]/40"></div>
-      <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-gradient-to-br from-[#FF6B35]/5 to-transparent blur-3xl"></div>
-      <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-gradient-to-tr from-[#6B3FB5]/5 to-transparent blur-3xl"></div>
-    </div>
+    <section className="relative min-h-screen flex items-center overflow-hidden bg-gradient-to-b from-[#0a0e14] via-[#0f1218] to-[#0a0e14]">
+      {/* Premium atmospheric background layers */}
+      <div className="absolute inset-0 pointer-events-none">
+        {/* Radial gradient from center */}
+        <div className="absolute inset-0 bg-radial from-[#FF6B35]/8 via-transparent to-transparent opacity-40"></div>
+        
+        {/* Corner accents */}
+        <div className="absolute top-20 right-1/4 w-96 h-96 bg-gradient-to-br from-[#6B3FB5]/20 to-transparent blur-3xl"></div>
+        <div className="absolute bottom-32 -left-20 w-80 h-80 bg-gradient-to-tr from-[#00F5D4]/15 to-transparent blur-3xl"></div>
+        
+        {/* Grid effect */}
+        <div className="absolute inset-0 opacity-[0.02] bg-[linear-gradient(0deg,transparent_24%,rgba(255,255,255,.05)_25%,rgba(255,255,255,.05)_26%,transparent_27%,transparent_74%,rgba(255,255,255,.05)_75%,rgba(255,255,255,.05)_76%,transparent_77%,transparent_100%)] bg-[length:50px_50px]"></div>
+      </div>
 
-      <div className="relative z-[5] max-w-[1200px] mx-auto px-6 w-full text-white">
-        <div className="flex flex-col gap-16 items-center text-center">
-          {/* Centered Premium Content */}
-          <div className="w-full max-w-[900px]">
-            {/* Multi-color Gradient Badge with Animated Capability Ticker */}
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 py-20 md:py-32">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          
+          {/* Left Column - Content */}
+          <div className="order-2 lg:order-1">
+            {/* Eyebrow badge */}
             <motion.div
-              initial={{ opacity: 0, y: 15 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-gradient-to-r from-[#FF6B35]/12 via-[#6B3FB5]/12 to-[#00F5D4]/12 border border-[#FF6B35]/25 backdrop-blur-xl mb-8 shadow-lg shadow-[#FF6B35]/10 hover:shadow-[#FF6B35]/20 transition-all duration-500"
+              transition={{ duration: 0.6 }}
+              className="inline-flex items-center gap-3 mb-8 px-4 py-2 rounded-lg bg-var-color-primary-muted border border-[rgba(255,107,53,0.2)] backdrop-blur-sm"
             >
-              <Sparkles size={14} className="text-[#FF6B35] animate-pulse" />
-              <div className="h-5 overflow-hidden relative w-[240px] sm:w-[320px]">
-                <AnimatePresence mode="wait">
-                  <motion.span
-                    key={tickerIndex}
-                    initial={{ y: 20, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    exit={{ y: -20, opacity: 0 }}
-                    transition={{ duration: 0.4 }}
-                    className="absolute inset-0 font-mono text-xs font-bold text-[#FF8557] uppercase tracking-wider whitespace-nowrap truncate"
-                  >
-                    {TICKER_TEXTS[tickerIndex]}
-                  </motion.span>
-                </AnimatePresence>
-              </div>
+              <div className="w-2 h-2 rounded-full bg-[#FF6B35] animate-pulse"></div>
+              <span className="text-xs font-mono font-bold uppercase tracking-widest text-[#FF8557]">Digital transformation</span>
             </motion.div>
 
+            {/* Main headline */}
             <motion.h1
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              className="font-display font-extrabold leading-[1.15] tracking-tight mb-8 text-white"
-              style={{ fontSize: 'clamp(3rem, 10vw, 6.5rem)' }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              className="font-display font-extrabold mb-6 leading-[1.1] tracking-tight"
+              style={{ fontSize: 'clamp(2.5rem, 8vw, 4.5rem)' }}
             >
-              <span className="block mb-3" style={{fontSize:'clamp(1.8rem,5vw,3.5rem)', color: '#E0E0E0'}}>Transform your business</span>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF6B35] via-[#6B3FB5] to-[#00F5D4] animate-gradient block">
-                with AI-powered solutions
+              <span className="block text-white mb-2">Grow smarter.</span>
+              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#FF6B35] via-[#6B3FB5] to-[#00F5D4]">
+                Build faster.
               </span>
             </motion.h1>
 
+            {/* Subheadline */}
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.15 }}
-              className="text-slate-300 mx-auto max-w-[700px] leading-relaxed mb-12 text-lg sm:text-xl font-light"
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="text-lg leading-relaxed text-[#B0B8C8] mb-8 max-w-md"
             >
-              Custom software, AI automation, and performance marketing—building digital experiences that drive real growth.
+              Enterprise software, AI automation, and performance marketing for companies ready to scale.
             </motion.p>
 
+            {/* CTA Group */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="flex flex-col sm:flex-row gap-5 mb-16 justify-center"
+              className="flex flex-col sm:flex-row gap-4 mb-12"
             >
               <Link
                 href="/contact"
-                className="group relative inline-flex items-center justify-center gap-2 px-10 py-4.5 rounded-2xl bg-gradient-to-r from-[#FF6B35] to-[#FF8557] text-white font-bold text-base shadow-2xl shadow-[#FF6B35]/50 hover:shadow-[#FF6B35]/70 transition-all duration-500 hover:scale-[1.03] active:scale-[0.97] overflow-hidden"
+                className="group px-8 py-4 rounded-xl bg-gradient-to-r from-[#FF6B35] to-[#FF8557] text-white font-semibold flex items-center justify-center gap-2 shadow-lg shadow-[#FF6B35]/30 hover:shadow-[#FF6B35]/50 transition-all duration-300 hover:scale-105 active:scale-95"
               >
-                <span className="relative z-10">Get Started Today</span>
-                <ArrowRight size={20} className="transition-transform group-hover:translate-x-1" />
+                Start Your Journey
+                <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
               </Link>
-
+              
               <Link
-                href="/results"
-                className="inline-flex items-center justify-center gap-2 px-10 py-4.5 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/30 text-white font-semibold text-base backdrop-blur-xl transition-all duration-500 hover:border-[#FF6B35]/60 group"
+                href="#about"
+                className="px-8 py-4 rounded-xl bg-white/8 border border-white/20 text-white font-semibold flex items-center justify-center hover:bg-white/12 hover:border-[#FF6B35]/40 transition-all duration-300"
               >
-                <span>View Portfolio</span>
-                <ArrowRight size={20} className="transition-transform group-hover:translate-x-1" />
+                Learn More
+                <ArrowRight size={18} className="ml-2" />
               </Link>
             </motion.div>
 
-            {/* Trust & Social Proof */}
+            {/* Stats row */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.5 }}
-              className="mb-12 flex flex-col items-center gap-4"
+              className="flex gap-12 pt-8 border-t border-white/10"
             >
-              <div className="flex items-center gap-3 px-6 py-3 rounded-full bg-white/8 border border-white/15 backdrop-blur-md">
-                <div className="flex gap-1">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} size={18} fill="#FF6B35" color="#FF6B35" />
-                  ))}
-                </div>
-                <span className="text-white font-bold text-sm">5.0 / 5.0</span>
-                <span className="text-slate-400 text-sm">50+ reviews</span>
+              <div>
+                <p className="text-2xl font-bold text-[#FF6B35]">200+</p>
+                <p className="text-sm text-[#8A92A8]">Projects Delivered</p>
               </div>
-              <p className="font-mono text-xs uppercase tracking-widest text-slate-400 font-semibold">
-                Trusted by industry leaders • 200+ Projects Delivered
-              </p>
-            </motion.div>
-
-            {/* Client Logos - Premium Display */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.6 }}
-              className="flex flex-wrap gap-4 sm:gap-6 items-center justify-center pt-4 border-t border-white/10"
-            >
-              {clientLogos.map((logo, index) => (
-                <motion.div
-                  key={logo.name}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: 0.7 + index * 0.08 }}
-                  className="text-slate-400 hover:text-[#FF6B35] font-semibold text-xs sm:text-sm transition-all duration-300 cursor-pointer"
-                >
-                  {logo.name}
-                </motion.div>
-              ))}
+              <div>
+                <p className="text-2xl font-bold text-[#00F5D4]">50+</p>
+                <p className="text-sm text-[#8A92A8]">Client Reviews</p>
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-[#6B3FB5]">10+</p>
+                <p className="text-sm text-[#8A92A8]">Years Experience</p>
+              </div>
             </motion.div>
           </div>
 
+          {/* Right Column - Visual */}
+          <motion.div
+            initial={{ opacity: 0, x: 40 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="order-1 lg:order-2 relative h-[400px] md:h-[500px]"
+          >
+            {/* Premium card with gradient border */}
+            <div className="relative h-full rounded-2xl overflow-hidden group">
+              {/* Gradient border effect */}
+              <div className="absolute inset-0 bg-gradient-to-br from-[#FF6B35]/40 via-[#6B3FB5]/20 to-[#00F5D4]/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              
+              {/* Inner card */}
+              <div className="relative h-full bg-gradient-to-br from-[#161d2b]/80 to-[#0f1218]/60 border border-white/10 rounded-2xl p-8 backdrop-blur-xl flex flex-col justify-center">
+                
+                {/* Content inside card */}
+                <div className="space-y-6">
+                  <div className="inline-flex items-center gap-3 w-fit px-3 py-2 rounded-lg bg-[#FF6B35]/10 border border-[#FF6B35]/30">
+                    <Sparkles size={16} className="text-[#FF6B35]" />
+                    <span className="text-xs font-mono font-bold uppercase text-[#FF8557]">What we do</span>
+                  </div>
 
+                  <div className="min-h-[80px] flex items-center">
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={tickerIndex}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.4 }}
+                        className="flex flex-col"
+                      >
+                        <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">
+                          {CAPABILITIES[tickerIndex]}
+                        </h3>
+                        <p className="text-sm text-[#8A92A8]">
+                          {tickerIndex === 0 && "Enterprise-grade applications built for scale"}
+                          {tickerIndex === 1 && "Intelligent systems that work for you 24/7"}
+                          {tickerIndex === 2 && "Data-driven strategies that convert"}
+                          {tickerIndex === 3 && "Mission-critical infrastructure & support"}
+                        </p>
+                      </motion.div>
+                    </AnimatePresence>
+                  </div>
+
+                  {/* Client logos inline */}
+                  <div className="flex gap-3 flex-wrap mt-8 pt-8 border-t border-white/10">
+                    {clientLogos.slice(0, 3).map((logo, idx) => (
+                      <div key={idx} className="text-xs font-mono text-[#5F6B82] bg-white/5 px-3 py-1.5 rounded-md border border-white/10">
+                        {logo.name}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
         </div>
+
+        {/* Bottom Section - Client logos */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.5 }}
+          className="mt-20 pt-12 border-t border-white/10"
+        >
+          <p className="text-xs font-mono uppercase tracking-widest text-[#5F6B82] mb-6">Trusted by innovative teams</p>
+          <div className="flex flex-wrap gap-6 md:gap-10">
+            {clientLogos.map((logo, idx) => (
+              <div key={idx} className="text-sm font-semibold text-[#8A92A8] hover:text-[#FF6B35] transition-colors">
+                {logo.name}
+              </div>
+            ))}
+          </div>
+        </motion.div>
       </div>
 
       {/* Scroll indicator */}
-      <Link
-        href="/about"
-        aria-label="Scroll to content"
-        className="hidden md:flex absolute bottom-6 left-1/2 -translate-x-1/2 flex-col items-center gap-1.5 text-slate-400 hover:text-cyan-400 transition-colors z-[5]"
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8, delay: 1 }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2"
       >
-        <span className="font-mono text-[0.7rem] uppercase tracking-widest font-semibold">Explore Below</span>
-        <ChevronDown size={18} className="animate-bounce" />
-      </Link>
+        <div className="flex flex-col items-center gap-2 text-[#5F6B82] hover:text-[#FF6B35] transition-colors cursor-pointer">
+          <span className="text-xs font-mono uppercase tracking-widest">Scroll</span>
+          <ChevronDown size={20} className="animate-bounce" />
+        </div>
+      </motion.div>
     </section>
   );
 }
