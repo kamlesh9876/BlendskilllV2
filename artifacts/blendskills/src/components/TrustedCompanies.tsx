@@ -12,20 +12,21 @@ const clientLogos = [
 
 export default function TrustedCompanies() {
   return (
-    <section className="relative" style={{ minHeight: '200px', background: '#ffffff', padding: '80px 24px' }}>
-      <div className="max-w-[1400px] mx-auto">
+    <section className="relative py-16 md:py-20 bg-gradient-to-b from-[#0f1418] to-[#1a1f2e] border-t border-white/10">
+      <div className="max-w-[1400px] mx-auto px-6">
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          className="text-center mb-10"
+          transition={{ duration: 0.5 }}
+          className="text-center mb-12"
         >
           <p
-            className="font-mono text-[0.75rem] font-normal uppercase tracking-widest"
-            style={{ color: '#94a3b8' }}
+            className="font-mono text-[0.7rem] font-bold uppercase tracking-widest"
+            style={{ color: '#FF6B35' }}
           >
-            Trusted by industry leaders
+            Trusted by 200+ Companies
           </p>
         </motion.div>
 
@@ -34,8 +35,7 @@ export default function TrustedCompanies() {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          className="flex flex-wrap justify-center gap-16"
-          style={{ marginBottom: '40px' }}
+          className="flex flex-wrap justify-center gap-12 md:gap-16"
         >
           {clientLogos.map((logo, index) => (
             <motion.div
@@ -43,21 +43,21 @@ export default function TrustedCompanies() {
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: index * 0.1 }}
-              className="font-semibold text-lg cursor-pointer transition-all duration-300 hover:scale-110"
+              transition={{ duration: 0.4, delay: index * 0.08 }}
+              className="font-semibold text-base md:text-lg cursor-pointer transition-all duration-500 hover:scale-125 group"
               style={{
-                color: '#64748b',
-                opacity: 0.6,
+                color: '#CBD5E1',
+                opacity: 0.7,
                 height: '40px',
                 display: 'flex',
                 alignItems: 'center',
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.color = '#1e293b';
+                e.currentTarget.style.color = '#FF6B35';
                 e.currentTarget.style.opacity = '1';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.color = '#64748b';
+                e.currentTarget.style.color = '#CBD5E1';
                 e.currentTarget.style.opacity = '0.6';
               }}
             >

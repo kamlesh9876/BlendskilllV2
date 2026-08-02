@@ -15,23 +15,10 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="relative py-24 md:py-32 bg-slate-950 text-white overflow-hidden">
-      {/* Background Video Layer */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-30">
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          poster="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1600&auto=format&fit=crop&q=80"
-          onLoadedData={() => setVideoLoaded(true)}
-          className={`w-full h-full object-cover transition-opacity duration-1000 ${
-            videoLoaded ? 'opacity-80' : 'opacity-20'
-          }`}
-          src="https://assets.mixkit.co/videos/preview/mixkit-futuristic-hologram-screen-with-data-32532-large.mp4"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-950/90 to-slate-950" />
-      </div>
+    <section id="contact" className="relative py-24 md:py-32 bg-gradient-to-b from-[#0f1418] to-[#000000] text-white overflow-hidden">
+      {/* Premium gradient overlays */}
+      <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-gradient-to-br from-[#FF6B35]/10 to-transparent blur-3xl pointer-events-none"></div>
+      <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-gradient-to-tr from-[#6B3FB5]/10 to-transparent blur-3xl pointer-events-none"></div>
 
       <div className="max-w-[1400px] mx-auto px-6 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
@@ -44,15 +31,13 @@ export default function Contact() {
             className="space-y-8"
           >
             <div>
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-cyan-500/20 to-blue-500/20 border border-cyan-400/30 text-cyan-300 font-mono text-xs font-bold uppercase tracking-wider mb-4">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-[#FF6B35]/20 to-[#FF6B35]/10 border border-[#FF6B35]/30 text-[#FF8557] font-mono text-xs font-bold uppercase tracking-wider mb-6">
                 <Sparkles size={14} />
-                <span>Let's Build Something Great</span>
+                <span>Ready to Transform?</span>
               </div>
               <h2 className="font-display font-extrabold text-3xl sm:text-4xl md:text-5xl text-white leading-tight">
-                Transform your business with{' '}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-indigo-400">
-                  BlendSkills
-                </span>
+                Let's build your next
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF6B35] via-[#6B3FB5] to-[#00F5D4]"> digital breakthrough</span>
               </h2>
               <p className="text-slate-300 text-base md:text-lg mt-4 leading-relaxed">
                 Take your digital marketing and software infrastructure to the next level. Book a free strategy call with our growth engineering specialists.
