@@ -35,27 +35,26 @@ const steps = [
 
 export default function Process() {
   return (
-    <section id="process" className="relative" style={{ padding: '120px 24px', background: '#f8fafc' }}>
-      <div className="max-w-[1400px] mx-auto">
+    <section id="process" className="relative py-24 md:py-32 bg-gradient-to-b from-[#1a1f2e] to-[#0f1418]">
+      <div className="max-w-[1400px] mx-auto px-6">
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="mb-16"
+          className="mb-16 text-center"
         >
           <p
-            className="font-mono text-[0.75rem] font-semibold uppercase tracking-widest mb-6"
-            style={{ color: '#0066cc' }}
+            className="font-mono text-[0.75rem] font-bold uppercase tracking-widest mb-6"
+            style={{ color: '#FF6B35' }}
           >
             How It Works
           </p>
           <h2
-            className="font-display font-bold leading-tight mb-6"
+            className="font-display font-bold leading-tight mb-6 text-white"
             style={{
               fontSize: 'clamp(2rem, 4vw, 3rem)',
-              color: '#1e293b',
             }}
           >
             Simple steps to<br />

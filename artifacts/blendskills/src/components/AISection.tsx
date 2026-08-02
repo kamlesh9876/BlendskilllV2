@@ -33,12 +33,12 @@ export default function AISection() {
   const [isPlaying, setIsPlaying] = useState(true);
 
   return (
-    <section className="relative" style={{ padding: '120px 24px', background: '#f8fafc' }}>
-      {/* Radial gradient overlay */}
+    <section className="relative py-24 md:py-32 bg-gradient-to-b from-[#0f1418] to-[#1a1f2e]">
+      {/* Premium gradient overlay */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: 'radial-gradient(circle at center, rgba(0, 102, 204, 0.06) 0%, transparent 70%)',
+          background: 'radial-gradient(circle at center, rgba(255, 107, 53, 0.08) 0%, transparent 70%)',
         }}
       />
 
@@ -53,8 +53,8 @@ export default function AISection() {
             style={{ maxWidth: '600px' }}
           >
             <p
-              className="font-mono text-[0.75rem] font-semibold uppercase tracking-widest mb-6"
-              style={{ color: '#0066cc' }}
+              className="font-mono text-[0.75rem] font-bold uppercase tracking-widest mb-6"
+              style={{ color: '#FF6B35' }}
             >
               AI-Powered Growth
             </p>

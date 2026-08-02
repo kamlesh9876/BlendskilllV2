@@ -34,7 +34,7 @@ const problems = [
 
 export default function BusinessProblems() {
   return (
-    <section id="about" className="relative py-24 md:py-32 bg-slate-50 text-slate-900">
+    <section id="about" className="relative py-24 md:py-32 bg-gradient-to-b from-[#1a1f2e] to-[#0f1418]">
       <div className="max-w-[1400px] mx-auto px-6">
         {/* Section Header */}
         <motion.div
@@ -42,13 +42,15 @@ export default function BusinessProblems() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="mb-16"
+          className="mb-16 text-center"
         >
-          <p className="font-mono text-xs font-bold uppercase tracking-widest text-[#0066cc] mb-4">
-            The Industry Challenge
+          <p className="font-mono text-xs font-bold uppercase tracking-widest text-[#FF6B35] mb-4">
+            The Challenge
           </p>
-          <h2 className="font-display font-extrabold text-3xl sm:text-4xl md:text-5xl text-slate-900 leading-tight max-w-3xl">
-            Most businesses struggle with fragmented vendors, outdated technology, and marketing that doesn't scale.
+          <h2 className="font-display font-extrabold text-3xl sm:text-4xl md:text-5xl text-white leading-tight mx-auto max-w-3xl">
+            Most businesses struggle with
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF6B35] to-[#00F5D4]"> fragmented systems</span>
+            and outdated technology.
           </h2>
         </motion.div>
 
