@@ -60,9 +60,7 @@ export default function Nav() {
     <>
       <header
         className={`fixed top-0 left-0 w-full z-[1000] transition-all duration-300 ${
-          scrolled
-            ? 'h-16 bg-slate-950/90 backdrop-blur-xl border-b border-white/10 shadow-2xl'
-            : 'h-20 bg-slate-950/70 backdrop-blur-md border-b border-white/10'
+          scrolled ? 'h-16 glass' : 'h-20 glass'
         }`}
       >
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 h-full flex justify-between items-center">

@@ -2,10 +2,18 @@ import { useEffect, useRef } from 'react';
 
 /**
  * Lightweight WebGL hero scene built with raw WebGL (no three.js dependency):
- * a rotating wireframe icosahedron + scattered particle field, with gentle
- * cursor parallax. Falls back to nothing if WebGL is unavailable.
+ * a rotating wireframe icosahedron-like node network + scattered particle
+ * field, with gentle cursor parallax. Falls back to nothing if WebGL is
+ * unavailable.
  */
-export default function Hero3D() {
+interface Hero3DProps {
+  /** Extra classes merged onto the wrapping div (e.g. utility classes). */
+  className?: string;
+  /** Style overrides merged onto the wrapping div's defaults below. */
+  style?: React.CSSProperties;
+}
+
+export default function Hero3D({ className, style }: Hero3DProps = {}) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -21,9 +29,15 @@ export default function Hero3D() {
     const gl =
       (canvas.getContext('webgl') as WebGLRenderingContext | null) ||
       (canvas.getContext('experimental-webgl') as WebGLRenderingContext | null);
-    if (!gl) return;
+    if (!gl) {
+      console.warn('Hero3D: WebGL is not available in this browser.');
+      return;
+    }
 
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    // proj is recomputed on every resize so aspect ratio never warps
+    let proj = new Float32Array(16);
 
     const resize = () => {
       const w = container.clientWidth || 1;
@@ -31,9 +45,8 @@ export default function Hero3D() {
       canvas.width = Math.floor(w * dpr);
       canvas.height = Math.floor(h * dpr);
       gl.viewport(0, 0, canvas.width, canvas.height);
+      proj = mat4.perspective(Math.PI / 4, canvas.width / canvas.height, 0.1, 100);
     };
-    resize();
-    window.addEventListener('resize', resize);
 
     // ---- Shaders ----
     const vsSrc = `
@@ -57,16 +70,33 @@ export default function Hero3D() {
       }
     `;
 
-    const compile = (type: number, src: string) => {
-      const s = gl.createShader(type)!;
+    const compile = (type: number, src: string): WebGLShader | null => {
+      const s = gl.createShader(type);
+      if (!s) return null;
       gl.shaderSource(s, src);
       gl.compileShader(s);
+      if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
+        console.error('Hero3D shader compile error:', gl.getShaderInfoLog(s));
+        gl.deleteShader(s);
+        return null;
+      }
       return s;
     };
-    const program = gl.createProgram()!;
-    gl.attachShader(program, compile(gl.VERTEX_SHADER, vsSrc));
-    gl.attachShader(program, compile(gl.FRAGMENT_SHADER, fsSrc));
+
+    const vs = compile(gl.VERTEX_SHADER, vsSrc);
+    const fs = compile(gl.FRAGMENT_SHADER, fsSrc);
+    if (!vs || !fs) return; // compile failed, bail out cleanly
+
+    const program = gl.createProgram();
+    if (!program) return;
+    gl.attachShader(program, vs);
+    gl.attachShader(program, fs);
     gl.linkProgram(program);
+    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+      console.error('Hero3D program link error:', gl.getProgramInfoLog(program));
+      gl.deleteProgram(program);
+      return;
+    }
     gl.useProgram(program);
 
     const aPos = gl.getAttribLocation(program, 'aPos');
@@ -81,38 +111,39 @@ export default function Hero3D() {
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
     gl.enable(gl.DEPTH_TEST);
 
-    // ---- Icosahedron wireframe geometry ----
-    const t = (1 + Math.sqrt(5)) / 2;
-    const verts: number[][] = [
-      [-1, t, 0], [1, t, 0], [-1, -t, 0], [1, -t, 0],
-      [0, -1, t], [0, 1, t], [0, -1, -t], [0, 1, -t],
-      [t, 0, -1], [t, 0, 1], [-t, 0, -1], [-t, 0, 1],
-    ].map((v) => {
-      const len = Math.hypot(v[0], v[1], v[2]);
-      return v.map((c) => (c / len) * 4.2);
-    });
-    const edges: [number, number][] = [
-      [0, 1], [0, 5], [0, 7], [0, 10], [0, 11],
-      [1, 5], [1, 7], [1, 8], [1, 9],
-      [2, 3], [2, 4], [2, 6], [2, 10], [2, 11],
-      [3, 4], [3, 6], [3, 8], [3, 9],
-      [4, 5], [4, 9], [4, 11],
-      [5, 9], [5, 11],
-      [6, 7], [6, 8], [6, 10],
-      [7, 8], [7, 10],
-      [8, 9],
-      [10, 11],
-    ];
+    // ---- Neural network flow geometry ----
+    const NODE_COUNT = 80;
+    const NODE_RADIUS = 4.2;
+    // Generate random nodes inside a sphere
+    const nodes: number[][] = [];
+    for (let i = 0; i < NODE_COUNT; i++) {
+      const phi = Math.acos(2 * Math.random() - 1);
+      const theta = Math.random() * 2 * Math.PI;
+      const r = Math.random() * NODE_RADIUS;
+      const x = r * Math.sin(phi) * Math.cos(theta);
+      const y = r * Math.sin(phi) * Math.sin(theta);
+      const z = r * Math.cos(phi);
+      nodes.push([x, y, z]);
+    }
+    // Build connections: each node connects to its 3 nearest neighbors
     const lineVerts: number[] = [];
-    edges.forEach(([a, b]) => {
-      lineVerts.push(...verts[a], ...verts[b]);
-    });
+    const K = 3;
+    for (let i = 0; i < NODE_COUNT; i++) {
+      const distances = nodes
+        .map((p, idx) => ({ idx, dist: Math.hypot(p[0] - nodes[i][0], p[1] - nodes[i][1], p[2] - nodes[i][2]) }))
+        .filter(d => d.idx !== i)
+        .sort((a, b) => a.dist - b.dist)
+        .slice(0, K);
+      distances.forEach(d => {
+        lineVerts.push(...nodes[i], ...nodes[d.idx]);
+      });
+    }
     const lineBuf = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, lineBuf);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(lineVerts), gl.STATIC_DRAW);
 
     // ---- Particles ----
-    const count = 220;
+    const count = 500;
     const ppos = new Float32Array(count * 3);
     for (let i = 0; i < count; i++) {
       const u = Math.random();
@@ -164,9 +195,9 @@ export default function Hero3D() {
       },
     };
 
-    const proj = mat4.perspective(Math.PI / 4, canvas.width / canvas.height, 0.1, 100);
-    let view = mat4.identity();
-    view = mat4.translate(view, 0, 0, -15);
+    // Now that mat4 exists, do the initial sizing pass (also sets proj).
+    resize();
+    window.addEventListener('resize', resize);
 
     let mouseX = 0, mouseY = 0;
     const onMove = (e: MouseEvent) => {
@@ -190,12 +221,12 @@ export default function Hero3D() {
       gl.uniformMatrix4fv(uProj, false, proj);
       gl.uniformMatrix4fv(uView, false, v);
 
-      // Dynamic Color Shift for rich vibrant tech visuals
+      // Dynamic color shift for rich, vibrant tech visuals
       const rMesh = 0.2 + 0.3 * Math.sin(time * 0.5);
       const gMesh = 0.6 + 0.3 * Math.cos(time * 0.7);
       const bMesh = 0.85 + 0.15 * Math.sin(time * 0.4);
 
-      // Wireframe
+      // Wireframe / node network
       let model = mat4.identity();
       model = mat4.rotateY(model, time * 0.18);
       model = mat4.rotateX(model, time * 0.12);
@@ -227,9 +258,34 @@ export default function Hero3D() {
       cancelAnimationFrame(raf);
       window.removeEventListener('resize', resize);
       window.removeEventListener('mousemove', onMove);
+
+      // Release GL resources explicitly (matters under StrictMode double-mount
+      // and for any parent that mounts/unmounts this component repeatedly)
+      gl.deleteBuffer(lineBuf);
+      gl.deleteBuffer(pBuf);
+      gl.deleteProgram(program);
+      gl.deleteShader(vs);
+      gl.deleteShader(fs);
+
       if (canvas.parentNode) canvas.parentNode.removeChild(canvas);
     };
   }, []);
 
-  return <div ref={containerRef} className="hero-3d-canvas" aria-hidden="true" />;
+  return (
+    <div
+      ref={containerRef}
+      className={`hero-3d-canvas${className ? ` ${className}` : ''}`}
+      aria-hidden="true"
+      style={{
+        position: 'absolute',
+        inset: 0,
+        width: '100%',
+        height: '100%',
+        overflow: 'hidden',
+        pointerEvents: 'none', // let clicks/scroll pass through to hero content
+        zIndex: 0,
+        ...style,
+      }}
+    />
+  );
 }

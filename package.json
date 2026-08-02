@@ -15,6 +15,9 @@
   },
   "dependencies": {
     "@google/genai": "^2.13.0",
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^9.7.0",
+    "@react-three/postprocessing": "^3.0.4",
     "@replit/connectors-sdk": "^0.4.1",
     "@tailwindcss/vite": "^4.3.3",
     "@vitejs/plugin-react": "^6.0.5",
@@ -23,7 +26,10 @@
     "express": "^5.2.1",
     "pino": "^10.3.1",
     "pino-http": "^11.0.0",
+    "postprocessing": "^6.39.4",
+    "simplex-noise": "^4.0.3",
     "tailwindcss": "^4.3.3",
+    "three": "^0.185.1",
     "vite": "^8.2.0"
   },
   "devDependencies": {
