@@ -50,9 +50,9 @@ export default function Hero() {
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-[#0066cc]/20 via-purple-500/20 to-cyan-400/20 border border-cyan-400/30 backdrop-blur-md mb-6 shadow-lg shadow-[#0066cc]/10"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-[#FF6B35]/15 via-[#6B3FB5]/15 to-[#00F5D4]/15 border border-[#FF6B35]/30 backdrop-blur-md mb-6 shadow-lg shadow-[#FF6B35]/5"
             >
-              <Sparkles size={14} className="text-cyan-400 animate-pulse" />
+              <Sparkles size={14} className="text-[#FF6B35] animate-pulse" />
               <div className="h-5 overflow-hidden relative w-[240px] sm:w-[320px]">
                 <AnimatePresence mode="wait">
                   <motion.span
@@ -61,7 +61,7 @@ export default function Hero() {
                     animate={{ y: 0, opacity: 1 }}
                     exit={{ y: -20, opacity: 0 }}
                     transition={{ duration: 0.4 }}
-                    className="absolute inset-0 font-mono text-xs font-bold text-cyan-200 uppercase tracking-wider whitespace-nowrap truncate"
+                    className="absolute inset-0 font-mono text-xs font-bold text-[#FF8557] uppercase tracking-wider whitespace-nowrap truncate"
                   >
                     {TICKER_TEXTS[tickerIndex]}
                   </motion.span>
@@ -77,7 +77,7 @@ export default function Hero() {
               style={{ fontSize: 'clamp(4rem, 9vw, 6rem)' }}
             >
               <span style={{fontSize:'clamp(2rem,4vw,3.5rem)'}}>Technology that grows your business.</span>{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4F7CFF] via-[#8B5CF6] to-[#4F7CFF]">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF6B35] via-[#6B3FB5] to-[#00F5D4]">
                 Marketing that delivers.
               </span>
             </motion.h1>
@@ -99,7 +99,7 @@ export default function Hero() {
             >
               <Link
                 href="/contact"
-                className="group relative inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl bg-gradient-to-r from-[#0066cc] via-indigo-600 to-cyan-500 text-white font-bold text-sm shadow-xl shadow-[#0066cc]/30 hover:shadow-cyan-500/25 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+                className="group relative inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-gradient-to-r from-[#FF6B35] to-[#FF8557] text-white font-bold text-sm shadow-xl shadow-[#FF6B35]/40 hover:shadow-[#FF6B35]/50 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
               >
                 <span>Book Free Consultation</span>
                 <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
@@ -107,7 +107,7 @@ export default function Hero() {
 
               <Link
                 href="/results"
-                className="inline-flex items-center justify-center px-8 py-4 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold text-sm backdrop-blur-md transition-all duration-300 hover:border-white/40"
+                className="inline-flex items-center justify-center px-8 py-4 rounded-xl bg-white/8 hover:bg-white/12 border border-white/20 text-white font-semibold text-sm backdrop-blur-md transition-all duration-300 hover:border-[#FF6B35]/40"
               >
                 View Case Studies
               </Link>

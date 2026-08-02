@@ -27,7 +27,7 @@ const testimonials = [
 
 export default function Testimonials() {
   return (
-    <section className="relative" style={{ padding: '120px 24px', background: '#ffffff' }}>
+    <section className="relative" style={{ padding: '120px 24px', background: 'linear-gradient(to bottom, #0f1418, #1a1f2e)' }}>
       <div className="max-w-[1400px] mx-auto">
         {/* Section Header */}
         <motion.div
@@ -39,7 +39,7 @@ export default function Testimonials() {
         >
           <p
             className="font-mono text-[0.75rem] font-semibold uppercase tracking-widest mb-6"
-            style={{ color: '#0066cc' }}
+            style={{ color: '#FF6B35' }}
           >
             What Our Clients Say
           </p>
@@ -47,7 +47,7 @@ export default function Testimonials() {
             className="font-display font-bold leading-tight mb-6"
             style={{
               fontSize: 'clamp(2rem, 4vw, 3rem)',
-              color: '#1e293b',
+              color: '#FFFFFF',
             }}
           >
             Real stories.<br />
@@ -57,7 +57,7 @@ export default function Testimonials() {
             className="font-normal"
             style={{
               fontSize: '1.1rem',
-              color: '#64748b',
+              color: '#CBD5E1',
               maxWidth: '600px',
               lineHeight: 1.7,
             }}
@@ -75,30 +75,30 @@ export default function Testimonials() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: index * 0.2 }}
-              className="glass-card group"
+              className="group"
               style={{
                 padding: '40px',
-                borderRadius: '24px',
-                background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(248, 250, 252, 0.9))',
-                border: '1px solid rgba(0, 0, 0, 0.08)',
-                backdropFilter: 'blur(10px)',
+                borderRadius: '20px',
+                background: 'linear-gradient(135deg, rgba(20, 24, 35, 0.6), rgba(15, 18, 27, 0.5))',
+                border: '1px solid rgba(255, 107, 53, 0.15)',
+                backdropFilter: 'blur(16px)',
               }}
               whileHover={{
                 transform: 'translateY(-8px)',
-                borderColor: 'rgba(0, 102, 204, 0.3)',
-                boxShadow: '0 20px 40px -12px rgba(0, 0, 0, 0.1)',
+                borderColor: 'rgba(255, 107, 53, 0.3)',
+                boxShadow: '0 20px 40px -12px rgba(255, 107, 53, 0.15)',
                 transition: { duration: 0.35 }
               }}
             >
               {/* Quote Icon */}
-              <Quote size={32} style={{ color: '#0066cc', opacity: 0.3, marginBottom: '24px' }} />
+              <Quote size={32} style={{ color: '#FF6B35', opacity: 0.4, marginBottom: '24px' }} />
 
               {/* Quote */}
               <p
                 className="font-normal mb-8"
                 style={{
                   fontSize: '1rem',
-                  color: '#475569',
+                  color: '#E0E0E0',
                   lineHeight: 1.7,
                 }}
               >
@@ -108,21 +108,21 @@ export default function Testimonials() {
               {/* Rating */}
               <div className="flex gap-1 mb-6">
                 {[...Array(testimonial.rating)].map((_, i) => (
-                  <Star key={i} size={16} fill="#fbbf24" color="#fbbf24" />
+                  <Star key={i} size={16} fill="#FF6B35" color="#FF6B35" />
                 ))}
               </div>
 
               {/* Author */}
-              <div className="flex items-center gap-4 pt-6" style={{ borderTop: '1px solid rgba(0, 0, 0, 0.08)' }}>
+              <div className="flex items-center gap-4 pt-6" style={{ borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
                 <div
                   className="flex items-center justify-center font-display font-bold"
                   style={{
                     width: '48px',
                     height: '48px',
                     borderRadius: '12px',
-                    background: 'linear-gradient(135deg, rgba(0, 102, 204, 0.15), rgba(0, 102, 204, 0.05))',
-                    border: '1px solid rgba(0, 102, 204, 0.2)',
-                    color: '#0066cc',
+                    background: 'linear-gradient(135deg, rgba(255, 107, 53, 0.2), rgba(255, 107, 53, 0.08))',
+                    border: '1px solid rgba(255, 107, 53, 0.25)',
+                    color: '#FF6B35',
                     fontSize: '0.9rem',
                   }}
                 >
@@ -133,7 +133,7 @@ export default function Testimonials() {
                     className="font-display font-semibold"
                     style={{
                       fontSize: '1rem',
-                      color: '#1e293b',
+                      color: '#FFFFFF',
                     }}
                   >
                     {testimonial.name}
@@ -142,7 +142,7 @@ export default function Testimonials() {
                     className="font-normal"
                     style={{
                       fontSize: '0.85rem',
-                      color: '#64748b',
+                      color: '#999AAA',
                     }}
                   >
                     {testimonial.role}
