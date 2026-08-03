@@ -60,7 +60,7 @@ export default function Hero() {
   ];
 
   return (
-    <section className="relative flex min-h-screen items-center overflow-hidden bg-transparent">
+    <section className="relative flex min-h-screen items-center overflow-hidden bg-transparent" aria-label="Hero section introducing BlendSkills digital engineering services">
       <div className="pointer-events-none absolute inset-0">
         <div className="hero-mesh absolute inset-0" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,107,53,0.13),transparent_58%)]" />
@@ -116,20 +116,22 @@ export default function Hero() {
               <MagneticButton strength={0.38}>
                 <Link
                   href="/contact"
-                  className="group flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[#FF6B35] to-[#FF8557] px-8 py-4 font-semibold text-white shadow-[0_20px_60px_-12px_rgba(255,107,53,0.45)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_28px_70px_-10px_rgba(255,107,53,0.6)] active:scale-[0.98]"
+                  className="group flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[#FF6B35] to-[#FF8557] px-8 py-4 font-semibold text-white shadow-[0_20px_60px_-12px_rgba(255,107,53,0.45)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_28px_70px_-10px_rgba(255,107,53,0.6)] active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-[#FF6B35] focus:ring-offset-2 focus:ring-offset-[#0a0e14]"
+                  aria-label="Book a free consultation with BlendSkills"
                 >
                   Start Your Journey
-                  <ArrowRight size={18} className="transition-transform duration-300 group-hover:translate-x-1" />
+                  <ArrowRight size={18} className="transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true" />
                 </Link>
               </MagneticButton>
 
               <MagneticButton strength={0.24}>
                 <Link
                   href="#about"
-                  className="flex items-center justify-center rounded-2xl border border-white/20 bg-white/8 px-8 py-4 font-semibold text-white transition-all duration-300 hover:-translate-y-1 hover:border-[#FF6B35]/40 hover:bg-white/12"
+                  className="flex items-center justify-center rounded-2xl border border-white/20 bg-white/8 px-8 py-4 font-semibold text-white transition-all duration-300 hover:-translate-y-1 hover:border-[#FF6B35]/40 hover:bg-white/12 focus:outline-none focus:ring-2 focus:ring-[#FF6B35] focus:ring-offset-2 focus:ring-offset-[#0a0e14]"
+                  aria-label="Learn more about BlendSkills services"
                 >
                   Learn More
-                  <ArrowRight size={18} className="ml-2 transition-transform duration-300 hover:translate-x-1" />
+                  <ArrowRight size={18} className="ml-2 transition-transform duration-300 hover:translate-x-1" aria-hidden="true" />
                 </Link>
               </MagneticButton>
             </motion.div>
@@ -144,6 +146,10 @@ export default function Hero() {
               className="relative h-full"
               onMouseMove={handlePointerMove}
               onMouseLeave={() => setPointer({ x: 0.5, y: 0.5 })}
+              onFocus={() => setPointer({ x: 0.5, y: 0.5 })}
+              tabIndex={0}
+              role="region"
+              aria-label="Interactive capabilities showcase"
             >
               <motion.div
                 whileHover={{ y: -8, scale: 1.01, rotateX: -5, rotateY: 6, transition: { type: 'spring', stiffness: 120, damping: 18 } }}

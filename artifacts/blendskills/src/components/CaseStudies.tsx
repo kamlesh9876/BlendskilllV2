@@ -116,7 +116,7 @@ export default function CaseStudies() {
   );
 
   return (
-    <section id="results" className="relative py-24 md:py-32 bg-white text-slate-900">
+    <section id="results" className="relative py-24 md:py-32 bg-white text-slate-900" aria-labelledby="case-studies-heading">
       <div className="max-w-[1400px] mx-auto px-6">
         {/* Section Header */}
         <motion.div
@@ -129,7 +129,7 @@ export default function CaseStudies() {
           <p className="font-mono text-xs font-bold uppercase tracking-widest text-[#0066cc] mb-4">
             Results That Matter
           </p>
-          <h2 className="font-display font-extrabold text-3xl sm:text-4xl md:text-5xl text-slate-900 leading-tight mb-6">
+          <h2 id="case-studies-heading" className="font-display font-extrabold text-3xl sm:text-4xl md:text-5xl text-slate-900 leading-tight mb-6">
             Real projects. Measurable impact.<br className="hidden md:block" />
             Sustainable growth.
           </h2>
@@ -139,9 +139,9 @@ export default function CaseStudies() {
         </motion.div>
 
         {/* Category Filters */}
-        <div className="flex items-center gap-2 flex-wrap mb-12">
-          <div className="flex items-center gap-1.5 text-xs text-slate-500 font-mono mr-2">
-            <Filter size={14} />
+        <div className="flex items-center gap-2 flex-wrap mb-12" role="group" aria-labelledby="filter-label">
+          <div id="filter-label" className="flex items-center gap-1.5 text-xs text-slate-500 font-mono mr-2">
+            <Filter size={14} aria-hidden="true" />
             <span>Filter:</span>
           </div>
           {categories.map((cat) => {
@@ -154,11 +154,13 @@ export default function CaseStudies() {
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
-                className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 ${
+                className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 focus:outline-none focus:ring-2 focus:ring-[#0066cc] focus:ring-offset-2 ${
                   isActive
                     ? 'bg-[#0066cc] text-white shadow-md shadow-[#0066cc]/20'
                     : 'bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-slate-900'
                 }`}
+                aria-pressed={isActive}
+                aria-label={`Filter by ${cat} (${count} projects)`}
               >
                 <span>{cat}</span>
                 <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono ${isActive ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-700'}`}>
@@ -170,10 +172,10 @@ export default function CaseStudies() {
         </div>
 
         {/* Case Study Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20" role="list" aria-label="Case studies and success stories">
           <AnimatePresence mode="popLayout">
             {filteredStudies.map((study, index) => (
-              <motion.div
+              <motion.article
                 key={study.id}
                 layout
                 initial={{ opacity: 0, scale: 0.95 }}
@@ -181,7 +183,16 @@ export default function CaseStudies() {
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.4, delay: index * 0.1 }}
                 onClick={() => setSelectedStudy(study)}
-                className="group cursor-pointer overflow-hidden rounded-3xl bg-white border border-slate-200/80 hover:border-[#0066cc]/40 transition-all duration-300 shadow-sm hover:shadow-2xl hover:-translate-y-1 flex flex-col justify-between"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    setSelectedStudy(study);
+                  }
+                }}
+                tabIndex={0}
+                className="group cursor-pointer overflow-hidden rounded-3xl bg-white border border-slate-200/80 hover:border-[#0066cc]/40 transition-all duration-300 shadow-sm hover:shadow-2xl hover:-translate-y-1 flex flex-col justify-between focus:outline-none focus:ring-2 focus:ring-[#0066cc] focus:ring-offset-2"
+                role="listitem"
+                aria-label={`Case study: ${study.client} - ${study.category}`}
               >
                 {/* Screenshot Header */}
                 <div className={`w-full h-56 bg-gradient-to-br ${study.bgGradient} p-6 relative flex flex-col justify-between text-white overflow-hidden`}>
@@ -259,13 +270,13 @@ export default function CaseStudies() {
                       )}
                     </div>
 
-                    <button className="inline-flex items-center gap-1.5 text-xs font-bold text-[#0066cc] group-hover:translate-x-1 transition-transform">
+                    <button className="inline-flex items-center gap-1.5 text-xs font-bold text-[#0066cc] group-hover:translate-x-1 transition-transform focus:outline-none focus:ring-2 focus:ring-[#0066cc] focus:ring-offset-2" aria-label={`View detailed case study for ${study.client}`}>
                       <span>View Case Study</span>
-                      <ArrowRight size={14} />
+                      <ArrowRight size={14} aria-hidden="true" />
                     </button>
                   </div>
                 </div>
-              </motion.div>
+              </motion.article>
             ))}
           </AnimatePresence>
         </div>
@@ -277,6 +288,8 @@ export default function CaseStudies() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
           className="grid grid-cols-2 md:grid-cols-4 gap-6 p-8 rounded-3xl bg-gradient-to-r from-slate-900 to-slate-950 text-white border border-slate-800 shadow-xl"
+          role="region"
+          aria-label="BlendSkills company statistics and achievements"
         >
           {[
             { number: '50+', label: 'Enterprise Projects' },
@@ -299,7 +312,7 @@ export default function CaseStudies() {
       {/* Interactive Detail Modal */}
       <AnimatePresence>
         {selectedStudy && (
-          <div className="fixed inset-0 z-[2000] flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+          <div className="fixed inset-0 z-[2000] flex items-center justify-center p-4 sm:p-6 overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="modal-title">
             {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
@@ -307,6 +320,7 @@ export default function CaseStudies() {
               exit={{ opacity: 0 }}
               onClick={() => setSelectedStudy(null)}
               className="fixed inset-0 bg-slate-950/80 backdrop-blur-md"
+              aria-hidden="true"
             />
 
             {/* Modal Body */}
@@ -315,6 +329,7 @@ export default function CaseStudies() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               className="relative w-full max-w-3xl bg-white rounded-3xl shadow-2xl overflow-hidden z-10 border border-slate-200 max-h-[90vh] flex flex-col"
+              role="document"
             >
               {/* Modal Banner Header */}
               <div className={`p-6 md:p-8 bg-gradient-to-br ${selectedStudy.bgGradient} text-white relative flex justify-between items-start`}>
@@ -322,7 +337,7 @@ export default function CaseStudies() {
                   <span className="px-3 py-1 rounded-full bg-white/20 border border-white/30 text-[10px] font-mono uppercase font-bold text-white tracking-wider inline-block">
                     {selectedStudy.category}
                   </span>
-                  <h3 className="font-display font-extrabold text-2xl md:text-3xl text-white">
+                  <h3 id="modal-title" className="font-display font-extrabold text-2xl md:text-3xl text-white">
                     {selectedStudy.client}
                   </h3>
                   <p className="text-xs md:text-sm text-white/90">
@@ -332,8 +347,8 @@ export default function CaseStudies() {
 
                 <button
                   onClick={() => setSelectedStudy(null)}
-                  className="w-10 h-10 rounded-full bg-black/40 hover:bg-black/60 text-white flex items-center justify-center transition-colors relative z-10"
-                  aria-label="Close modal"
+                  className="w-10 h-10 rounded-full bg-black/40 hover:bg-black/60 text-white flex items-center justify-center transition-colors relative z-10 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-transparent"
+                  aria-label="Close case study modal"
                 >
                   <X size={20} />
                 </button>
@@ -418,10 +433,11 @@ export default function CaseStudies() {
                     setSelectedStudy(null);
                     setLocation(`/contact?service=${encodeURIComponent(selectedStudy.category)}&msg=${encodeURIComponent(`Inquiring about a similar solution to ${selectedStudy.client}`)}`);
                   }}
-                  className="w-full sm:w-auto px-6 py-3 rounded-xl bg-[#0066cc] hover:bg-[#0052a3] text-white font-bold text-xs shadow-lg shadow-[#0066cc]/20 flex items-center justify-center gap-2 transition-all cursor-pointer"
+                  className="w-full sm:w-auto px-6 py-3 rounded-xl bg-[#0066cc] hover:bg-[#0052a3] text-white font-bold text-xs shadow-lg shadow-[#0066cc]/20 flex items-center justify-center gap-2 transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#0066cc] focus:ring-offset-2"
+                  aria-label={`Request strategy plan similar to ${selectedStudy.client}`}
                 >
                   <span>Request Similar Strategy Plan</span>
-                  <ArrowRight size={16} />
+                  <ArrowRight size={16} aria-hidden="true" />
                 </button>
               </div>
             </motion.div>

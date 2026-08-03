@@ -35,7 +35,8 @@ export default function App() {
           <div className="scroll-progress" style={{ width: `${progress}%` }} />
           <Nav />
           <Suspense fallback={<PageFallback />}>
-            <Switch>
+            <main id="main-content">
+              <Switch>
               <Route path="/" component={Home} />
               <Route path="/about" component={About} />
               <Route path="/services" component={Services} />
@@ -48,6 +49,7 @@ export default function App() {
               <Route path="/contact" component={ContactPage} />
               <Route path="/:rest*" component={NotFound} />
             </Switch>
+            </main>
           </Suspense>
           <Footer />
         </div>

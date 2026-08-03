@@ -93,6 +93,10 @@ export default function AIChatBot() {
     }
   };
 
+  const handleQuickPrompt = (prompt: string) => {
+    handleSend(prompt);
+  };
+
   const handleClear = () => {
     setMessages([
       {
@@ -126,7 +130,7 @@ export default function AIChatBot() {
   return (
     <>
       {/* Floating Toggle Button */}
-      <div className="fixed bottom-6 right-6 z-50">
+      <div className="fixed bottom-6 right-6 z-[1200]">
         <AnimatePresence>
           {!isOpen && (
             <motion.button
@@ -168,7 +172,7 @@ export default function AIChatBot() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 30, scale: 0.92 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="fixed bottom-6 right-4 sm:right-6 z-50 w-[calc(100vw-2rem)] sm:w-[410px] h-[580px] max-h-[85vh] bg-slate-900/95 backdrop-blur-2xl rounded-3xl border border-white/15 shadow-2xl flex flex-col overflow-hidden"
+            className="fixed bottom-6 right-4 sm:right-6 z-[1200] w-[calc(100vw-2rem)] sm:w-[410px] h-[580px] max-h-[85vh] bg-slate-900/95 backdrop-blur-2xl rounded-3xl border border-white/15 shadow-2xl flex flex-col overflow-hidden"
           >
             {/* Header */}
             <div className="p-4 sm:p-5 bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 border-b border-white/10 flex items-center justify-between text-white">
@@ -262,13 +266,15 @@ export default function AIChatBot() {
             </div>
 
             {/* Quick Prompt Chips */}
-            <div className="p-2.5 bg-slate-950/80 border-t border-white/10 overflow-x-auto flex gap-2 no-scrollbar">
+            <div className="p-2.5 bg-slate-950/80 border-t border-white/10 overflow-x-auto flex gap-2 no-scrollbar" role="list" aria-label="Quick conversation starters">
               {QUICK_PROMPTS.map((prompt, i) => (
                 <button
                   key={i}
                   disabled={isLoading}
-                  onClick={() => handleSend(prompt)}
-                  className="px-3 py-1.5 rounded-full bg-slate-800 hover:bg-[#0066cc]/30 border border-white/10 hover:border-[#0066cc]/50 text-slate-300 hover:text-cyan-300 text-xs font-medium whitespace-nowrap transition-all duration-200 shrink-0 flex items-center gap-1"
+                  onClick={() => handleQuickPrompt(prompt)}
+                  className="px-3 py-1.5 rounded-full bg-slate-800 hover:bg-[#0066cc]/30 border border-white/10 hover:border-[#0066cc]/50 text-slate-300 hover:text-cyan-300 text-xs font-medium whitespace-nowrap transition-all duration-200 shrink-0 flex items-center gap-1 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-slate-900"
+                  role="listitem"
+                  aria-label={`Ask: ${prompt}`}
                 >
                   <span>{prompt}</span>
                   <ChevronRight size={12} />

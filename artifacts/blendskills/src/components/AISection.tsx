@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { MessageSquare, Workflow, TrendingUp, Sparkles, ArrowRight, Play, Pause } from 'lucide-react';
+import { MessageSquare, Workflow, TrendingUp, Sparkles, ArrowRight, Play, Pause, Clock, Zap, Target, Shield, Users, ChevronRight } from 'lucide-react';
 import { Link } from 'wouter';
 import AIRoiCalculator from './AIRoiCalculator';
 import { VideoSkeleton } from './Skeleton';
@@ -10,21 +10,29 @@ const features = [
     icon: MessageSquare,
     title: 'Intelligent Chatbots & Voice AI',
     text: '24/7 customer support that understands context, resolves issues automatically, and qualifies leads.',
+    progress: 92,
+    color: 'from-blue-500 to-cyan-500',
   },
   {
     icon: Workflow,
     title: 'Smart Workflow Automation',
     text: 'Eliminate manual repetitive tasks with custom pipelines that sync your CRM, tools, and databases.',
+    progress: 88,
+    color: 'from-purple-500 to-pink-500',
   },
   {
     icon: TrendingUp,
     title: 'Predictive Growth Analytics',
     text: 'Forecast customer churn, optimize pricing dynamically, and deploy data-backed conversion tactics.',
+    progress: 85,
+    color: 'from-emerald-500 to-teal-500',
   },
   {
     icon: Sparkles,
     title: 'Hyper-Personalization at Scale',
     text: 'Deliver tailored messaging, dynamic recommendations, and custom landing pages powered by AI.',
+    progress: 95,
+    color: 'from-orange-500 to-red-500',
   },
 ];
 
@@ -96,61 +104,143 @@ export default function AISection() {
             </Link>
           </motion.div>
 
-          {/* Right Content - Features */}
+          {/* Right Content - Bento Grid Features */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
+            className="grid grid-cols-2 gap-4"
           >
-            <div className="flex flex-col gap-6">
-              {features.map((feature, index) => (
+            {/* Large Featured Card */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="col-span-2 p-6 rounded-2xl bg-gradient-to-br from-[#0066cc]/10 to-[#0066cc]/5 border border-[#0066cc]/30 relative overflow-hidden"
+              whileHover={{ scale: 1.02 }}
+            >
+              <div className="absolute top-0 right-0 w-32 h-32 bg-[#0066cc]/10 rounded-full blur-3xl" />
+              <div className="relative z-10">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#0066cc] to-[#0052a3] flex items-center justify-center text-white">
+                    <MessageSquare size={24} />
+                  </div>
+                  <h3 className="font-display font-bold text-xl text-white">
+                    {features[0].title}
+                  </h3>
+                </div>
+                <p className="text-sm text-slate-300 leading-relaxed mb-4">
+                  {features[0].text}
+                </p>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-slate-400">AI Readiness</span>
+                  <span className="text-2xl font-bold text-white">{features[0].progress}%</span>
+                </div>
+                <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden mt-2">
+                  <motion.div
+                    initial={{ width: 0 }}
+                    whileInView={{ width: `${features[0].progress}%` }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 1, delay: 0.3 }}
+                    className="h-full bg-gradient-to-r from-[#0066cc] to-[#00F5D4] rounded-full"
+                  />
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Tall Card */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="row-span-2 p-6 rounded-2xl bg-gradient-to-br from-[#6B3FB5]/10 to-[#6B3FB5]/5 border border-[#6B3FB5]/30 relative overflow-hidden"
+              whileHover={{ scale: 1.02 }}
+            >
+              <div className="absolute top-0 right-0 w-32 h-32 bg-[#6B3FB5]/10 rounded-full blur-3xl" />
+              <div className="relative z-10">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#6B3FB5] to-[#8B5FD4] flex items-center justify-center text-white mb-4">
+                  <Workflow size={24} />
+                </div>
+                <h3 className="font-display font-bold text-lg text-white mb-2">
+                  {features[1].title}
+                </h3>
+                <p className="text-sm text-slate-300 leading-relaxed mb-4">
+                  {features[1].text}
+                </p>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs text-slate-400">Automation</span>
+                  <span className="text-2xl font-bold text-white">{features[1].progress}%</span>
+                </div>
+                <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
+                  <motion.div
+                    initial={{ width: 0 }}
+                    whileInView={{ width: `${features[1].progress}%` }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 1, delay: 0.4 }}
+                    className="h-full bg-gradient-to-r from-[#6B3FB5] to-[#8B5FD4] rounded-full"
+                  />
+                </div>
+                <div className="mt-4 flex gap-2">
+                  {[...Array(3)].map((_, i) => (
+                    <div
+                      key={i}
+                      className={`h-1.5 flex-1 rounded-full ${
+                        i < 2 ? 'bg-[#6B3FB5]' : 'bg-white/20'
+                      }`}
+                    />
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Standard Cards */}
+            {features.slice(2, 4).map((feature, index) => {
+              const FeatureIcon = feature.icon;
+              return (
                 <motion.div
                   key={feature.title}
-                  initial={{ opacity: 0, x: 20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: index * 0.15 }}
-                  className="flex items-start gap-4 p-5 rounded-2xl bg-white/80 border border-black/5 hover:border-[#0066cc]/30 transition-all shadow-sm hover:shadow-md"
-                  whileHover={{ scale: 1.01, x: 4 }}
+                  transition={{ duration: 0.6, delay: 0.2 + index * 0.1 }}
+                  className="p-5 rounded-2xl bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 hover:border-[#0066cc]/30 transition-all relative overflow-hidden"
+                  whileHover={{ scale: 1.02 }}
                 >
-                  <div
-                    style={{
-                      width: '44px',
-                      height: '44px',
-                      borderRadius: '12px',
-                      background: 'rgba(0, 102, 204, 0.1)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      flexShrink: 0,
-                    }}
-                  >
-                    <feature.icon size={22} style={{ color: '#0066cc' }} />
+                  <div className="flex items-center justify-between mb-3">
+                    <div
+                      className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
+                      style={{
+                        background: `linear-gradient(135deg, ${feature.color})`,
+                      }}
+                    >
+                      <FeatureIcon size={22} className="text-white" />
+                    </div>
+                    <div className="text-right">
+                      <div className="text-2xl font-bold text-white">{feature.progress}%</div>
+                      <div className="text-xs text-slate-400">Impact</div>
+                    </div>
                   </div>
-                  <div>
-                    <h3
-                      className="font-display font-semibold mb-1"
-                      style={{
-                        fontSize: '1.1rem',
-                        color: '#1e293b',
-                      }}
-                    >
-                      {feature.title}
-                    </h3>
-                    <p
-                      className="font-normal text-sm"
-                      style={{
-                        color: '#64748b',
-                        lineHeight: 1.6,
-                      }}
-                    >
-                      {feature.text}
-                    </p>
+                  <h3 className="font-display font-semibold mb-2 text-white">
+                    {feature.title}
+                  </h3>
+                  <p className="font-normal text-xs text-slate-300 leading-relaxed">
+                    {feature.text}
+                  </p>
+                  <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden mt-3">
+                    <motion.div
+                      initial={{ width: 0 }}
+                      whileInView={{ width: `${feature.progress}%` }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 1, delay: 0.5 + index * 0.1 }}
+                      className="h-full bg-gradient-to-r from-gray-400 to-gray-600 rounded-full"
+                    />
                   </div>
                 </motion.div>
-              ))}
-            </div>
+              );
+            })}
           </motion.div>
         </div>
 
@@ -182,7 +272,7 @@ export default function AISection() {
 
             {/* Royalty-Free Tech AI Video Loop */}
             <video
-              autoPlay
+              autoPlay={isPlaying}
               loop
               muted
               playsInline
@@ -215,9 +305,23 @@ export default function AISection() {
               <h3 className="font-display font-bold text-xl text-white mb-2">
                 Real-Time Neural Automation
               </h3>
-              <p className="text-xs text-slate-300 leading-relaxed">
+              <p className="text-xs text-slate-300 leading-relaxed mb-4">
                 Watch how our custom AI pipelines orchestrate customer support, lead qualification, and multi-channel marketing synchronization 24/7 without human intervention.
               </p>
+              <div className="grid grid-cols-3 gap-2">
+                <div className="p-3 rounded-xl bg-white/10 border border-white/10">
+                  <div className="text-xs text-slate-400 mb-1">Tasks</div>
+                  <div className="text-lg font-bold text-white">2.4K+</div>
+                </div>
+                <div className="p-3 rounded-xl bg-white/10 border border-white/10">
+                  <div className="text-xs text-slate-400 mb-1">Speed</div>
+                  <div className="text-lg font-bold text-white">0.3s</div>
+                </div>
+                <div className="p-3 rounded-xl bg-white/10 border border-white/10">
+                  <div className="text-xs text-slate-400 mb-1">Uptime</div>
+                  <div className="text-lg font-bold text-white">99.9%</div>
+                </div>
+              </div>
             </div>
           </motion.div>
 
@@ -236,4 +340,3 @@ export default function AISection() {
     </section>
   );
 }
-

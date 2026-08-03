@@ -18,7 +18,6 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
       smoothWheel: true,
       wheelMultiplier: 1.06,
       touchMultiplier: 1.3,
-      normalizeWheel: true,
       infinite: false,
       autoResize: true,
       lerp: 0.12,

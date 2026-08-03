@@ -20,6 +20,8 @@ export default function Nav() {
   const scrolled = useScrolled(30);
   const [open, setOpen] = useState(false);
   const [location, setLocation] = useLocation();
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
 
   useEffect(() => {
     if (open) {
@@ -57,8 +59,34 @@ export default function Nav() {
     window.scrollTo({ top: 0, behavior: 'instant' });
   };
 
+  // Touch gesture handlers for swipe to close
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!open) return;
+    const swipeDistance = touchStart - touchEnd;
+    // Swipe right to close (distance > 50px)
+    if (swipeDistance < -50) {
+      setOpen(false);
+    }
+  };
+
   return (
     <>
+      {/* Skip to content link for accessibility */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[1003] focus:px-4 focus:py-2 focus:bg-cyan-500 focus:text-slate-950 focus:font-semibold focus:rounded-lg focus:shadow-lg"
+      >
+        Skip to main content
+      </a>
+
       <motion.header
         initial={false}
         animate={{
@@ -66,8 +94,9 @@ export default function Nav() {
           boxShadow: scrolled ? '0 18px 50px rgba(0,0,0,0.28)' : '0 8px 30px rgba(0,0,0,0.16)',
         }}
         transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-        className="fixed left-0 top-0 z-[1000] w-full border-b border-white/10"
+        className="fixed left-0 top-0 z-[1100] w-full border-b border-white/10"
         style={{
+          paddingTop: 'env(safe-area-inset-top, 0px)',
           backdropFilter: scrolled ? 'blur(24px)' : 'blur(30px)',
           WebkitBackdropFilter: scrolled ? 'blur(24px)' : 'blur(30px)',
           background: scrolled
@@ -78,7 +107,7 @@ export default function Nav() {
         <div className="mx-auto flex h-full max-w-[1400px] items-center justify-between px-4 sm:px-6">
           <button
             onClick={() => handleNavClick('/')}
-            className="relative z-[1002] flex items-center gap-2 rounded-lg border border-transparent bg-transparent p-0 no-underline transition-all duration-300 hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-cyan-400"
+            className="relative z-[1102] flex items-center gap-2 rounded-lg border border-transparent bg-transparent p-0 no-underline transition-all duration-300 hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-cyan-400"
             aria-label="BlendSkills Home"
           >
             <img
@@ -121,7 +150,7 @@ export default function Nav() {
             onClick={() => setOpen((v) => !v)}
             aria-label={open ? 'Close navigation menu' : 'Open navigation menu'}
             aria-expanded={open}
-            className="relative z-[1002] flex min-h-[44px] min-w-[44px] items-center justify-center rounded-xl border border-white/20 bg-slate-900/80 text-white shadow-lg transition-all duration-200 hover:border-cyan-400/50 hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-cyan-400 active:scale-95 lg:hidden"
+            className="relative z-[1102] flex min-h-[44px] min-w-[44px] items-center justify-center rounded-xl border border-white/20 bg-slate-900/80 text-white shadow-lg transition-all duration-200 hover:border-cyan-400/50 hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-cyan-400 active:scale-95 lg:hidden"
           >
             {open ? <X size={22} className="animate-in fade-in text-cyan-400 duration-200" /> : <Menu size={22} className="text-slate-100" />}
           </button>
@@ -129,8 +158,16 @@ export default function Nav() {
       </motion.header>
 
       <div
-        className={`fixed inset-0 z-[1001] flex h-[100dvh] min-h-[100dvh] flex-col bg-slate-950/95 text-white backdrop-blur-2xl transition-all duration-300 ease-in-out lg:hidden ${open ? 'pointer-events-auto translate-x-0 opacity-100' : 'pointer-events-none translate-x-full opacity-0'}`}
-        style={{ paddingTop: 'calc(5rem + env(safe-area-inset-top, 0px))' }}
+        className={`fixed inset-0 z-[1090] flex h-[100dvh] min-h-[100dvh] flex-col bg-slate-950/95 text-white backdrop-blur-2xl transition-all duration-300 ease-in-out lg:hidden ${open ? 'pointer-events-auto translate-x-0 opacity-100' : 'pointer-events-none translate-x-full opacity-0'}`}
+        style={{
+          paddingTop: 'calc(5rem + env(safe-area-inset-top, 0px))',
+          paddingBottom: 'env(safe-area-inset-bottom, 0px)',
+          paddingLeft: 'env(safe-area-inset-left, 0px)',
+          paddingRight: 'env(safe-area-inset-right, 0px)',
+        }}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
         aria-hidden={!open}
       >
         <div className="pointer-events-none absolute left-[-2rem] top-1/4 h-64 w-64 rounded-full bg-cyan-500/10 blur-3xl" />
