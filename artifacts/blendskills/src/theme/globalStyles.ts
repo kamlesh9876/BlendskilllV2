@@ -16,7 +16,6 @@ export const GlobalStyles = createGlobalStyle`
     background: ${palette.backgroundGradient};
     color: ${palette.textPrimary};
     overflow-x: hidden;
-    scroll-behaviour: smooth;
   }
 
   a {
