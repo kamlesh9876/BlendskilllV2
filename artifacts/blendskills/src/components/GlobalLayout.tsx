@@ -8,9 +8,11 @@ import { ThemeProvider } from 'styled-components';
 import { palette } from '../theme/colors';
 import { GlobalStyles } from '../theme/globalStyles';
 
+import liquidStyles from './LiquidBackground.module.css';
+
 /**
  * GlobalLayout provides the page‑wide layout, custom cursor, and a progress indicator.
- * It also injects the styled‑components theme and global CSS.
+ * It also injects the styled‑components theme, global CSS, and a subtle liquid background.
  */
 export default function GlobalLayout({ children }: { children: React.ReactNode }) {
   const controls = useAnimation();
@@ -26,6 +28,8 @@ export default function GlobalLayout({ children }: { children: React.ReactNode }
   return (
     <ThemeProvider theme={palette}>
       <GlobalStyles />
+      {/* Liquid background layer */}
+      <div className={liquidStyles.liquid} />
       <motion.div
         className={styles.wrapper}
         initial={{ opacity: 0 }}

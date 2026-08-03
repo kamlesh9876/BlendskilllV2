@@ -15,7 +15,7 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="relative py-24 md:py-32 bg-gradient-to-b from-[#0f1418] to-[#000000] text-white overflow-hidden">
+    <section id="contact" className="relative z-10 py-24 md:py-32 bg-gradient-to-b from-[#0f1418] to-[#000000] text-white overflow-hidden">
       {/* Premium gradient overlays */}
       <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-gradient-to-br from-[#FF6B35]/10 to-transparent blur-3xl pointer-events-none"></div>
       <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-gradient-to-tr from-[#6B3FB5]/10 to-transparent blur-3xl pointer-events-none"></div>
@@ -156,7 +156,7 @@ export default function Contact() {
 
 export function Footer() {
   return (
-    <footer className="bg-slate-950 text-white border-t border-slate-900 py-16">
+    <footer className="relative z-10 bg-slate-950 text-white border-t border-slate-900 py-16">
       <div className="max-w-[1400px] mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10 pb-12 border-b border-slate-900">
           <div className="space-y-4">

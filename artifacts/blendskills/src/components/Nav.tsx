@@ -2,12 +2,16 @@ import { useEffect, useState } from 'react';
 import { useLocation } from 'wouter';
 import { Menu, X, ArrowRight, Phone, Mail, Sparkles, ChevronRight, MessageSquare, Compass, CheckCircle2 } from 'lucide-react';
 import { useScrolled } from '@/hooks/useScroll';
+import MagneticButton from '@/components/MagneticButton';
 
 const LINKS = [
   { href: '/', label: 'Home' },
   { href: '/services', label: 'Services' },
-  { href: '/process', label: 'Process' },
-  { href: '/results', label: 'Results' },
+  { href: '/solutions', label: 'Solutions' },
+  { href: '/industries', label: 'Industries' },
+  { href: '/portfolio', label: 'Portfolio' },
+  { href: '/careers', label: 'Careers' },
+  { href: '/insights', label: 'Insights' },
   { href: '/about', label: 'About Us' },
   { href: '/contact', label: 'Contact' },
 ];
@@ -100,13 +104,15 @@ export default function Nav() {
           </nav>
 
           {/* Desktop CTA Button */}
-          <button
-            onClick={() => handleNavClick('/contact')}
-            className="hidden lg:inline-flex items-center justify-center gap-2 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-[#FF6B35]/30 active:scale-95 cursor-pointer bg-gradient-to-r from-[#FF6B35] to-[#FF8557] text-white font-semibold text-sm px-6 py-2.5 rounded-xl border border-[#FF6B35]/40 shadow-md"
-          >
-            <span>Book Consultation</span>
-            <ArrowRight size={16} />
-          </button>
+          <MagneticButton strength={0.3} className="hidden lg:inline-flex">
+            <button
+              onClick={() => handleNavClick('/contact')}
+              className="inline-flex items-center justify-center gap-2 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-[#FF6B35]/30 active:scale-95 cursor-pointer bg-gradient-to-r from-[#FF6B35] to-[#FF8557] text-white font-semibold text-sm px-6 py-2.5 rounded-xl border border-[#FF6B35]/40 shadow-md"
+            >
+              <span>Book Consultation</span>
+              <ArrowRight size={16} />
+            </button>
+          </MagneticButton>
 
           {/* Mobile Navigation Trigger Button */}
           <button

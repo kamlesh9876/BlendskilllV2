@@ -3,6 +3,8 @@ import { ArrowRight, ChevronDown, Sparkles } from 'lucide-react';
 import { Link } from 'wouter';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useScrollReveal } from '@/hooks/useScrollReveal';
+import MagneticButton from '@/components/MagneticButton';
+import ParallaxWrapper from '@/components/ParallaxWrapper';
 
 const CAPABILITIES = [
   'Custom Software Development',
@@ -31,7 +33,7 @@ export default function Hero() {
   ];
 
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden bg-gradient-to-b from-[#0a0e14] via-[#0f1218] to-[#0a0e14]">
+    <section className="relative min-h-screen flex items-center overflow-hidden bg-transparent">
       {/* Premium atmospheric background layers */}
       <div className="absolute inset-0 pointer-events-none">
         {/* Radial gradient from center */}
@@ -58,7 +60,9 @@ export default function Hero() {
               className="inline-flex items-center gap-3 mb-8 px-4 py-2 rounded-lg bg-var-color-primary-muted border border-[rgba(255,107,53,0.2)] backdrop-blur-sm"
             >
               <div className="w-2 h-2 rounded-full bg-[#FF6B35] animate-pulse"></div>
-              <span className="text-xs font-mono font-bold uppercase tracking-widest text-[#FF8557]">Digital transformation</span>
+              <span className="text-xs font-mono font-bold tracking-wider text-[#FF6B35] uppercase">
+                Digital Engineering & Growth Studio
+              </span>
             </motion.div>
 
             {/* Main headline */}
@@ -85,28 +89,32 @@ export default function Hero() {
               Enterprise software, AI automation, and performance marketing for companies ready to scale.
             </motion.p>
 
-            {/* CTA Group */}
+            {/* CTA Group with Magnetic Buttons */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
               className="flex flex-col sm:flex-row gap-4 mb-12"
             >
-              <Link
-                href="/contact"
-                className="group px-8 py-4 rounded-xl bg-gradient-to-r from-[#FF6B35] to-[#FF8557] text-white font-semibold flex items-center justify-center gap-2 shadow-lg shadow-[#FF6B35]/30 hover:shadow-[#FF6B35]/50 transition-all duration-300 hover:scale-105 active:scale-95"
-              >
-                Start Your Journey
-                <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-              </Link>
+              <MagneticButton strength={0.4}>
+                <Link
+                  href="/contact"
+                  className="group px-8 py-4 rounded-xl bg-gradient-to-r from-[#FF6B35] to-[#FF8557] text-white font-semibold flex items-center justify-center gap-2 shadow-lg shadow-[#FF6B35]/30 hover:shadow-[#FF6B35]/50 transition-all duration-300 hover:scale-105 active:scale-95"
+                >
+                  Start Your Journey
+                  <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                </Link>
+              </MagneticButton>
               
-              <Link
-                href="#about"
-                className="px-8 py-4 rounded-xl bg-white/8 border border-white/20 text-white font-semibold flex items-center justify-center hover:bg-white/12 hover:border-[#FF6B35]/40 transition-all duration-300"
-              >
-                Learn More
-                <ArrowRight size={18} className="ml-2" />
-              </Link>
+              <MagneticButton strength={0.25}>
+                <Link
+                  href="#about"
+                  className="px-8 py-4 rounded-xl bg-white/8 border border-white/20 text-white font-semibold flex items-center justify-center hover:bg-white/12 hover:border-[#FF6B35]/40 transition-all duration-300"
+                >
+                  Learn More
+                  <ArrowRight size={18} className="ml-2" />
+                </Link>
+              </MagneticButton>
             </motion.div>
 
             {/* Stats row */}

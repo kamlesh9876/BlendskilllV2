@@ -1,0 +1,85 @@
+/* High-intensity liquid glowing gradient background */
+.liquid {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: -1;
+  /* Base multi-point vibrant liquid gradient */
+  background: 
+    radial-gradient(circle at 20% 20%, rgba(0, 255, 212, 0.45), transparent 60%),
+    radial-gradient(circle at 80% 30%, rgba(157, 0, 255, 0.5), transparent 65%),
+    radial-gradient(circle at 50% 80%, rgba(255, 0, 122, 0.45), transparent 60%),
+    radial-gradient(circle at 85% 85%, rgba(0, 102, 255, 0.4), transparent 55%);
+  background-size: 180% 180%;
+  animation: liquidMove 15s ease-in-out infinite alternate;
+}
+
+@keyframes liquidMove {
+  0% {
+    transform: scale(1) translate(0, 0) rotate(0deg);
+    background-position: 0% 0%;
+  }
+  50% {
+    transform: scale(1.15) translate(-5%, -5%) rotate(90deg);
+    background-position: 100% 50%;
+  }
+  100% {
+    transform: scale(1.05) translate(3%, 4%) rotate(180deg);
+    background-position: 50% 100%;
+  }
+}
+
+/* Glowing high-vibrancy mesh overlay */
+.liquid::before {
+  content: '';
+  position: absolute;
+  inset: -30%;
+  background: 
+    radial-gradient(circle at 40% 40%, rgba(0, 255, 212, 0.55), rgba(157, 0, 255, 0.45), transparent 70%),
+    radial-gradient(circle at 70% 60%, rgba(255, 0, 122, 0.5), rgba(0, 102, 255, 0.4), transparent 70%);
+  filter: blur(70px);
+  mix-blend-mode: screen;
+  animation: glowPulse 6s ease-in-out infinite alternate;
+}
+
+/* Secondary liquid highlight beam */
+.liquid::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(
+    from 0deg at 50% 50%,
+    transparent 0deg,
+    rgba(0, 255, 212, 0.25) 90deg,
+    transparent 180deg,
+    rgba(255, 0, 122, 0.25) 270deg,
+    transparent 360deg
+  );
+  filter: blur(90px);
+  mix-blend-mode: color-dodge;
+  animation: conicSpin 25s linear infinite;
+}
+
+@keyframes glowPulse {
+  0% {
+    opacity: 0.7;
+    filter: blur(70px);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(50px);
+  }
+}
+
+@keyframes conicSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

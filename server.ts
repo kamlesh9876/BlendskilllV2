@@ -1,4 +1,5 @@
 import express from "express";
+import http from "http";
 import path from "path";
 import cors from "cors";
 import pinoHttp from "pino-http";
@@ -8,6 +9,7 @@ import { logger } from "./artifacts/api-server/src/lib/logger";
 
 async function startServer() {
   const app = express();
+  const httpServer = http.createServer(app);
   const PORT = 3000;
 
   app.use(
@@ -40,7 +42,9 @@ async function startServer() {
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({
       root: path.resolve(process.cwd(), "artifacts/blendskills"),
-      server: { middlewareMode: true },
+      server: {
+        middlewareMode: true,
+      },
       appType: "spa",
     });
     app.use(vite.middlewares);
@@ -58,7 +62,7 @@ async function startServer() {
     });
   }
 
-  app.listen(PORT, "0.0.0.0", () => {
+  httpServer.listen(PORT, "0.0.0.0", () => {
     logger.info(`Server running! Open http://localhost:${PORT} in your browser.`);
   });
 }
