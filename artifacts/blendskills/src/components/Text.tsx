@@ -1,6 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
 
+const headingTagMap = {
+  1: 'h1',
+  2: 'h2',
+  3: 'h3',
+  4: 'h4',
+  5: 'h5',
+  6: 'h6',
+} as const;
+
 // Heading component
 interface HeadingProps {
   level?: 1 | 2 | 3 | 4 | 5 | 6;
@@ -18,37 +27,37 @@ const HeadingBase = styled.h1<{ $size?: string }>`
     line-height: 1.2;
 
     ${({ $size }) => {
-      switch ($size) {
-        case 'display-lg':
-          return `
+    switch ($size) {
+      case 'display-lg':
+        return `
             font-size: 3.5rem;
             font-weight: 300;
             font-family: var(--font-display);
             letter-spacing: -0.02em;
             line-height: 1.1;
           `;
-        case 'display-md':
-          return `
+      case 'display-md':
+        return `
             font-size: 2.75rem;
             font-weight: 300;
             font-family: var(--font-display);
             letter-spacing: -0.015em;
             line-height: 1.2;
           `;
-        case 'xl':
-          return `font-size: 3rem; letter-spacing: -0.01em;`;
-        case 'lg':
-          return `font-size: 2.25rem; letter-spacing: -0.01em;`;
-        case 'md':
-          return `font-size: 1.875rem; font-weight: 600;`;
-        case 'sm':
-          return `font-size: 1.5rem; font-weight: 600;`;
-        case 'xs':
-          return `font-size: 1.25rem; font-weight: 600;`;
-        default:
-          return `font-size: 2rem;`;
-      }
-    }}
+      case 'xl':
+        return `font-size: 3rem; letter-spacing: -0.01em;`;
+      case 'lg':
+        return `font-size: 2.25rem; letter-spacing: -0.01em;`;
+      case 'md':
+        return `font-size: 1.875rem; font-weight: 600;`;
+      case 'sm':
+        return `font-size: 1.5rem; font-weight: 600;`;
+      case 'xs':
+        return `font-size: 1.25rem; font-weight: 600;`;
+      default:
+        return `font-size: 2rem;`;
+    }
+  }}
   }
 `;
 
@@ -56,11 +65,12 @@ export const Heading = React.forwardRef<
   HTMLHeadingElement,
   HeadingProps
 >(({ level = 1, size, children, className, id }, ref) => {
-  const Component = HeadingBase.withComponent(`h${level}` as keyof JSX.IntrinsicElements);
+  const tag = headingTagMap[level];
+
   return (
-    <Component ref={ref} $size={size} className={className} id={id}>
+    <HeadingBase as={tag} ref={ref} $size={size} className={className} id={id}>
       {children}
-    </Component>
+    </HeadingBase>
   );
 });
 

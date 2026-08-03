@@ -11,15 +11,17 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
 
   useEffect(() => {
     const lenis = new Lenis({
-      duration: 0.4,
+      duration: 0.55,
       easing: (t) => 1 - Math.pow(1 - t, 3),
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      wheelMultiplier: 1.0,
-      touchMultiplier: 1.2,
+      wheelMultiplier: 1.06,
+      touchMultiplier: 1.3,
+      normalizeWheel: true,
       infinite: false,
       autoResize: true,
+      lerp: 0.12,
     });
 
     lenisRef.current = lenis;
@@ -30,8 +32,6 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
     }
 
     requestAnimationFrame(raf);
-
-    // Expose lenis globally for debugging
     (window as any).__lenis = lenis;
 
     return () => {

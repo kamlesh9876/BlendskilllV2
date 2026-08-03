@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
+import { motion, useReducedMotion, useScroll, useSpring, useTransform } from 'framer-motion';
 import { throttle } from '../utils/throttle';
 import { getDeviceCapabilities } from '../utils/deviceCapabilities';
 
@@ -26,13 +26,15 @@ export default function LiquidBackground() {
   const lastMousePosRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const deviceCapabilitiesRef = useRef(getDeviceCapabilities());
   const animationFrameIdRef = useRef<number | null>(null);
+  const shouldReduceMotion = useReducedMotion();
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end start'],
   });
   const springScroll = useSpring(scrollYProgress, { stiffness: 120, damping: 26, mass: 0.25 });
-  const parallaxY = useTransform(springScroll, [0, 1], [0, 180]);
-  const parallaxX = useTransform(springScroll, [0, 1], [0, -70]);
+  const shouldReduceParallax = shouldReduceMotion || deviceCapabilitiesRef.current.isMobile || deviceCapabilitiesRef.current.isLowEnd;
+  const parallaxY = useTransform(springScroll, [0, 1], [0, shouldReduceParallax ? 0 : 180]);
+  const parallaxX = useTransform(springScroll, [0, 1], [0, shouldReduceParallax ? 0 : -70]);
 
   // Canvas Ripple Loop with Optimizations
   useEffect(() => {
@@ -170,7 +172,7 @@ export default function LiquidBackground() {
   // Track cursor position for smooth gradient aura (throttled)
   useEffect(() => {
     const deviceCaps = deviceCapabilitiesRef.current;
-    
+
     const handleMouseMove = throttle((e: MouseEvent) => {
       const x = (e.clientX / window.innerWidth) * 100;
       const y = (e.clientY / window.innerHeight) * 100;
@@ -251,7 +253,7 @@ export default function LiquidBackground() {
 
       {/* Interactive Mouse Liquid Follower */}
       <div
-        className="absolute w-[480px] h-[480px] rounded-full mix-blend-screen filter blur-[60px] opacity-80 transition-transform duration-300 ease-out pointer-events-none"
+        className="absolute w-[480px] h-[480px] rounded-full mix-blend-screen filter blur-[60px] opacity-80 transition-transform duration-300 ease-out pointer-events-none hidden sm:block"
         style={{
           left: `${mousePos.x}%`,
           top: `${mousePos.y}%`,

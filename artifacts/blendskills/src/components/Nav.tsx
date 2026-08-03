@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from 'wouter';
-import { Menu, X, ArrowRight, Phone, Mail, Sparkles, ChevronRight, MessageSquare, Compass, CheckCircle2 } from 'lucide-react';
+import { Menu, X, ArrowRight, Phone, Mail, Sparkles, ChevronRight, Compass, CheckCircle2 } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { useScrolled } from '@/hooks/useScroll';
 import MagneticButton from '@/components/MagneticButton';
 
@@ -20,7 +21,6 @@ export default function Nav() {
   const [open, setOpen] = useState(false);
   const [location, setLocation] = useLocation();
 
-  // Prevent background body scroll when mobile menu is open (handles iOS Safari & Android Chrome)
   useEffect(() => {
     if (open) {
       document.body.style.overflow = 'hidden';
@@ -35,7 +35,6 @@ export default function Nav() {
     };
   }, [open]);
 
-  // Handle ESC key press to close menu
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && open) {
@@ -46,7 +45,6 @@ export default function Nav() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [open]);
 
-  // Close drawer on location/route change
   useEffect(() => {
     setOpen(false);
   }, [location]);
@@ -61,40 +59,47 @@ export default function Nav() {
 
   return (
     <>
-      <header
-        className={`fixed top-0 left-0 w-full z-[1000] transition-all duration-300 ${
-          scrolled ? 'h-16 glass' : 'h-20 glass'
-        }`}
+      <motion.header
+        initial={false}
+        animate={{
+          height: scrolled ? 64 : 80,
+          boxShadow: scrolled ? '0 18px 50px rgba(0,0,0,0.28)' : '0 8px 30px rgba(0,0,0,0.16)',
+        }}
+        transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+        className="fixed left-0 top-0 z-[1000] w-full border-b border-white/10"
+        style={{
+          backdropFilter: scrolled ? 'blur(24px)' : 'blur(30px)',
+          WebkitBackdropFilter: scrolled ? 'blur(24px)' : 'blur(30px)',
+          background: scrolled
+            ? 'linear-gradient(135deg, rgba(10, 14, 20, 0.82), rgba(10, 14, 20, 0.6))'
+            : 'linear-gradient(135deg, rgba(10, 14, 20, 0.68), rgba(10, 14, 20, 0.4))',
+        }}
       >
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 h-full flex justify-between items-center">
-          {/* Brand Logo */}
+        <div className="mx-auto flex h-full max-w-[1400px] items-center justify-between px-4 sm:px-6">
           <button
             onClick={() => handleNavClick('/')}
-            className="no-underline transition-transform duration-300 hover:scale-[1.02] flex items-center gap-2 relative z-[1002] cursor-pointer bg-transparent border-none p-0 focus:outline-none focus:ring-2 focus:ring-cyan-400 rounded-lg"
+            className="relative z-[1002] flex items-center gap-2 rounded-lg border border-transparent bg-transparent p-0 no-underline transition-all duration-300 hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-cyan-400"
             aria-label="BlendSkills Home"
           >
             <img
               src="/logo.png"
               alt="BlendSkills"
-              className="h-8 sm:h-9 w-auto object-contain brightness-0 invert transition-all duration-300"
+              className="h-8 w-auto object-contain brightness-0 invert transition-all duration-300 sm:h-9"
             />
           </button>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden lg:flex gap-8 items-center" aria-label="Main Navigation">
+          <nav className="hidden items-center gap-8 lg:flex" aria-label="Main Navigation">
             {LINKS.map((l) => {
               const isActive = location === l.href;
               return (
                 <button
                   key={l.href}
                   onClick={() => handleNavClick(l.href)}
-                  className={`relative text-[0.925rem] font-semibold transition-colors duration-300 no-underline group py-1 cursor-pointer bg-transparent border-none ${
-                    isActive ? 'text-cyan-400 font-bold' : 'text-slate-300 hover:text-white'
-                  }`}
+                  className={`group relative cursor-pointer border-none bg-transparent py-1 text-[0.925rem] font-semibold no-underline transition-colors duration-300 ${isActive ? 'text-cyan-400' : 'text-slate-300 hover:text-white'}`}
                 >
                   {l.label}
                   <span
-                    className="absolute -bottom-0.5 left-0 h-0.5 bg-cyan-400 rounded-full transition-all duration-300 group-hover:w-full"
+                    className="absolute bottom-[-0.35rem] left-0 h-0.5 rounded-full bg-gradient-to-r from-[#FF6B35] to-[#00F5D4] transition-all duration-300"
                     style={{ width: isActive ? '100%' : '0' }}
                   />
                 </button>
@@ -102,51 +107,42 @@ export default function Nav() {
             })}
           </nav>
 
-          {/* Desktop CTA Button */}
           <MagneticButton strength={0.3} className="hidden lg:inline-flex">
             <button
               onClick={() => handleNavClick('/contact')}
-              className="inline-flex items-center justify-center gap-2 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-[#FF6B35]/30 active:scale-95 cursor-pointer bg-gradient-to-r from-[#FF6B35] to-[#FF8557] text-white font-semibold text-sm px-6 py-2.5 rounded-xl border border-[#FF6B35]/40 shadow-md"
+              className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#FF6B35]/35 bg-gradient-to-r from-[#FF6B35] to-[#FF8557] px-6 py-2.5 text-sm font-semibold text-white shadow-[0_20px_40px_-12px_rgba(255,107,53,0.4)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_24px_48px_-10px_rgba(255,107,53,0.5)] active:scale-[0.97]"
             >
               <span>Book Consultation</span>
               <ArrowRight size={16} />
             </button>
           </MagneticButton>
 
-          {/* Mobile Navigation Trigger Button */}
           <button
             onClick={() => setOpen((v) => !v)}
             aria-label={open ? 'Close navigation menu' : 'Open navigation menu'}
             aria-expanded={open}
-            className="lg:hidden flex items-center justify-center min-w-[44px] min-h-[44px] rounded-xl active:scale-95 transition-all duration-200 relative z-[1002] cursor-pointer bg-slate-900/80 border border-white/20 text-white hover:bg-slate-800 hover:border-cyan-400/50 shadow-lg focus:outline-none focus:ring-2 focus:ring-cyan-400"
+            className="relative z-[1002] flex min-h-[44px] min-w-[44px] items-center justify-center rounded-xl border border-white/20 bg-slate-900/80 text-white shadow-lg transition-all duration-200 hover:border-cyan-400/50 hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-cyan-400 active:scale-95 lg:hidden"
           >
-            {open ? <X size={22} className="text-cyan-400 animate-in fade-in duration-200" /> : <Menu size={22} className="text-slate-100" />}
+            {open ? <X size={22} className="animate-in fade-in text-cyan-400 duration-200" /> : <Menu size={22} className="text-slate-100" />}
           </button>
         </div>
-      </header>
+      </motion.header>
 
-      {/* Universal Responsive Mobile Menu Overlay */}
       <div
-        className={`lg:hidden fixed inset-0 z-[1001] bg-slate-950/95 backdrop-blur-2xl text-white transition-all duration-300 ease-in-out flex flex-col h-[100dvh] min-h-[100dvh] pt-20 pb-[max(1rem,env(safe-area-inset-bottom))] ${
-          open ? 'opacity-100 pointer-events-auto translate-x-0' : 'opacity-0 pointer-events-none translate-x-full'
-        }`}
-        style={{
-          paddingTop: 'calc(5rem + env(safe-area-inset-top, 0px))',
-        }}
+        className={`fixed inset-0 z-[1001] flex h-[100dvh] min-h-[100dvh] flex-col bg-slate-950/95 text-white backdrop-blur-2xl transition-all duration-300 ease-in-out lg:hidden ${open ? 'pointer-events-auto translate-x-0 opacity-100' : 'pointer-events-none translate-x-full opacity-0'}`}
+        style={{ paddingTop: 'calc(5rem + env(safe-area-inset-top, 0px))' }}
         aria-hidden={!open}
       >
-        {/* Subtle Background Accent Glow */}
-        <div className="absolute top-1/4 -right-20 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-1/4 -left-20 w-64 h-64 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="pointer-events-none absolute left-[-2rem] top-1/4 h-64 w-64 rounded-full bg-cyan-500/10 blur-3xl" />
+        <div className="pointer-events-none absolute bottom-1/4 right-[-2rem] h-64 w-64 rounded-full bg-indigo-600/10 blur-3xl" />
 
-        {/* Scrollable Nav Area */}
-        <div className="flex-1 overflow-y-auto overscroll-contain px-5 sm:px-8 py-2 space-y-2 relative z-10">
-          <div className="flex items-center justify-between mb-3 border-b border-white/10 pb-2">
-            <span className="font-mono text-[11px] uppercase tracking-widest text-cyan-400 font-bold flex items-center gap-1.5">
+        <div className="relative z-10 flex-1 space-y-2 overflow-y-auto overscroll-contain px-5 py-2 sm:px-8">
+          <div className="mb-3 flex items-center justify-between border-b border-white/10 pb-2">
+            <span className="flex items-center gap-1.5 font-mono text-[11px] font-bold uppercase tracking-widest text-cyan-400">
               <Compass size={13} />
               Navigation
             </span>
-            <span className="text-[10px] text-slate-400 font-mono">BlendSkills AI</span>
+            <span className="font-mono text-[10px] text-slate-400">BlendSkills AI</span>
           </div>
 
           <div className="space-y-1.5">
@@ -156,60 +152,39 @@ export default function Nav() {
                 <button
                   key={l.href}
                   onClick={() => handleNavClick(l.href)}
-                  className={`w-full min-h-[48px] flex items-center justify-between px-4 py-3 rounded-xl text-base sm:text-lg font-medium transition-all duration-200 cursor-pointer text-left border ${
-                    isActive
-                      ? 'bg-gradient-to-r from-[#FF6B35]/90 to-[#FF8557]/90 text-white font-bold border-[#FF6B35]/40 shadow-lg shadow-[#FF6B35]/20'
-                      : 'bg-white/[0.03] hover:bg-white/[0.08] text-slate-200 hover:text-white border-white/5 active:bg-white/10'
-                  }`}
-                  style={{
-                    transitionDelay: open ? `${i * 30}ms` : '0ms',
-                  }}
+                  className={`flex min-h-[48px] w-full items-center justify-between rounded-xl border px-4 py-3 text-left text-base font-medium transition-all duration-200 sm:text-lg ${isActive ? 'border-[#FF6B35]/40 bg-gradient-to-r from-[#FF6B35]/90 to-[#FF8557]/90 font-bold text-white shadow-lg shadow-[#FF6B35]/20' : 'border-white/5 bg-white/[0.03] text-slate-200 hover:bg-white/[0.08] hover:text-white active:bg-white/10'}`}
+                  style={{ transitionDelay: open ? `${i * 30}ms` : '0ms' }}
                 >
                   <div className="flex items-center gap-3">
-                    {isActive ? (
-                      <CheckCircle2 size={18} className="text-cyan-300 shrink-0" />
-                    ) : (
-                      <span className="w-2 h-2 rounded-full bg-slate-600 shrink-0" />
-                    )}
+                    {isActive ? <CheckCircle2 size={18} className="shrink-0 text-cyan-300" /> : <span className="h-2 w-2 shrink-0 rounded-full bg-slate-600" />}
                     <span>{l.label}</span>
                   </div>
-                  <ChevronRight
-                    size={18}
-                    className={`transition-transform duration-200 ${isActive ? 'text-cyan-300 translate-x-0.5' : 'text-slate-500'}`}
-                  />
+                  <ChevronRight size={18} className={`transition-transform duration-200 ${isActive ? 'translate-x-0.5 text-cyan-300' : 'text-slate-500'}`} />
                 </button>
               );
             })}
           </div>
 
-          {/* Primary Mobile CTA Button */}
-          <div className="pt-4 pb-2">
+          <div className="pb-2 pt-4">
             <button
               onClick={() => handleNavClick('/contact')}
-              className="w-full min-h-[50px] py-3.5 px-5 rounded-xl bg-gradient-to-r from-[#FF6B35] to-[#FF8557] text-white font-bold text-sm sm:text-base flex items-center justify-center gap-2 shadow-xl shadow-[#FF6B35]/35 border border-[#FF6B35]/40 cursor-pointer active:scale-[0.98] transition-transform"
+              className="flex w-full min-h-[50px] items-center justify-center gap-2 rounded-xl border border-[#FF6B35]/40 bg-gradient-to-r from-[#FF6B35] to-[#FF8557] px-5 py-3.5 text-sm font-bold text-white shadow-xl shadow-[#FF6B35]/35 transition-transform active:scale-[0.98] sm:text-base"
             >
-              <Sparkles size={18} className="text-[#FFB380] animate-pulse" />
+              <Sparkles size={18} className="animate-pulse text-[#FFB380]" />
               <span>Book Free AI Consultation</span>
             </button>
           </div>
         </div>
 
-        {/* Fixed Bottom Contact Footer Bar */}
-        <div className="px-5 sm:px-8 py-4 bg-slate-900/95 border-t border-white/10 space-y-2.5 shrink-0 relative z-10">
-          <p className="text-[10px] font-mono uppercase tracking-wider text-slate-400">Direct Contact</p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-            <a
-              href="tel:+918530819966"
-              className="flex items-center gap-2.5 p-2.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-200 hover:text-cyan-300 font-mono transition-colors border border-white/5"
-            >
-              <Phone size={14} className="text-[#0066cc] shrink-0" />
+        <div className="relative z-10 shrink-0 space-y-2.5 border-t border-white/10 bg-slate-900/95 px-5 py-4 sm:px-8">
+          <p className="font-mono text-[10px] uppercase tracking-wider text-slate-400">Direct Contact</p>
+          <div className="grid grid-cols-1 gap-2 text-xs sm:grid-cols-2">
+            <a href="tel:+918530819966" className="flex items-center gap-2.5 rounded-lg border border-white/5 bg-white/5 p-2.5 font-mono text-slate-200 transition-colors hover:bg-white/10 hover:text-cyan-300">
+              <Phone size={14} className="shrink-0 text-[#0066cc]" />
               <span className="truncate">+91 85308 19966</span>
             </a>
-            <a
-              href="mailto:info@blendskills.co.in"
-              className="flex items-center gap-2.5 p-2.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-200 hover:text-cyan-300 font-mono transition-colors border border-white/5"
-            >
-              <Mail size={14} className="text-[#0066cc] shrink-0" />
+            <a href="mailto:info@blendskills.co.in" className="flex items-center gap-2.5 rounded-lg border border-white/5 bg-white/5 p-2.5 font-mono text-slate-200 transition-colors hover:bg-white/10 hover:text-cyan-300">
+              <Mail size={14} className="shrink-0 text-[#0066cc]" />
               <span className="truncate">info@blendskills.co.in</span>
             </a>
           </div>

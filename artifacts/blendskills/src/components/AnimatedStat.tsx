@@ -55,12 +55,12 @@ export const AnimatedStat = React.forwardRef<
     },
     ref
   ) => {
-    const [displayValue, setDisplayValue] = useState(0);
-    const animationRef = useRef<number>();
+    const [displayValue, setDisplayValue] = useState<number | string>(0);
+    const animationRef = useRef<number | null>(null);
 
     useEffect(() => {
       if (!isVisible || typeof value !== 'number') {
-        setDisplayValue(value);
+        setDisplayValue(typeof value === 'number' ? value : 0);
         return;
       }
 
