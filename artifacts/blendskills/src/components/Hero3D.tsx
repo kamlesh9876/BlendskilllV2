@@ -1,4 +1,6 @@
 import { useEffect, useRef } from 'react';
+import { throttle } from '../utils/throttle';
+import { getDeviceCapabilities } from '../utils/deviceCapabilities';
 
 /**
  * Lightweight WebGL hero scene built with raw WebGL (no three.js dependency):
@@ -19,6 +21,8 @@ export default function Hero3D({ className, style }: Hero3DProps = {}) {
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
+
+    const deviceCaps = getDeviceCapabilities();
 
     const canvas = document.createElement('canvas');
     canvas.style.width = '100%';
@@ -142,8 +146,8 @@ export default function Hero3D({ className, style }: Hero3DProps = {}) {
     gl.bindBuffer(gl.ARRAY_BUFFER, lineBuf);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(lineVerts), gl.STATIC_DRAW);
 
-    // ---- Particles ----
-    const count = 500;
+    // ---- Particles - use device-aware count ----
+    const count = deviceCaps.maxParticles;
     const ppos = new Float32Array(count * 3);
     for (let i = 0; i < count; i++) {
       const u = Math.random();
@@ -200,10 +204,11 @@ export default function Hero3D({ className, style }: Hero3DProps = {}) {
     window.addEventListener('resize', resize);
 
     let mouseX = 0, mouseY = 0;
-    const onMove = (e: MouseEvent) => {
+    // Throttle mouse movement to reduce update frequency
+    const onMove = throttle((e: MouseEvent) => {
       mouseX = e.clientX / window.innerWidth - 0.5;
       mouseY = e.clientY / window.innerHeight - 0.5;
-    };
+    }, 50); // 50ms throttle for smooth but performant updates
     window.addEventListener('mousemove', onMove);
 
     let raf = 0;

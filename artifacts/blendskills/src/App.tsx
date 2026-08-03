@@ -14,7 +14,6 @@ const Services = lazy(() => import('@/pages/Services'));
 const SolutionsPage = lazy(() => import('@/pages/Solutions'));
 const IndustriesPage = lazy(() => import('@/pages/Industries'));
 const PortfolioPage = lazy(() => import('@/pages/Portfolio'));
-const CareersPage = lazy(() => import('@/pages/Careers'));
 const InsightsPage = lazy(() => import('@/pages/Insights'));
 const Results = lazy(() => import('@/pages/Results'));
 const ProcessPage = lazy(() => import('@/pages/Process'));
@@ -52,7 +51,6 @@ export default function App() {
               <Route path="/solutions" component={SolutionsPage} />
               <Route path="/industries" component={IndustriesPage} />
               <Route path="/portfolio" component={PortfolioPage} />
-              <Route path="/careers" component={CareersPage} />
               <Route path="/insights" component={InsightsPage} />
               <Route path="/results" component={Results} />
               <Route path="/process" component={ProcessPage} />

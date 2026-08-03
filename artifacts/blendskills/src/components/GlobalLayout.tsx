@@ -13,8 +13,9 @@ import liquidStyles from './LiquidBackground.module.css';
 /**
  * GlobalLayout provides the page‑wide layout, custom cursor, and a progress indicator.
  * It also injects the styled‑components theme, global CSS, and a subtle liquid background.
+ * Memoized to prevent unnecessary re-renders from parent updates.
  */
-export default function GlobalLayout({ children }: { children: React.ReactNode }) {
+function GlobalLayoutContent({ children }: { children: React.ReactNode }) {
   const controls = useAnimation();
   const { scrollYProgress } = useViewportScroll();
 
@@ -26,6 +27,20 @@ export default function GlobalLayout({ children }: { children: React.ReactNode }
   }, [controls]);
 
   return (
+    <>
+      <CustomCursor />
+      <FloatingNav />
+      {/* Top scroll progress bar */}
+      <motion.div className={styles.progressBar} style={{ width }} />
+      <main className={styles.main}>{children}</main>
+    </>
+  );
+}
+
+const MemoizedGlobalLayoutContent = React.memo(GlobalLayoutContent);
+
+export default function GlobalLayout({ children }: { children: React.ReactNode }) {
+  return (
     <ThemeProvider theme={palette}>
       <GlobalStyles />
       {/* Liquid background layer */}
@@ -33,13 +48,10 @@ export default function GlobalLayout({ children }: { children: React.ReactNode }
       <motion.div
         className={styles.wrapper}
         initial={{ opacity: 0 }}
-        animate={controls}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.6 }}
       >
-        <CustomCursor />
-        <FloatingNav />
-        {/* Top scroll progress bar */}
-        <motion.div className={styles.progressBar} style={{ width }} />
-        <main className={styles.main}>{children}</main>
+        <MemoizedGlobalLayoutContent>{children}</MemoizedGlobalLayoutContent>
       </motion.div>
     </ThemeProvider>
   );

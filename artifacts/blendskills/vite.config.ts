@@ -37,6 +37,18 @@ export default defineConfig({
   build: {
     outDir: path.resolve(__dirname, 'dist'),
     emptyOutDir: true,
+    minify: 'esbuild',
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor': ['react', 'react-dom', 'framer-motion'],
+          'lenis': ['lenis'],
+        },
+      },
+    },
+    // Optimize chunk sizes for better caching
+    reportCompressedSize: false,
+    chunkSizeWarningLimit: 600,
   },
   server: {
     port,

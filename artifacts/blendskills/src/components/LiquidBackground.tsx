@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
+import { throttle } from '../utils/throttle';
+import { getDeviceCapabilities } from '../utils/deviceCapabilities';
 
 interface Ripple {
   x: number;
@@ -22,6 +24,8 @@ export default function LiquidBackground() {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const ripplesRef = useRef<Ripple[]>([]);
   const lastMousePosRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+  const deviceCapabilitiesRef = useRef(getDeviceCapabilities());
+  const animationFrameIdRef = useRef<number | null>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end start'],
@@ -30,18 +34,24 @@ export default function LiquidBackground() {
   const parallaxY = useTransform(springScroll, [0, 1], [0, 180]);
   const parallaxX = useTransform(springScroll, [0, 1], [0, -70]);
 
-  // Canvas Ripple Loop
+  // Canvas Ripple Loop with Optimizations
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { willReadFrequently: false });
     if (!ctx) return;
 
-    let animationFrameId: number;
+    const deviceCaps = deviceCapabilitiesRef.current;
 
     const handleResize = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
+      // Set proper pixel ratio for retina displays
+      if (deviceCaps.canvasPixelRatio > 1) {
+        canvas.width *= deviceCaps.canvasPixelRatio;
+        canvas.height *= deviceCaps.canvasPixelRatio;
+        ctx.scale(deviceCaps.canvasPixelRatio, deviceCaps.canvasPixelRatio);
+      }
     };
     handleResize();
     window.addEventListener('resize', handleResize);
@@ -56,6 +66,11 @@ export default function LiquidBackground() {
     let colorIndex = 0;
 
     const addRipple = (x: number, y: number, isClick = false) => {
+      // Respect max ripple limit based on device capabilities
+      if (ripplesRef.current.length >= deviceCaps.maxRipples) {
+        return;
+      }
+
       const colorPrefix = colors[colorIndex % colors.length];
       colorIndex++;
 
@@ -70,31 +85,34 @@ export default function LiquidBackground() {
         lineWidth: isClick ? 3.5 : 2.0,
       });
 
-      if (isClick) {
+      if (isClick && ripplesRef.current.length < deviceCaps.maxRipples) {
         // Extra secondary concentric wave for click shockwave
         setTimeout(() => {
-          ripplesRef.current.push({
-            x,
-            y,
-            radius: 2,
-            maxRadius: 180,
-            opacity: 0.8,
-            speed: 3.5,
-            color: colors[(colorIndex + 1) % colors.length],
-            lineWidth: 2,
-          });
+          if (ripplesRef.current.length < deviceCaps.maxRipples) {
+            ripplesRef.current.push({
+              x,
+              y,
+              radius: 2,
+              maxRadius: 180,
+              opacity: 0.8,
+              speed: 3.5,
+              color: colors[(colorIndex + 1) % colors.length],
+              lineWidth: 2,
+            });
+          }
         }, 80);
       }
     };
 
-    const handlePointerMove = (e: MouseEvent) => {
+    // Throttle mousemove to spawn ripples less frequently
+    const handlePointerMove = throttle((e: MouseEvent) => {
       const dist = Math.hypot(e.clientX - lastMousePosRef.current.x, e.clientY - lastMousePosRef.current.y);
       // Spawn ripple when cursor moves > 25px
       if (dist > 25) {
         addRipple(e.clientX, e.clientY, false);
         lastMousePosRef.current = { x: e.clientX, y: e.clientY };
       }
-    };
+    }, deviceCaps.throttleMs);
 
     const handlePointerDown = (e: MouseEvent) => {
       addRipple(e.clientX, e.clientY, true);
@@ -103,7 +121,7 @@ export default function LiquidBackground() {
     window.addEventListener('mousemove', handlePointerMove);
     window.addEventListener('mousedown', handlePointerDown);
 
-    // Animation Loop
+    // Animation Loop - efficient RAF management
     const render = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -134,7 +152,7 @@ export default function LiquidBackground() {
         ctx.fill();
       }
 
-      animationFrameId = requestAnimationFrame(render);
+      animationFrameIdRef.current = requestAnimationFrame(render);
     };
 
     render();
@@ -143,17 +161,21 @@ export default function LiquidBackground() {
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('mousemove', handlePointerMove);
       window.removeEventListener('mousedown', handlePointerDown);
-      cancelAnimationFrame(animationFrameId);
+      if (animationFrameIdRef.current !== null) {
+        cancelAnimationFrame(animationFrameIdRef.current);
+      }
     };
   }, []);
 
-  // Track cursor position for smooth gradient aura
+  // Track cursor position for smooth gradient aura (throttled)
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
+    const deviceCaps = deviceCapabilitiesRef.current;
+    
+    const handleMouseMove = throttle((e: MouseEvent) => {
       const x = (e.clientX / window.innerWidth) * 100;
       const y = (e.clientY / window.innerHeight) * 100;
       setMousePos({ x, y });
-    };
+    }, deviceCaps.throttleMs);
 
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
@@ -168,13 +190,11 @@ export default function LiquidBackground() {
       {/* Deep Obsidian Base */}
       <div className="absolute inset-0 bg-[#060913]" />
 
-      {/* SVG Liquid Distortion Filters */}
+      {/* SVG Liquid Distortion Filters - Static for performance */}
       <svg className="hidden">
         <defs>
           <filter id="liquid-wobble">
-            <feTurbulence type="fractalNoise" baseFrequency="0.008" numOctaves="2" result="noise">
-              <animate attributeName="baseFrequency" dur="16s" values="0.008;0.016;0.008" repeatCount="indefinite" />
-            </feTurbulence>
+            <feTurbulence type="fractalNoise" baseFrequency="0.008" numOctaves="2" result="noise" />
             <feDisplacementMap in="SourceGraphic" in2="noise" scale="32" xChannelSelector="R" yChannelSelector="G" />
           </filter>
         </defs>
