@@ -84,7 +84,7 @@ export default function Nav() {
             <img
               src="/logo.png"
               alt="BlendSkills"
-              className="h-8 w-auto object-contain brightness-0 invert transition-all duration-300 sm:h-9"
+              className="h-10 w-auto object-contain transition-all duration-300 sm:h-12"
             />
           </button>
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { motion, useReducedMotion, useScroll, useSpring, useTransform } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { throttle } from '../utils/throttle';
 import { getDeviceCapabilities } from '../utils/deviceCapabilities';
 
@@ -27,14 +27,7 @@ export default function LiquidBackground() {
   const deviceCapabilitiesRef = useRef(getDeviceCapabilities());
   const animationFrameIdRef = useRef<number | null>(null);
   const shouldReduceMotion = useReducedMotion();
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start start', 'end start'],
-  });
-  const springScroll = useSpring(scrollYProgress, { stiffness: 120, damping: 26, mass: 0.25 });
-  const shouldReduceParallax = shouldReduceMotion || deviceCapabilitiesRef.current.isMobile || deviceCapabilitiesRef.current.isLowEnd;
-  const parallaxY = useTransform(springScroll, [0, 1], [0, shouldReduceParallax ? 0 : 180]);
-  const parallaxX = useTransform(springScroll, [0, 1], [0, shouldReduceParallax ? 0 : -70]);
+  const isReducedMotion = shouldReduceMotion || deviceCapabilitiesRef.current.isMobile || deviceCapabilitiesRef.current.isLowEnd;
 
   // Canvas Ripple Loop with Optimizations
   useEffect(() => {
@@ -187,7 +180,8 @@ export default function LiquidBackground() {
     <motion.div
       ref={containerRef}
       className="fixed inset-0 pointer-events-none overflow-hidden z-0"
-      style={{ y: parallaxY, x: parallaxX }}
+      animate={isReducedMotion ? { opacity: 0.9 } : { opacity: 1 }}
+      transition={{ duration: 0.3 }}
     >
       {/* Deep Obsidian Base */}
       <div className="absolute inset-0 bg-[#060913]" />
@@ -264,8 +258,8 @@ export default function LiquidBackground() {
 
       {/* Subtle ambient sheen */}
       <div className="absolute inset-0 opacity-40 pointer-events-none">
-        <div className="absolute left-[-10%] top-[-15%] w-[65vw] h-[65vw] rounded-full blur-[140px] bg-[radial-gradient(circle_at_30%_30%,rgba(0,245,212,0.22),transparent_60%)] animate-ambient-drift" />
-        <div className="absolute right-[-8%] bottom-[-12%] w-[60vw] h-[60vw] rounded-full blur-[140px] bg-[radial-gradient(circle_at_70%_70%,rgba(139,92,246,0.2),transparent_62%)] animate-ambient-drift-reverse" />
+        <div className="absolute left-[-8%] top-[-12%] w-[60vw] h-[60vw] rounded-full blur-[140px] bg-[radial-gradient(circle_at_30%_30%,rgba(0,245,212,0.18),transparent_60%)]" />
+        <div className="absolute right-[-6%] bottom-[-10%] w-[56vw] h-[56vw] rounded-full blur-[140px] bg-[radial-gradient(circle_at_70%_70%,rgba(139,92,246,0.16),transparent_62%)]" />
       </div>
 
       {/* Glass Grain Texture Overlay for Film Aesthetic */}

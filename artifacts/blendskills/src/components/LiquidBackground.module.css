@@ -6,13 +6,13 @@
   overflow: hidden;
   z-index: -1;
   /* Base multi-point vibrant liquid gradient */
-  background: 
+  background:
     radial-gradient(circle at 20% 20%, rgba(0, 255, 212, 0.45), transparent 60%),
     radial-gradient(circle at 80% 30%, rgba(157, 0, 255, 0.5), transparent 65%),
     radial-gradient(circle at 50% 80%, rgba(255, 0, 122, 0.45), transparent 60%),
     radial-gradient(circle at 85% 85%, rgba(0, 102, 255, 0.4), transparent 55%);
   background-size: 180% 180%;
-  animation: liquidMove 15s ease-in-out infinite alternate;
+  animation: liquidMove 18s ease-in-out infinite alternate;
 }
 
 @keyframes liquidMove {
@@ -20,13 +20,15 @@
     transform: scale(1) translate(0, 0) rotate(0deg);
     background-position: 0% 0%;
   }
+
   50% {
-    transform: scale(1.15) translate(-5%, -5%) rotate(90deg);
-    background-position: 100% 50%;
+    transform: scale(1.06) translate(-2%, -2%) rotate(42deg);
+    background-position: 70% 40%;
   }
+
   100% {
-    transform: scale(1.05) translate(3%, 4%) rotate(180deg);
-    background-position: 50% 100%;
+    transform: scale(1.03) translate(1.5%, 2%) rotate(88deg);
+    background-position: 30% 100%;
   }
 }
 
@@ -35,12 +37,12 @@
   content: '';
   position: absolute;
   inset: -30%;
-  background: 
+  background:
     radial-gradient(circle at 40% 40%, rgba(0, 255, 212, 0.55), rgba(157, 0, 255, 0.45), transparent 70%),
     radial-gradient(circle at 70% 60%, rgba(255, 0, 122, 0.5), rgba(0, 102, 255, 0.4), transparent 70%);
   filter: blur(70px);
   mix-blend-mode: screen;
-  animation: glowPulse 6s ease-in-out infinite alternate;
+  animation: glowPulse 8s ease-in-out infinite alternate;
 }
 
 /* Secondary liquid highlight beam */
@@ -51,27 +53,28 @@
   left: -50%;
   width: 200%;
   height: 200%;
-  background: conic-gradient(
-    from 0deg at 50% 50%,
-    transparent 0deg,
-    rgba(0, 255, 212, 0.25) 90deg,
-    transparent 180deg,
-    rgba(255, 0, 122, 0.25) 270deg,
-    transparent 360deg
-  );
+  background: conic-gradient(from 0deg at 50% 50%,
+      transparent 0deg,
+      rgba(0, 255, 212, 0.25) 90deg,
+      transparent 180deg,
+      rgba(255, 0, 122, 0.25) 270deg,
+      transparent 360deg);
   filter: blur(90px);
   mix-blend-mode: color-dodge;
-  animation: conicSpin 25s linear infinite;
+  animation: conicSpin 34s linear infinite;
 }
 
 @keyframes glowPulse {
   0% {
-    opacity: 0.7;
-    filter: blur(70px);
+    opacity: 0.72;
+    filter: blur(72px);
+    transform: scale(0.97);
   }
+
   100% {
-    opacity: 1;
-    filter: blur(50px);
+    opacity: 0.95;
+    filter: blur(54px);
+    transform: scale(1.02);
   }
 }
 
@@ -79,6 +82,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
